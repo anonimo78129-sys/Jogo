@@ -516,8 +516,8 @@ export default function App() {
             }}
           >
             <div style={{ display: "flex", justifyContent: "center", gap: 24, marginBottom: 16, alignItems: "flex-end" }}>
-              <CharacterSprite src="lyelson.png" size={90} color="#ff0055" />
-              <CharacterSprite src="lorena.png" size={90} color="#ff0055" />
+              <CharacterSprite src="/lyelson.png" size={90} color="#ff0055" />
+              <CharacterSprite src="/lorena.png" size={90} color="#ff0055" />
             </div>
             <p style={{ fontSize: 10, color: "#ccc", lineHeight: 2, marginBottom: 8 }}>
               Para:
@@ -584,13 +584,13 @@ export default function App() {
                 VOCÊ VENCEU!
               </div>
               <div style={{ display: "flex", justifyContent: "center", gap: 16, marginBottom: 20, alignItems: "flex-end" }}>
-                <CharacterSprite src="lyelson.png" size={100} color="#fbbf24" />
+                <CharacterSprite src="/lyelson.png" size={100} color="#fbbf24" />
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
                   {[...Array(3)].map((_, i) => (
                     <PixelHeart key={i} color="#ff0055" size={22} />
                   ))}
                 </div>
-                <CharacterSprite src="lorena.png" size={100} color="#fbbf24" />
+                <CharacterSprite src="/lorena.png" size={100} color="#fbbf24" />
               </div>
               <div style={{ fontSize: 9, color: "#ccc", lineHeight: 2.5, marginBottom: 24 }}>
                 <p>Feliz aniversário de namoro,</p>
