@@ -1391,7 +1391,7 @@ export default function App() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
         *{box-sizing:border-box;margin:0;padding:0;}
-        body{background:#1a0812;min-height:100vh;}
+        body{background:#fce4ec;min-height:100vh;}
 
         @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
         @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
@@ -1406,7 +1406,7 @@ export default function App() {
         @keyframes heartFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.1)}}
 
         ::-webkit-scrollbar{width:5px;}
-        ::-webkit-scrollbar-track{background:#1a0812;}
+        ::-webkit-scrollbar-track{background:#fce4ec;}
         ::-webkit-scrollbar-thumb{background:#ff0055;}
       `}</style>
 
@@ -1423,7 +1423,7 @@ export default function App() {
         {/* ── HEADER ── */}
         <div style={{
           textAlign: "center", marginBottom: 26, padding: "26px 20px",
-          border: "3px solid #ff0055", background: "#1a0812", position: "relative",
+          border: "3px solid #ff0055", background: "#060000", position: "relative",
           boxShadow: "0 0 40px #ff005518",
         }}>
           <Stars color="#ff0055" n={40} />
@@ -1453,7 +1453,7 @@ export default function App() {
         {/* ── HUD ── */}
         <div style={{
           display: "flex", justifyContent: "space-between",
-          padding: "9px 16px", background: "#1a0812",
+          padding: "9px 16px", background: "#0c0c0c",
           border: "2px solid #181818", marginBottom: 24,
           fontSize: 7.5, color: "#444",
         }}>
@@ -1466,7 +1466,7 @@ export default function App() {
         {!started && (
           <div style={{
             padding: "0 0 32px", border: "3px solid #ff0055",
-            background: "#1a0812", marginBottom: 24,
+            background: "#050000", marginBottom: 24,
             animation: "slideIn .5s ease", position: "relative", overflow: "hidden",
           }}>
             <Stars color="#ff0055" n={30} />
@@ -1476,7 +1476,7 @@ export default function App() {
               {/* Sky */}
               <div style={{
                 position: "absolute", inset: 0,
-                background: "linear-gradient(180deg, #1a0812 0%, #2a0a1e 50%, #1a0812 100%)",
+                background: "linear-gradient(180deg, #0a0010 0%, #150020 50%, #0a0010 100%)",
               }} />
 
               {/* Stars in sky */}
@@ -1533,7 +1533,7 @@ export default function App() {
               {/* Ground */}
               <div style={{
                 position: "absolute", bottom: 0, left: 0, right: 0, height: 40,
-                background: "#1a0812", borderTop: "2px solid #ff005522",
+                background: "#0a0000", borderTop: "2px solid #ff005522",
               }} />
             </div>
 
