@@ -73,6 +73,7 @@ const phases = [
     ],
     emoji: "🏡",
     cleared: "FUTURO DESBLOQUEADO!",
+    illustration: "/fase4-planos.jpg",
   },
   {
     id: 5,
