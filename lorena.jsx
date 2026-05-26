@@ -553,42 +553,16 @@ function MechanicClicker({ phase, onComplete }) {
         onClick={handleClick}
         style={{
           position: "relative", height: 200,
-          background: "linear-gradient(180deg, #0a2a4a 0%, #0e4070 40%, #0a2a4a 60%, #0a3a1a 80%, #05200a 100%)",
-          border: `2px solid ${color}44`,
+          backgroundImage: "url(/cena-praia.jpg)",
+          backgroundSize: "cover", backgroundPosition: "center",
+          imageRendering: "pixelated",
+          border: `2px solid ${color}`,
           cursor: done ? "default" : "pointer",
           overflow: "hidden", userSelect: "none",
         }}
       >
-        {/* Sun */}
-        <div style={{
-          position: "absolute", top: 16, right: 24,
-          width: 36, height: 36, background: "#fbbf24",
-          boxShadow: "0 0 20px #fbbf24",
-          imageRendering: "pixelated",
-        }} />
-        {/* Clouds */}
-        {[[10,12],[35,20],[65,8]].map(([l,t],i) => (
-          <div key={i} style={{ position: "absolute", left: `${l}%`, top: t, display: "flex", gap: 2 }}>
-            <div style={{ width: 16, height: 10, background: "#ffffff18" }} />
-            <div style={{ width: 22, height: 12, background: "#ffffff22" }} />
-            <div style={{ width: 14, height: 10, background: "#ffffff18" }} />
-          </div>
-        ))}
-        {/* Waves */}
-        {[0, 1, 2].map(i => (
-          <div key={i} style={{
-            position: "absolute", bottom: 32 + i * 12, left: 0, right: 0,
-            height: 8,
-            background: `rgba(56,189,248,${0.15 + i * 0.08})`,
-            borderTop: `1px solid ${color}44`,
-          }} />
-        ))}
-        {/* Sand */}
-        <div style={{
-          position: "absolute", bottom: 0, left: 0, right: 0, height: 32,
-          background: "linear-gradient(180deg, #8b6914 0%, #6b4f10 100%)",
-          borderTop: `2px solid #a07820`,
-        }} />
+        {/* Light overlay for heart contrast */}
+        <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.12)" }} />
 
         {/* Big heart to click */}
         {!done && (
