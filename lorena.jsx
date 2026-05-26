@@ -304,69 +304,122 @@ function MechanicDialogue({ phase, onComplete }) {
         💬 DIALOGUE — O ENCONTRO
       </p>
 
-      {/* Scene */}
+      {/* Scene with real lab background */}
       <div style={{
-        background: "#0a1a0a",
-        border: `2px solid ${color}33`,
-        padding: "16px 14px 14px",
-        position: "relative",
-        minHeight: 180,
+        backgroundImage: "url(/cena-laboratorio.jpg)",
+        backgroundSize: "cover", backgroundPosition: "center",
+        imageRendering: "pixelated",
+        border: `2px solid ${color}`,
+        overflow: "hidden", position: "relative",
+        height: 310,
       }}>
-        {/* Lab background elements */}
-        <div style={{ position: "absolute", top: 8, left: 10, width: 12, height: 28, background: "#4ade8022", border: "1px solid #4ade8044" }} />
-        <div style={{ position: "absolute", top: 14, left: 28, width: 8, height: 22, background: "#38bdf822", border: "1px solid #38bdf844" }} />
-        <div style={{ position: "absolute", top: 8, right: 14, width: 16, height: 30, background: "#4ade8022", border: "1px solid #4ade8044" }} />
+        {/* Dark overlay for readability */}
+        <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.40)" }} />
 
-        {/* Speaker label */}
+        {/* Location label */}
         <div style={{
+          position: "absolute", top: 7, left: 0, right: 0, zIndex: 3,
           fontFamily: "'Press Start 2P', monospace", fontSize: 7,
-          color: isLorena ? "#f472b6" : color,
-          marginBottom: 8, textAlign: isLorena ? "left" : "right",
+          color: "#fff", textAlign: "center",
+          textShadow: "0 1px 4px #000, 0 0 8px #000",
         }}>
-          {isLorena ? "👗 LORENA" : `🧑 ${HERO_NAME.toUpperCase()}`}
+          ── LABORATÓRIO DE QUÍMICA ──
         </div>
 
-        {/* Speech bubble */}
+        {/* Characters in scene (highlight active speaker) */}
         <div style={{
-          background: isLorena ? "#0d1a10" : "#0a0a0a",
-          border: `2px solid ${isLorena ? "#f472b688" : color + "88"}`,
-          padding: "12px 14px",
-          fontFamily: "'Press Start 2P', monospace",
-          fontSize: 9, color: "#ddd", lineHeight: 2,
-          marginBottom: 16,
-          position: "relative",
+          position: "absolute", bottom: 138, left: 0, right: 0,
+          display: "flex", justifyContent: "space-between",
+          padding: "0 18px", zIndex: 2, pointerEvents: "none",
         }}>
-          {cur.text}
-          {/* Triangle */}
+          {/* Lorena (left) */}
           <div style={{
-            position: "absolute", bottom: -8,
-            [isLorena ? "left" : "right"]: 20,
-            width: 0, height: 0,
-            borderLeft: "6px solid transparent",
-            borderRight: "6px solid transparent",
-            borderTop: `8px solid ${isLorena ? "#f472b688" : color + "88"}`,
-          }} />
+            opacity: isLorena ? 1 : 0.3, transition: "opacity .3s",
+            animation: "bob 1.4s infinite",
+          }}>
+            <img src="/lorena.png" alt="Lorena" style={{
+              width: 68, imageRendering: "pixelated",
+              filter: isLorena ? "drop-shadow(0 0 14px #f472b6)" : "none",
+            }} />
+          </div>
+          {/* Lyelson (right) */}
+          <div style={{
+            opacity: !isLorena ? 1 : 0.3, transition: "opacity .3s",
+            animation: "bob 1.4s 0.35s infinite",
+          }}>
+            <img src="/lyelson.png" alt="Lyelson" style={{
+              width: 68, imageRendering: "pixelated",
+              filter: !isLorena ? `drop-shadow(0 0 14px ${color})` : "none",
+            }} />
+          </div>
         </div>
 
-        {/* Choices or continue */}
-        {cur.choices ? (
-          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-            {cur.choices.map((ch, i) => (
-              <PixelBtn key={i} color={color} onClick={() => advance(ch)} style={{ fontSize: 8 }}>
-                {ch}
-              </PixelBtn>
-            ))}
-          </div>
-        ) : (
-          <button onClick={() => advance()} style={{
-            background: "transparent", border: "none",
-            fontFamily: "'Press Start 2P', monospace", fontSize: 8,
-            color: "#555", cursor: "pointer",
-            animation: "blink 1s infinite",
+        {/* Dialogue box at bottom */}
+        <div style={{
+          position: "absolute", bottom: 0, left: 0, right: 0, zIndex: 3,
+          background: "rgba(2,8,2,0.92)",
+          borderTop: `2px solid ${isLorena ? "#f472b655" : color + "55"}`,
+          padding: "9px 12px 11px",
+        }}>
+          {/* Speaker: face portrait + name */}
+          <div style={{
+            display: "flex", alignItems: "center", gap: 8, marginBottom: 7,
+            justifyContent: isLorena ? "flex-start" : "flex-end",
           }}>
-            ▶ continuar
-          </button>
-        )}
+            {isLorena && (
+              <img src="/lorena-rosto.png" alt="Lorena" style={{
+                width: 30, height: 30, imageRendering: "pixelated",
+                border: "2px solid #f472b6",
+                filter: "drop-shadow(0 0 5px #f472b6)",
+              }} />
+            )}
+            <div style={{
+              fontFamily: "'Press Start 2P', monospace", fontSize: 7,
+              color: isLorena ? "#f472b6" : color,
+              textShadow: `0 0 8px ${isLorena ? "#f472b6" : color}`,
+            }}>
+              {isLorena ? "LORENA" : HERO_NAME.toUpperCase()}
+            </div>
+            {!isLorena && (
+              <img src="/lyelson-rosto.png" alt="Lyelson" style={{
+                width: 30, height: 30, imageRendering: "pixelated",
+                border: `2px solid ${color}`,
+                filter: `drop-shadow(0 0 5px ${color})`,
+              }} />
+            )}
+          </div>
+
+          {/* Speech text */}
+          <div style={{
+            background: "rgba(0,0,0,0.55)",
+            border: `1px solid ${isLorena ? "#f472b622" : color + "22"}`,
+            padding: "8px 10px", marginBottom: 9,
+            fontFamily: "'Press Start 2P', monospace",
+            fontSize: 8.5, color: "#e8e8e8", lineHeight: 2.1,
+          }}>
+            {cur.text}
+          </div>
+
+          {/* Choices or continue */}
+          {cur.choices ? (
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              {cur.choices.map((ch, i) => (
+                <PixelBtn key={i} color={color} onClick={() => advance(ch)} style={{ fontSize: 7.5 }}>
+                  {ch}
+                </PixelBtn>
+              ))}
+            </div>
+          ) : (
+            <button onClick={() => advance()} style={{
+              background: "transparent", border: "none",
+              fontFamily: "'Press Start 2P', monospace", fontSize: 7.5,
+              color: "#444", cursor: "pointer",
+              animation: "blink 1s infinite",
+            }}>
+              ▶ continuar
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -467,14 +520,17 @@ function MechanicCatch({ phase, onComplete }) {
           <button onClick={catchIt} style={{
             position: "absolute",
             left: `${x}%`, top: `${y}%`,
-            transform: "translateX(-50%) rotate(12deg)",
+            transform: "translateX(-50%) rotate(18deg)",
             background: "transparent", border: "none",
-            fontSize: 34, cursor: "pointer",
-            filter: `drop-shadow(0 0 8px ${color})`,
+            cursor: "pointer",
+            filter: `drop-shadow(0 0 10px ${color})`,
             transition: "left .05s linear", zIndex: 5,
-            animation: "none",
+            padding: 0, lineHeight: 0,
           }}>
-            👗
+            <img src="/lorena-caindo.png" alt="Lorena caindo" style={{
+              width: 52, imageRendering: "pixelated",
+              display: "block",
+            }} />
           </button>
         )}
 
