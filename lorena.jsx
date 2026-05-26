@@ -148,6 +148,23 @@ function PixelChar({ color = "#fff", emoji }) {
   );
 }
 
+function CharacterSprite({ src, size = 80, color = "#fff", style = {} }) {
+  return (
+    <img
+      src={src}
+      alt="character"
+      style={{
+        width: size,
+        height: "auto",
+        imageRendering: "pixelated",
+        filter: `drop-shadow(0 0 10px ${color})`,
+        animation: "bob 1s infinite",
+        ...style,
+      }}
+    />
+  );
+}
+
 function TypeWriter({ lines, color, onDone }) {
   const [lineIdx, setLineIdx] = useState(0);
   const [charIdx, setCharIdx] = useState(0);
@@ -498,7 +515,10 @@ export default function App() {
               animation: "slideIn 0.5s ease",
             }}
           >
-            <div style={{ fontSize: 32, marginBottom: 16 }}>🎮</div>
+            <div style={{ display: "flex", justifyContent: "center", gap: 24, marginBottom: 16, alignItems: "flex-end" }}>
+              <CharacterSprite src="lyelson.png" size={90} color="#ff0055" />
+              <CharacterSprite src="lorena.png" size={90} color="#ff0055" />
+            </div>
             <p style={{ fontSize: 10, color: "#ccc", lineHeight: 2, marginBottom: 8 }}>
               Para:
             </p>
@@ -552,17 +572,25 @@ export default function App() {
           >
             <Stars color="#fbbf24" />
             <div style={{ position: "relative", zIndex: 1 }}>
-              <div style={{ fontSize: 36, marginBottom: 16 }}>👑</div>
               <div
                 style={{
                   fontSize: 14,
                   color: "#fbbf24",
-                  marginBottom: 16,
+                  marginBottom: 20,
                   textShadow: "0 0 20px #fbbf24",
                   animation: "glow 1.5s infinite",
                 }}
               >
                 VOCÊ VENCEU!
+              </div>
+              <div style={{ display: "flex", justifyContent: "center", gap: 16, marginBottom: 20, alignItems: "flex-end" }}>
+                <CharacterSprite src="lyelson.png" size={100} color="#fbbf24" />
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+                  {[...Array(3)].map((_, i) => (
+                    <PixelHeart key={i} color="#ff0055" size={22} />
+                  ))}
+                </div>
+                <CharacterSprite src="lorena.png" size={100} color="#fbbf24" />
               </div>
               <div style={{ fontSize: 9, color: "#ccc", lineHeight: 2.5, marginBottom: 24 }}>
                 <p>Feliz aniversário de namoro,</p>
