@@ -92,7 +92,7 @@ const PHASES = [
   {
     id: 1, title: "FASE 1", subtitle: "O Encontro",
     location: "🧪 LABORATÓRIO DE QUÍMICA",
-    color: "#4ade80", bg: "#020a03", stars: "#4ade80",
+    color: "#4ade80", bg: "#f0fff4", stars: "#4ade80",
     story: ["No laboratório, dois estranhos.", "Aos poucos, foram virando amigos.", "Sem pressa. Sem saber", "onde aquilo ia chegar. 💚"],
     emoji: "📚", cleared: "AMIZADE CONQUISTADA!",
     illustration: "/fase1-laboratorio.jpg", mechanic: "dialogue",
@@ -100,7 +100,7 @@ const PHASES = [
   {
     id: 2, title: "FASE 2", subtitle: "A Queda",
     location: "😂 RUA GRANDE",
-    color: "#fb923c", bg: "#0a0400", stars: "#fb923c",
+    color: "#fb923c", bg: "#fff8f0", stars: "#fb923c",
     story: ["Ela caiu na minha frente.", "Na Rua Grande. Do nada. 💀", "Eu tentei não rir... não consegui.", "Mas segurei a mão dela. 🧡"],
     emoji: "💨", cleared: "MEMÓRIA ÉPICA SALVA! 😂",
     mechanic: "catch",
@@ -108,7 +108,7 @@ const PHASES = [
   {
     id: 3, title: "FASE 3", subtitle: "A Viagem",
     location: "🌊 PRAIA DO BACABA",
-    color: "#38bdf8", bg: "#01080f", stars: "#38bdf8",
+    color: "#38bdf8", bg: "#f0f8ff", stars: "#38bdf8",
     story: ["Uma viagem mudou tudo.", "O Bacaba, o sol, e você do meu lado.", "Foi ali que a gente se reencontrou", "e algo maior começou. 💙"],
     emoji: "🏖️", cleared: "MEMÓRIA ESPECIAL DESBLOQUEADA!",
     illustration: "/fase2-praia.jpg", mechanic: "clicker",
@@ -116,7 +116,7 @@ const PHASES = [
   {
     id: 4, title: "FASE 4", subtitle: "A Noite",
     location: "🌙 UMA NOITE EM CLARO",
-    color: "#f472b6", bg: "#06020c", stars: "#f472b6",
+    color: "#f472b6", bg: "#fff0f8", stars: "#f472b6",
     story: ["Você se declarou. Eu fiquei em silêncio.", "Você ficou nervosa. Eu fiquei confuso.", "Mas numa noite em claro te conhecendo,", "eu entendi: era você. 💗"],
     emoji: "💕", cleared: "+11 MESES JUNTOS!",
     illustration: "/fase3-comeco.jpg", mechanic: "chat",
@@ -124,7 +124,7 @@ const PHASES = [
   {
     id: 5, title: "FASE 5", subtitle: "Os Planos",
     location: "🎵 PLANOS — BK",
-    color: "#c084fc", bg: "#05020f", stars: "#c084fc",
+    color: "#c084fc", bg: "#faf0ff", stars: "#c084fc",
     story: ["APA, Alcântara, praça, Rua Grande...", "(e aquela queda que nunca vou esquecer 💀)", "Cada memória contigo é minha favorita.", "Tenho planos com você, Doidiça. 💜"],
     emoji: "🏡", cleared: "FUTURO DESBLOQUEADO!",
     illustration: "/fase4-planos.jpg", mechanic: "cards",
@@ -132,7 +132,7 @@ const PHASES = [
   {
     id: 6, title: "FASE 6", subtitle: "Hoje",
     location: "🏆 BOSS FINAL: A DÚVIDA",
-    color: "#fbbf24", bg: "#080500", stars: "#fbbf24",
+    color: "#fbbf24", bg: "#fffbf0", stars: "#fbbf24",
     story: ["Minha vida não tinha cor.", "Você chegou e me fez querer viver de novo.", "Amor de Vida Minha,", "obrigado por existir. 💛"],
     emoji: "👑", cleared: "A DÚVIDA FOI DERROTADA! ❤️",
     illustration: "/fase5-final.jpg", mechanic: "boss",
@@ -253,7 +253,7 @@ function ProgressBar({ value, max, color, label }) {
           {label}
         </div>
       )}
-      <div style={{ height: 16, background: "#111", border: `2px solid ${color}44`, position: "relative", overflow: "hidden" }}>
+      <div style={{ height: 16, background: "#ffe8f4", border: `2px solid ${color}44`, position: "relative", overflow: "hidden" }}>
         <div style={{
           position: "absolute", top: 0, left: 0, height: "100%", width: `${pct}%`,
           background: `linear-gradient(90deg, ${color}88, ${color})`,
@@ -357,7 +357,7 @@ function MechanicDialogue({ phase, onComplete }) {
         {/* Dialogue box at bottom */}
         <div style={{
           position: "absolute", bottom: 0, left: 0, right: 0, zIndex: 3,
-          background: "rgba(2,8,2,0.92)",
+          background: "rgba(255,240,248,0.96)",
           borderTop: `2px solid ${isLorena ? "#f472b655" : color + "55"}`,
           padding: "9px 12px 11px",
         }}>
@@ -391,11 +391,11 @@ function MechanicDialogue({ phase, onComplete }) {
 
           {/* Speech text */}
           <div style={{
-            background: "rgba(0,0,0,0.55)",
+            background: "rgba(255,255,255,0.7)",
             border: `1px solid ${isLorena ? "#f472b622" : color + "22"}`,
             padding: "8px 10px", marginBottom: 9,
             fontFamily: "'Press Start 2P', monospace",
-            fontSize: 8.5, color: "#e8e8e8", lineHeight: 2.1,
+            fontSize: 8.5, color: "#2d0020", lineHeight: 2.1,
           }}>
             {cur.text}
           </div>
@@ -413,7 +413,7 @@ function MechanicDialogue({ phase, onComplete }) {
             <button onClick={() => advance()} style={{
               background: "transparent", border: "none",
               fontFamily: "'Press Start 2P', monospace", fontSize: 7.5,
-              color: "#444", cursor: "pointer",
+              color: "#cc6699", cursor: "pointer",
               animation: "blink 1s infinite",
             }}>
               ▶ continuar
@@ -708,7 +708,7 @@ function MechanicChat({ phase, onComplete }) {
       <p style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 7, color, textAlign: "center", marginBottom: 10 }}>
         📱 UMA NOITE EM CLARO
       </p>
-      <div style={{ border: `2px solid ${color}44`, background: "#030308", overflow: "hidden" }}>
+      <div style={{ border: `2px solid ${color}44`, background: "#fff8fc", overflow: "hidden" }}>
         {/* Header */}
         <div style={{
           background: `${color}14`, borderBottom: `1px solid ${color}33`,
@@ -743,8 +743,8 @@ function MechanicChat({ phase, onComplete }) {
             return (
               <div key={i} style={{ display: "flex", justifyContent: me ? "flex-end" : "flex-start", animation: "slideIn .25s ease" }}>
                 <div style={{
-                  background: me ? `${color}1a` : "#0e0e1e",
-                  border: `1px solid ${me ? color + "55" : "#252540"}`,
+                  background: me ? `${color}1a` : "#fff0f8",
+                  border: `1px solid ${me ? color + "55" : "#ffd6e8"}`,
                   padding: "7px 11px", maxWidth: "76%",
                   fontFamily: "'Press Start 2P', monospace",
                   fontSize: 7.5, color: me ? color : "#ccc", lineHeight: 1.9,
@@ -757,7 +757,7 @@ function MechanicChat({ phase, onComplete }) {
           {typing && (
             <div style={{ display: "flex" }}>
               <div style={{
-                background: "#0e0e1e", border: "1px solid #252540",
+                background: "#ffe8f4", border: "1px solid #ffd6e8",
                 padding: "8px 14px", fontSize: 14, color: "#444",
                 letterSpacing: 4, animation: "blink .9s infinite",
               }}>•••</div>
@@ -821,7 +821,7 @@ function MechanicCards({ phase, onComplete }) {
               style={{
                 height: 100,
                 border: `2px solid ${isFlipped ? color : "#222"}`,
-                background: isFlipped ? `${color}14` : "#0d0d0d",
+                background: isFlipped ? `${color}14` : "#fff0f8",
                 cursor: "pointer",
                 display: "flex", flexDirection: "column",
                 alignItems: "center", justifyContent: "center",
@@ -833,7 +833,7 @@ function MechanicCards({ phase, onComplete }) {
               {!isFlipped ? (
                 <>
                   <div style={{ fontSize: 24, filter: "grayscale(1) brightness(0.2)", marginBottom: 4 }}>❓</div>
-                  <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 6, color: "#333" }}>CLIQUE</div>
+                  <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 6, color: "#ccaacc" }}>CLIQUE</div>
                 </>
               ) : (
                 <div style={{ textAlign: "center", animation: "popIn .35s ease" }}>
@@ -922,7 +922,7 @@ function MechanicBoss({ phase, onComplete }) {
       {/* ── CINEMATIC BATTLE ARENA ── */}
       <div style={{
         position: "relative", height: 290,
-        background: "linear-gradient(180deg, #06001a 0%, #0d0020 45%, #060010 100%)",
+        background: "linear-gradient(180deg, #faf0ff 0%, #f5e8ff 45%, #faf0ff 100%)",
         border: `2px solid #c084fc33`,
         overflow: "hidden", marginBottom: 12,
       }}>
@@ -937,7 +937,7 @@ function MechanicBoss({ phase, onComplete }) {
         {/* Ground floor glow */}
         <div style={{
           position: "absolute", bottom: 56, left: 0, right: 0,
-          height: 2, background: "#c084fc15",
+          height: 2, background: "#c084fc33",
         }} />
 
         {/* Screen flash on attack */}
@@ -995,7 +995,7 @@ function MechanicBoss({ phase, onComplete }) {
           {!defeated && (
             <div style={{
               fontFamily: "'Press Start 2P', monospace", fontSize: 6,
-              color: "#c084fc44", marginTop: 2, letterSpacing: 1,
+              color: "#c084fc", marginTop: 2, letterSpacing: 1,
             }}>A DÚVIDA</div>
           )}
         </div>
@@ -1063,10 +1063,10 @@ function MechanicBoss({ phase, onComplete }) {
       {/* Taunt bubble */}
       {!defeated ? (
         <div style={{
-          background: "#04000e", border: "1px solid #c084fc1a",
+          background: "#faf0ff", border: "1px solid #c084fc1a",
           padding: "7px 14px", marginBottom: 12,
           fontFamily: "'Press Start 2P', monospace",
-          fontSize: 7, color: "#c084fc55", fontStyle: "italic",
+          fontSize: 7, color: "#9955cc", fontStyle: "italic",
           lineHeight: 2, textAlign: "center",
         }}>
           {taunt}
@@ -1131,7 +1131,7 @@ function Quiz({ onComplete }) {
   if (done) return (
     <div style={{
       textAlign: "center", padding: "32px 24px",
-      border: "3px solid #fbbf24", background: "#060400",
+      border: "3px solid #fbbf24", background: "#fffbee",
       animation: "slideIn .5s ease", marginBottom: 24, position: "relative",
     }}>
       <Stars color="#fbbf24" n={25} />
@@ -1157,7 +1157,7 @@ function Quiz({ onComplete }) {
   return (
     <div style={{
       padding: 24, border: "3px solid #f472b6",
-      background: "#06020c", animation: "slideIn .5s ease",
+      background: "#fff0f8", animation: "slideIn .5s ease",
       marginBottom: 24, position: "relative",
     }}>
       <Stars color="#f472b6" n={20} />
@@ -1268,7 +1268,7 @@ function PhaseCard({ phase, onComplete, index }) {
             <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 8.5, color: phase.color, marginBottom: 5, textShadow: `0 0 8px ${phase.color}55` }}>
               {phase.title}
             </div>
-            <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 13, color: "#fff", textShadow: "0 2px 4px #000" }}>
+            <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 13, color: "#1a1a2e", textShadow: "none" }}>
               {phase.subtitle}
             </div>
           </div>
@@ -1306,7 +1306,7 @@ function PhaseCard({ phase, onComplete, index }) {
 
         {/* Story */}
         {step === "story" && (
-          <TypeWriter lines={phase.story} color="#ccc" onDone={() => setStoryDone(true)} />
+          <TypeWriter lines={phase.story} color="#444" onDone={() => setStoryDone(true)} />
         )}
 
         {/* Next button */}
@@ -1423,7 +1423,7 @@ export default function App() {
         {/* ── HEADER ── */}
         <div style={{
           textAlign: "center", marginBottom: 26, padding: "26px 20px",
-          border: "3px solid #ff0055", background: "#060000", position: "relative",
+          border: "3px solid #ff0055", background: "#fff5f8", position: "relative",
           boxShadow: "0 0 40px #ff005518",
         }}>
           <Stars color="#ff0055" n={40} />
@@ -1453,20 +1453,20 @@ export default function App() {
         {/* ── HUD ── */}
         <div style={{
           display: "flex", justifyContent: "space-between",
-          padding: "9px 16px", background: "#0c0c0c",
-          border: "2px solid #181818", marginBottom: 24,
-          fontSize: 7.5, color: "#444",
+          padding: "9px 16px", background: "#ffe8f3",
+          border: "2px solid #ffb3d1", marginBottom: 24,
+          fontSize: 7.5, color: "#994466",
         }}>
-          <span>FASES: <span style={{ color: "#777" }}>{done.length}/{PHASES.length}</span></span>
+          <span>FASES: <span style={{ color: "#cc6688" }}>{done.length}/{PHASES.length}</span></span>
           <span style={{ color: "#f472b6" }}>11 MESES 💕</span>
-          <span>SCORE: <span style={{ color: "#777" }}>{done.length * 1000}</span></span>
+          <span>SCORE: <span style={{ color: "#cc6688" }}>{done.length * 1000}</span></span>
         </div>
 
         {/* ── START SCREEN ── */}
         {!started && (
           <div style={{
             padding: "0 0 32px", border: "3px solid #ff0055",
-            background: "#050000", marginBottom: 24,
+            background: "#fff0f5", marginBottom: 24,
             animation: "slideIn .5s ease", position: "relative", overflow: "hidden",
           }}>
             <Stars color="#ff0055" n={30} />
@@ -1476,7 +1476,7 @@ export default function App() {
               {/* Sky */}
               <div style={{
                 position: "absolute", inset: 0,
-                background: "linear-gradient(180deg, #0a0010 0%, #150020 50%, #0a0010 100%)",
+                background: "linear-gradient(180deg, #ffe4f0 0%, #ffd6e8 50%, #ffe4f0 100%)",
               }} />
 
               {/* Stars in sky */}
@@ -1533,13 +1533,13 @@ export default function App() {
               {/* Ground */}
               <div style={{
                 position: "absolute", bottom: 0, left: 0, right: 0, height: 40,
-                background: "#0a0000", borderTop: "2px solid #ff005522",
+                background: "#ffd6e8", borderTop: "2px solid #ff005522",
               }} />
             </div>
 
             {/* Text */}
             <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: "0 28px" }}>
-              <p style={{ fontSize: 8.5, color: "#888", lineHeight: 2, marginBottom: 5 }}>Para:</p>
+              <p style={{ fontSize: 8.5, color: "#cc8899", lineHeight: 2, marginBottom: 5 }}>Para:</p>
               <p style={{
                 fontSize: 16, color: "#ff0055", lineHeight: 1.8,
                 marginBottom: 8, animation: "glow 2s infinite",
