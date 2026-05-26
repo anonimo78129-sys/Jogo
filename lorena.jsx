@@ -19,6 +19,7 @@ const phases = [
     ],
     emoji: "📚",
     cleared: "AMIZADE CONQUISTADA!",
+    illustration: "/fase1-laboratorio.jpg",
   },
   {
     id: 2,
@@ -36,6 +37,7 @@ const phases = [
     ],
     emoji: "🏖️",
     cleared: "MEMÓRIA ESPECIAL DESBLOQUEADA!",
+    illustration: "/fase2-praia.jpg",
   },
   {
     id: 3,
@@ -53,6 +55,7 @@ const phases = [
     ],
     emoji: "💕",
     cleared: "+11 MESES JUNTOS!",
+    illustration: "/fase3-comeco.jpg",
   },
   {
     id: 4,
@@ -284,6 +287,32 @@ function PhaseCard({ phase, onComplete, index }) {
         >
           📍 {phase.location}
         </div>
+
+        {/* Illustration */}
+        {phase.illustration && (
+          <div style={{
+            marginBottom: 20,
+            border: `2px solid ${phase.color}`,
+            overflow: "hidden",
+            position: "relative",
+          }}>
+            <img
+              src={phase.illustration}
+              alt={phase.subtitle}
+              style={{
+                width: "100%",
+                display: "block",
+                imageRendering: "pixelated",
+                filter: `drop-shadow(0 0 6px ${phase.color}44)`,
+              }}
+            />
+            <div style={{
+              position: "absolute",
+              inset: 0,
+              background: `linear-gradient(to bottom, transparent 60%, ${phase.bg}cc)`,
+            }} />
+          </div>
+        )}
 
         {/* Story */}
         <TypeWriter lines={phase.story} color="#ddd" onDone={() => setStoryDone(true)} />
