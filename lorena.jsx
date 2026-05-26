@@ -92,7 +92,7 @@ const PHASES = [
   {
     id: 1, title: "FASE 1", subtitle: "O Encontro",
     location: "🧪 LABORATÓRIO DE QUÍMICA",
-    color: "#4ade80", bg: "#020a03", stars: "#4ade80",
+    color: "#4ade80", bg: "#010d04", stars: "#4ade80",
     story: ["No laboratório, dois estranhos.", "Aos poucos, foram virando amigos.", "Sem pressa. Sem saber", "onde aquilo ia chegar. 💚"],
     emoji: "📚", cleared: "AMIZADE CONQUISTADA!",
     illustration: "/fase1-laboratorio.jpg", mechanic: "dialogue",
@@ -100,23 +100,23 @@ const PHASES = [
   {
     id: 2, title: "FASE 2", subtitle: "A Queda",
     location: "😂 RUA GRANDE",
-    color: "#fb923c", bg: "#0a0400", stars: "#fb923c",
-    story: ["Ela caiu na minha frente.", "Na Rua Grande. Do nada. 💀", "Eu tentei não rir... não consegui.", "Mas segurei a mão dela. 🧡"],
+    color: "#a3e635", bg: "#060d01", stars: "#a3e635",
+    story: ["Ela caiu na minha frente.", "Na Rua Grande. Do nada. 💀", "Eu tentei não rir... não consegui.", "Mas segurei a mão dela. 🌿"],
     emoji: "💨", cleared: "MEMÓRIA ÉPICA SALVA! 😂",
     mechanic: "catch",
   },
   {
     id: 3, title: "FASE 3", subtitle: "A Viagem",
     location: "🌊 PRAIA DO BACABA",
-    color: "#38bdf8", bg: "#01080f", stars: "#38bdf8",
-    story: ["Uma viagem mudou tudo.", "O Bacaba, o sol, e você do meu lado.", "Foi ali que a gente se reencontrou", "e algo maior começou. 💙"],
+    color: "#34d399", bg: "#011209", stars: "#34d399",
+    story: ["Uma viagem mudou tudo.", "O Bacaba, o sol, e você do meu lado.", "Foi ali que a gente se reencontrou", "e algo maior começou. 💚"],
     emoji: "🏖️", cleared: "MEMÓRIA ESPECIAL DESBLOQUEADA!",
     illustration: "/fase2-praia.jpg", mechanic: "clicker",
   },
   {
     id: 4, title: "FASE 4", subtitle: "A Noite",
     location: "🌙 UMA NOITE EM CLARO",
-    color: "#f472b6", bg: "#06020c", stars: "#f472b6",
+    color: "#f472b6", bg: "#0d040a", stars: "#f472b6",
     story: ["Você se declarou. Eu fiquei em silêncio.", "Você ficou nervosa. Eu fiquei confuso.", "Mas numa noite em claro te conhecendo,", "eu entendi: era você. 💗"],
     emoji: "💕", cleared: "+11 MESES JUNTOS!",
     illustration: "/fase3-comeco.jpg", mechanic: "chat",
@@ -124,15 +124,15 @@ const PHASES = [
   {
     id: 5, title: "FASE 5", subtitle: "Os Planos",
     location: "🎵 PLANOS — BK",
-    color: "#c084fc", bg: "#05020f", stars: "#c084fc",
-    story: ["APA, Alcântara, praça, Rua Grande...", "(e aquela queda que nunca vou esquecer 💀)", "Cada memória contigo é minha favorita.", "Tenho planos com você, Doidiça. 💜"],
+    color: "#86efac", bg: "#031205", stars: "#86efac",
+    story: ["APA, Alcântara, praça, Rua Grande...", "(e aquela queda que nunca vou esquecer 💀)", "Cada memória contigo é minha favorita.", "Tenho planos com você, Doidiça. 💚"],
     emoji: "🏡", cleared: "FUTURO DESBLOQUEADO!",
     illustration: "/fase4-planos.jpg", mechanic: "cards",
   },
   {
     id: 6, title: "FASE 6", subtitle: "Hoje",
     location: "🏆 BOSS FINAL: A DÚVIDA",
-    color: "#fbbf24", bg: "#080500", stars: "#fbbf24",
+    color: "#fbbf24", bg: "#080a04", stars: "#fbbf24",
     story: ["Minha vida não tinha cor.", "Você chegou e me fez querer viver de novo.", "Amor de Vida Minha,", "obrigado por existir. 💛"],
     emoji: "👑", cleared: "A DÚVIDA FOI DERROTADA! ❤️",
     illustration: "/fase5-final.jpg", mechanic: "boss",
@@ -1391,13 +1391,13 @@ export default function App() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
         *{box-sizing:border-box;margin:0;padding:0;}
-        body{background:#020202;min-height:100vh;}
+        body{background:#010d04;min-height:100vh;}
 
         @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
         @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
         @keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
-        @keyframes glow{0%,100%{text-shadow:0 0 10px #ff0055,0 0 20px #ff0055}50%{text-shadow:0 0 20px #ff0055,0 0 50px #ff0055,0 0 80px #ff0055}}
+        @keyframes glow{0%,100%{text-shadow:0 0 10px #4ade80,0 0 20px #4ade80}50%{text-shadow:0 0 20px #4ade80,0 0 50px #4ade80,0 0 80px #4ade80}}
         @keyframes titleGlow{0%,100%{opacity:1;filter:brightness(1)}50%{opacity:.88;filter:brightness(1.2)}}
         @keyframes slideIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
         @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px) rotate(-2deg)}40%{transform:translateX(9px) rotate(2deg)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
@@ -1406,8 +1406,8 @@ export default function App() {
         @keyframes heartFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.1)}}
 
         ::-webkit-scrollbar{width:5px;}
-        ::-webkit-scrollbar-track{background:#0a0a0a;}
-        ::-webkit-scrollbar-thumb{background:#ff0055;}
+        ::-webkit-scrollbar-track{background:#010d04;}
+        ::-webkit-scrollbar-thumb{background:#4ade80;}
       `}</style>
 
       <Confetti active={victory} />
@@ -1423,29 +1423,29 @@ export default function App() {
         {/* ── HEADER ── */}
         <div style={{
           textAlign: "center", marginBottom: 26, padding: "26px 20px",
-          border: "3px solid #ff0055", background: "#060000", position: "relative",
-          boxShadow: "0 0 40px #ff005518",
+          border: "3px solid #4ade80", background: "#010d04", position: "relative",
+          boxShadow: "0 0 40px #4ade8018",
         }}>
-          <Stars color="#ff0055" n={40} />
+          <Stars color="#4ade80" n={40} />
           <div style={{ position: "relative", zIndex: 1 }}>
             <div style={{ display: "flex", justifyContent: "center", gap: 5, marginBottom: 10 }}>
               {[1,0,1,0,1].map((f,i) => (
-                <div key={i} style={{ width: 8, height: 8, background: f ? "#ff0055" : "transparent", border: "1px solid #ff005533" }} />
+                <div key={i} style={{ width: 8, height: 8, background: f ? "#4ade80" : "transparent", border: "1px solid #4ade8033" }} />
               ))}
             </div>
-            <div style={{ fontSize: 8, color: "#ff005577", marginBottom: 5, letterSpacing: 5 }}>★ SPECIAL EDITION ★</div>
+            <div style={{ fontSize: 8, color: "#4ade8077", marginBottom: 5, letterSpacing: 5 }}>★ SPECIAL EDITION ★</div>
             <div style={{
               fontSize: 22, color: "#fff", lineHeight: 1.5,
               animation: "titleGlow 2.5s infinite",
-              textShadow: "0 0 15px #ff0055, 0 0 30px #ff005533",
+              textShadow: "0 0 15px #4ade80, 0 0 30px #4ade8033",
             }}>
               LORENA
             </div>
-            <div style={{ fontSize: 8, color: "#ff0055", marginTop: 5, letterSpacing: 3 }}>THE JOURNEY</div>
+            <div style={{ fontSize: 8, color: "#4ade80", marginTop: 5, letterSpacing: 3 }}>THE JOURNEY</div>
             <div style={{ marginTop: 16, display: "flex", justifyContent: "center", gap: 12 }}>
-              <PixelHeart color="#ff0055" size={22} />
-              <PixelHeart color="#ff0055" size={22} />
-              <PixelHeart color="#ff0055" size={22} />
+              <PixelHeart color="#4ade80" size={22} />
+              <PixelHeart color="#34d399" size={22} />
+              <PixelHeart color="#4ade80" size={22} />
             </div>
           </div>
         </div>
@@ -1453,37 +1453,37 @@ export default function App() {
         {/* ── HUD ── */}
         <div style={{
           display: "flex", justifyContent: "space-between",
-          padding: "9px 16px", background: "#0c0c0c",
-          border: "2px solid #181818", marginBottom: 24,
-          fontSize: 7.5, color: "#444",
+          padding: "9px 16px", background: "#020e05",
+          border: "2px solid #4ade8022", marginBottom: 24,
+          fontSize: 7.5, color: "#2a4a30",
         }}>
-          <span>FASES: <span style={{ color: "#777" }}>{done.length}/{PHASES.length}</span></span>
-          <span style={{ color: "#f472b6" }}>11 MESES 💕</span>
-          <span>SCORE: <span style={{ color: "#777" }}>{done.length * 1000}</span></span>
+          <span>FASES: <span style={{ color: "#4ade8088" }}>{done.length}/{PHASES.length}</span></span>
+          <span style={{ color: "#4ade80" }}>11 MESES 💚</span>
+          <span>SCORE: <span style={{ color: "#4ade8088" }}>{done.length * 1000}</span></span>
         </div>
 
         {/* ── START SCREEN ── */}
         {!started && (
           <div style={{
-            padding: "0 0 32px", border: "3px solid #ff0055",
-            background: "#050000", marginBottom: 24,
+            padding: "0 0 32px", border: "3px solid #4ade80",
+            background: "#010d04", marginBottom: 24,
             animation: "slideIn .5s ease", position: "relative", overflow: "hidden",
           }}>
-            <Stars color="#ff0055" n={30} />
+            <Stars color="#4ade80" n={30} />
 
             {/* Platform scene */}
             <div style={{ position: "relative", height: 200 }}>
-              {/* Sky */}
+              {/* Sky — forest night */}
               <div style={{
                 position: "absolute", inset: 0,
-                background: "linear-gradient(180deg, #0a0010 0%, #150020 50%, #0a0010 100%)",
+                background: "linear-gradient(180deg, #010d04 0%, #021a08 50%, #010d04 100%)",
               }} />
 
-              {/* Stars in sky */}
+              {/* Fireflies / stars */}
               {[...Array(12)].map((_, i) => (
                 <div key={i} style={{
-                  position: "absolute", width: 2, height: 2, background: "#ff0055",
-                  opacity: .3 + (i % 3) * .15,
+                  position: "absolute", width: 2, height: 2, background: "#4ade80",
+                  opacity: .25 + (i % 3) * .15,
                   left: `${(i * 8.7 + 5) % 95}%`, top: `${(i * 11.3) % 50}%`,
                 }} />
               ))}
@@ -1492,63 +1492,63 @@ export default function App() {
               <div style={{
                 position: "absolute", bottom: 40, left: 20,
                 width: 100, height: 14,
-                background: "#ff0055", boxShadow: "0 4px 0 #aa0033",
+                background: "#1a5c2a", boxShadow: "0 4px 0 #0d3316",
               }}>
-                <div style={{ position: "absolute", top: -4, left: 0, right: 0, height: 4, background: "#ff3377" }} />
+                <div style={{ position: "absolute", top: -4, left: 0, right: 0, height: 4, background: "#2d8c4e" }} />
               </div>
               {/* Right platform */}
               <div style={{
                 position: "absolute", bottom: 40, right: 20,
                 width: 100, height: 14,
-                background: "#ff0055", boxShadow: "0 4px 0 #aa0033",
+                background: "#1a5c2a", boxShadow: "0 4px 0 #0d3316",
               }}>
-                <div style={{ position: "absolute", top: -4, left: 0, right: 0, height: 4, background: "#ff3377" }} />
+                <div style={{ position: "absolute", top: -4, left: 0, right: 0, height: 4, background: "#2d8c4e" }} />
               </div>
 
               {/* Lyelson on left platform */}
               <div style={{ position: "absolute", bottom: 54, left: 26, animation: "bob 1.4s .2s infinite" }}>
-                <Sprite src="/lyelson.png" size={72} glow="#ff0055" style={{ animation: "none" }} />
+                <Sprite src="/lyelson.png" size={72} glow="#4ade80" style={{ animation: "none" }} />
               </div>
 
               {/* Lorena on right platform */}
               <div style={{ position: "absolute", bottom: 54, right: 26, animation: "bob 1.4s .6s infinite" }}>
-                <Sprite src="/lorena.png" size={72} glow="#ff0055" style={{ animation: "none" }} />
+                <Sprite src="/lorena.png" size={72} glow="#34d399" style={{ animation: "none" }} />
               </div>
 
               {/* Floating hearts between them */}
               {[
-                { size: 14, left: "42%", bottom: 80, delay: "0s" },
-                { size: 20, left: "50%", bottom: 100, delay: ".4s" },
-                { size: 14, left: "58%", bottom: 80, delay: ".8s" },
+                { size: 14, left: "42%", bottom: 80, delay: "0s", color: "#4ade80" },
+                { size: 20, left: "50%", bottom: 100, delay: ".4s", color: "#34d399" },
+                { size: 14, left: "58%", bottom: 80, delay: ".8s", color: "#4ade80" },
               ].map((h, i) => (
                 <div key={i} style={{
                   position: "absolute", left: h.left, bottom: h.bottom,
                   transform: "translateX(-50%)",
                   animation: `heartFloat 1.6s ${h.delay} infinite`,
                 }}>
-                  <PixelHeart color="#ff0055" size={h.size} />
+                  <PixelHeart color={h.color} size={h.size} />
                 </div>
               ))}
 
-              {/* Ground */}
+              {/* Ground — forest floor */}
               <div style={{
                 position: "absolute", bottom: 0, left: 0, right: 0, height: 40,
-                background: "#0a0000", borderTop: "2px solid #ff005522",
+                background: "#010d04", borderTop: "2px solid #4ade8022",
               }} />
             </div>
 
             {/* Text */}
             <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: "0 28px" }}>
-              <p style={{ fontSize: 8.5, color: "#888", lineHeight: 2, marginBottom: 5 }}>Para:</p>
+              <p style={{ fontSize: 8.5, color: "#3a6b42", lineHeight: 2, marginBottom: 5 }}>Para:</p>
               <p style={{
-                fontSize: 16, color: "#ff0055", lineHeight: 1.8,
+                fontSize: 16, color: "#4ade80", lineHeight: 1.8,
                 marginBottom: 8, animation: "glow 2s infinite",
               }}>LORENA</p>
-              <p style={{ fontSize: 7.5, color: "#555", lineHeight: 2, marginBottom: 3 }}>A nossa história em 6 fases.</p>
-              <p style={{ fontSize: 6.5, color: "#4ade8077", lineHeight: 2, marginBottom: 24 }}>
+              <p style={{ fontSize: 7.5, color: "#2d5c35", lineHeight: 2, marginBottom: 3 }}>A nossa história em 6 fases.</p>
+              <p style={{ fontSize: 6.5, color: "#4ade8055", lineHeight: 2, marginBottom: 24 }}>
                 (ps: são 11 meses, não 9 😂)
               </p>
-              <PixelBtn color="#ff0055" onClick={() => setStarted(true)} anim style={{ fontSize: 11, padding: "14px 32px", boxShadow: "0 0 24px #ff005555" }}>
+              <PixelBtn color="#4ade80" onClick={() => setStarted(true)} anim style={{ fontSize: 11, padding: "14px 32px", boxShadow: "0 0 24px #4ade8055" }}>
                 ▶ INICIAR
               </PixelBtn>
             </div>
@@ -1595,7 +1595,7 @@ export default function App() {
                   style={{
                     width: 200, height: "auto",
                     imageRendering: "pixelated",
-                    filter: "drop-shadow(0 0 20px #ff0055) drop-shadow(0 0 40px #fbbf2444)",
+                    filter: "drop-shadow(0 0 20px #4ade80) drop-shadow(0 0 40px #fbbf2444)",
                     animation: "bob 1.5s infinite",
                   }}
                 />
