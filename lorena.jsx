@@ -1,103 +1,151 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 const HERO_NAME = "Lyelson";
 
-const phases = [
+// ──────────────────────────────────────────
+// DATA
+// ──────────────────────────────────────────
+
+const LAB_DIALOGUE = [
+  { speaker: "lorena", text: "oi... você é novo aqui na turma?" },
+  { speaker: "lyelson", text: "sou sim. eu sou o Lyelson." },
   {
-    id: 1,
-    title: "FASE 1",
-    subtitle: "A Amizade",
-    location: "🏫 FACULDADE",
-    color: "#4ade80",
-    bg: "#0f2318",
-    stars: "#4ade80",
-    story: [
-      "Era mais uma tarde na faculdade...",
-      "Dois estranhos dividiam o mesmo corredor.",
-      "Ninguém sabia ainda, mas aquela amizade",
-      "mudaria tudo. 💚",
-    ],
-    emoji: "📚",
-    cleared: "AMIZADE CONQUISTADA!",
-    illustration: "/fase1-laboratorio.jpg",
+    speaker: "lorena",
+    text: "Lorena! quer ser meu parceiro de laboratório?",
+    choices: ["Claro! 😊", "Por que não? 🤔"],
+  },
+  { speaker: "lyelson", text: "foi assim que começou." },
+  { speaker: "lorena", text: "nem imaginávamos... 💚", last: true },
+];
+
+const CHAT_MESSAGES = [
+  { from: "lorena",  text: "você ainda tá acordado?",            delay: 900  },
+  { from: "lyelson", text: "tô... não consigo dormir",           delay: 1300 },
+  { from: "lorena",  text: "eu também 😅",                       delay: 800  },
+  { from: "lorena",  text: "posso te perguntar uma coisa?",      delay: 700  },
+  { from: "lyelson", text: "pode",                               delay: 1100 },
+  { from: "lorena",  text: "qual é o seu maior sonho?",          delay: 1000 },
+  { from: "lyelson", text: "ter uma família",                    delay: 1900 },
+  { from: "lyelson", text: "uma casa, alguém ao lado",           delay: 800  },
+  { from: "lorena",  text: "❤️",                                 delay: 500  },
+  { from: "lorena",  text: "o meu também",                      delay: 700  },
+  { from: "lyelson", text: "tá tarde... você devia dormir",      delay: 1500 },
+  { from: "lorena",  text: "não quero parar de falar com você", delay: 800  },
+  { from: "lyelson", text: "eu também não 🌙",                   delay: 1100 },
+];
+
+const MEMORY_CARDS = [
+  { emoji: "✈️", title: "Alcântara",   desc: "Uma viagem que nunca vou esquecer" },
+  { emoji: "🌳", title: "APA",         desc: "Passeios longos, sem pressa" },
+  { emoji: "🏡", title: "Nossa Casa",  desc: "Um lar que vamos construir" },
+  { emoji: "💒", title: "Família",     desc: "O maior de todos os planos" },
+];
+
+const ATTACKS = [
+  { label: "❤️ AMOR",      damage: [15, 25], color: "#ff0055" },
+  { label: "🛡️ CONFIANÇA", damage: [20, 30], color: "#38bdf8" },
+  { label: "⭐ 11 MESES",  damage: [25, 35], color: "#fbbf24" },
+  { label: "💪 JUNTOS",    damage: [30, 40], color: "#4ade80" },
+];
+
+const BOSS_TAUNTS = [
+  '"Será que ele te ama de verdade?"',
+  '"E se não der certo?"',
+  '"Você tem certeza disso?"',
+  '"Vai durar mesmo?"',
+  '"Você realmente merece isso?"',
+  '"E se ele cansar de você?"',
+];
+
+const QUIZ_QUESTIONS = [
+  {
+    q: "O que Lyelson fez quando você se declarou?",
+    opts: ["Chorou emocionado 😭", "Ficou em silêncio 🤫", "Saiu correndo 🏃"],
+    correct: 1,
+    ok:   "Isso! Fiquei em silêncio... você ficou nervosa. Mas era amor. 🤍",
+    fail: "Errou! Fiquei em silêncio. Você ficou nervosa. Mas era amor. 🤍",
   },
   {
-    id: 2,
-    title: "FASE 2",
-    subtitle: "A Viagem",
-    location: "🌊 PRAIA",
-    color: "#38bdf8",
-    bg: "#071a2e",
-    stars: "#38bdf8",
-    story: [
-      "Uma viagem com os amigos.",
-      "Areia, mar e risadas.",
-      "E no meio de tudo isso,",
-      "algo diferente começou a nascer. 💙",
-    ],
-    emoji: "🏖️",
-    cleared: "MEMÓRIA ESPECIAL DESBLOQUEADA!",
-    illustration: "/fase2-praia.jpg",
+    q: "Quantos meses a gente completa hoje?",
+    opts: ["9 meses 🤔", "11 meses 💕", "1 ano 🎉"],
+    correct: 1,
+    ok:   "11 meses! (não 9 como alguém chegou a dizer... 😂💜)",
+    fail: "Não são 9! Alguém errou as datas hein 😂 São 11!",
   },
   {
-    id: 3,
-    title: "FASE 3",
-    subtitle: "O Começo",
-    location: "💞 11 MESES",
-    color: "#f472b6",
-    bg: "#2a0a1a",
-    stars: "#f472b6",
-    story: [
-      "Amigos viraram algo mais.",
-      "O coração acelerou pela primeira vez.",
-      `${HERO_NAME} & Lorena`,
-      "começa aqui. 💗",
-    ],
-    emoji: "💕",
-    cleared: "+11 MESES JUNTOS!",
-    illustration: "/fase3-comeco.jpg",
+    q: "Qual memória real vocês dois têm?",
+    opts: ["Viagem pra Alcântara ✈️", "Pular de paraquedas 🪂", "Escalar montanha 🏔️"],
+    correct: 0,
+    ok:   "Alcântara! Uma das memórias favoritas. 💙",
+    fail: "Ainda não! Mas Alcântara sim — foi incrível. 💙",
   },
   {
-    id: 4,
-    title: "FASE 4",
-    subtitle: "Os Planos",
-    location: "🎵 PLANOS - BK",
-    color: "#c084fc",
-    bg: "#180a2e",
-    stars: "#c084fc",
-    story: [
-      '"Tenho planos com você..."',
-      "Construir um lar, uma família.",
-      "Cada passo junto",
-      "é o melhor plano que existe. 💜",
-    ],
-    emoji: "🏡",
-    cleared: "FUTURO DESBLOQUEADO!",
-    illustration: "/fase4-planos.jpg",
-  },
-  {
-    id: 5,
-    title: "FASE 5",
-    subtitle: "Hoje",
-    location: "🏆 BOSS FINAL: O AMOR",
-    color: "#fbbf24",
-    bg: "#1a0f00",
-    stars: "#fbbf24",
-    story: [
-      "Faculdade → Praia → Amor → Família",
-      "Cada fase mais incrível que a anterior.",
-      `Lorena, você é meu jogador 2 favorito.`,
-      "Feliz aniversário de namoro! 💛",
-    ],
-    emoji: "👑",
-    cleared: "VOCÊ COMPLETOU O JOGO! ❤️",
-    illustration: "/fase5-final.jpg",
+    q: "O que Lyelson planeja com você?",
+    opts: ["Uma família e uma casa 🏡", "Só amizade 😅", "Sumir na praia 🏖️"],
+    correct: 0,
+    ok:   "Uma família e uma casa. O futuro dos dois. 💛",
+    fail: "A certa é: uma família e uma casa. O futuro dos dois. 💛",
   },
 ];
 
+const PHASES = [
+  {
+    id: 1, title: "FASE 1", subtitle: "O Encontro",
+    location: "🧪 LABORATÓRIO DE QUÍMICA",
+    color: "#4ade80", bg: "#020a03", stars: "#4ade80",
+    story: ["No laboratório, dois estranhos.", "Aos poucos, foram virando amigos.", "Sem pressa. Sem saber", "onde aquilo ia chegar. 💚"],
+    emoji: "📚", cleared: "AMIZADE CONQUISTADA!",
+    illustration: "/fase1-laboratorio.jpg", mechanic: "dialogue",
+  },
+  {
+    id: 2, title: "FASE 2", subtitle: "A Queda",
+    location: "😂 RUA GRANDE",
+    color: "#fb923c", bg: "#0a0400", stars: "#fb923c",
+    story: ["Ela caiu na minha frente.", "Na Rua Grande. Do nada. 💀", "Eu tentei não rir... não consegui.", "Mas segurei a mão dela. 🧡"],
+    emoji: "💨", cleared: "MEMÓRIA ÉPICA SALVA! 😂",
+    mechanic: "catch",
+  },
+  {
+    id: 3, title: "FASE 3", subtitle: "A Viagem",
+    location: "🌊 PRAIA DO BACABA",
+    color: "#38bdf8", bg: "#01080f", stars: "#38bdf8",
+    story: ["Uma viagem mudou tudo.", "O Bacaba, o sol, e você do meu lado.", "Foi ali que a gente se reencontrou", "e algo maior começou. 💙"],
+    emoji: "🏖️", cleared: "MEMÓRIA ESPECIAL DESBLOQUEADA!",
+    illustration: "/fase2-praia.jpg", mechanic: "clicker",
+  },
+  {
+    id: 4, title: "FASE 4", subtitle: "A Noite",
+    location: "🌙 UMA NOITE EM CLARO",
+    color: "#f472b6", bg: "#06020c", stars: "#f472b6",
+    story: ["Você se declarou. Eu fiquei em silêncio.", "Você ficou nervosa. Eu fiquei confuso.", "Mas numa noite em claro te conhecendo,", "eu entendi: era você. 💗"],
+    emoji: "💕", cleared: "+11 MESES JUNTOS!",
+    illustration: "/fase3-comeco.jpg", mechanic: "chat",
+  },
+  {
+    id: 5, title: "FASE 5", subtitle: "Os Planos",
+    location: "🎵 PLANOS — BK",
+    color: "#c084fc", bg: "#05020f", stars: "#c084fc",
+    story: ["APA, Alcântara, praça, Rua Grande...", "(e aquela queda que nunca vou esquecer 💀)", "Cada memória contigo é minha favorita.", "Tenho planos com você, Doidiça. 💜"],
+    emoji: "🏡", cleared: "FUTURO DESBLOQUEADO!",
+    illustration: "/fase4-planos.jpg", mechanic: "cards",
+  },
+  {
+    id: 6, title: "FASE 6", subtitle: "Hoje",
+    location: "🏆 BOSS FINAL: A DÚVIDA",
+    color: "#fbbf24", bg: "#080500", stars: "#fbbf24",
+    story: ["Minha vida não tinha cor.", "Você chegou e me fez querer viver de novo.", "Amor de Vida Minha,", "obrigado por existir. 💛"],
+    emoji: "👑", cleared: "A DÚVIDA FOI DERROTADA! ❤️",
+    illustration: "/fase5-final.jpg", mechanic: "boss",
+  },
+];
+
+// ──────────────────────────────────────────
+// BASE COMPONENTS
+// ──────────────────────────────────────────
+
 function PixelHeart({ color = "#ff0055", size = 24 }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 10 9" style={{ imageRendering: "pixelated" }}>
+    <svg width={size} height={size} viewBox="0 0 10 9" style={{ imageRendering: "pixelated", display: "block" }}>
       <rect x="1" y="0" width="3" height="1" fill={color} />
       <rect x="6" y="0" width="3" height="1" fill={color} />
       <rect x="0" y="1" width="4" height="2" fill={color} />
@@ -110,257 +158,1029 @@ function PixelHeart({ color = "#ff0055", size = 24 }) {
   );
 }
 
-function PixelStar({ color, x, y, size = 4 }) {
-  return (
-    <div
-      style={{
-        position: "absolute",
-        left: x,
-        top: y,
-        width: size,
-        height: size,
-        backgroundColor: color,
-        opacity: Math.random() * 0.6 + 0.3,
-        imageRendering: "pixelated",
-      }}
-    />
-  );
-}
-
-function Stars({ color }) {
-  const stars = useRef(
-    Array.from({ length: 40 }, (_, i) => ({
-      id: i,
-      x: `${Math.random() * 100}%`,
-      y: `${Math.random() * 100}%`,
-      size: Math.random() > 0.7 ? 4 : 2,
+function Stars({ color, n = 30 }) {
+  const pts = useRef(
+    Array.from({ length: n }, (_, i) => ({
+      id: i, x: `${Math.random() * 100}%`, y: `${Math.random() * 100}%`,
+      s: Math.random() > 0.7 ? 4 : 2, o: Math.random() * 0.4 + 0.15,
     }))
   );
   return (
-    <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
-      {stars.current.map((s) => (
-        <PixelStar key={s.id} color={color} x={s.x} y={s.y} size={s.size} />
+    <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
+      {pts.current.map(p => (
+        <div key={p.id} style={{
+          position: "absolute", left: p.x, top: p.y,
+          width: p.s, height: p.s, background: color, opacity: p.o,
+        }} />
       ))}
     </div>
   );
 }
 
-function PixelChar({ color = "#fff", emoji }) {
+function Sprite({ src, size = 80, glow, style: ext = {} }) {
   return (
-    <div style={{ fontSize: 40, filter: "drop-shadow(0 0 8px " + color + ")", animation: "bob 1s infinite" }}>
-      {emoji}
-    </div>
-  );
-}
-
-function CharacterSprite({ src, size = 80, color = "#fff", style = {} }) {
-  return (
-    <img
-      src={src}
-      alt="character"
-      style={{
-        width: size,
-        height: "auto",
-        imageRendering: "pixelated",
-        filter: `drop-shadow(0 0 10px ${color})`,
-        animation: "bob 1s infinite",
-        ...style,
-      }}
-    />
+    <img src={src} alt="" style={{
+      width: size, height: "auto", imageRendering: "pixelated",
+      filter: glow ? `drop-shadow(0 0 12px ${glow})` : undefined,
+      animation: "bob 1.3s ease-in-out infinite",
+      ...ext,
+    }} />
   );
 }
 
 function TypeWriter({ lines, color, onDone }) {
-  const [lineIdx, setLineIdx] = useState(0);
-  const [charIdx, setCharIdx] = useState(0);
+  const [li, setLi] = useState(0);
+  const [ci, setCi] = useState(0);
   const [done, setDone] = useState(false);
 
   useEffect(() => {
     if (done) return;
-    if (lineIdx >= lines.length) {
-      setDone(true);
-      onDone && onDone();
-      return;
-    }
-    if (charIdx < lines[lineIdx].length) {
-      const t = setTimeout(() => setCharIdx((c) => c + 1), 40);
-      return () => clearTimeout(t);
-    } else {
-      const t = setTimeout(() => {
-        setLineIdx((l) => l + 1);
-        setCharIdx(0);
-      }, 600);
+    if (li >= lines.length) { setDone(true); onDone?.(); return; }
+    if (ci < lines[li].length) {
+      const t = setTimeout(() => setCi(c => c + 1), 36);
       return () => clearTimeout(t);
     }
-  }, [charIdx, lineIdx, done, lines, onDone]);
+    const t = setTimeout(() => { setLi(l => l + 1); setCi(0); }, 520);
+    return () => clearTimeout(t);
+  }, [ci, li, done, lines, onDone]);
 
   return (
-    <div style={{ minHeight: 120, display: "flex", flexDirection: "column", gap: 8 }}>
-      {lines.slice(0, lineIdx + 1).map((line, i) => (
-        <p
-          key={i}
-          style={{
-            margin: 0,
-            color: i < lineIdx ? color : color,
-            opacity: i < lineIdx ? 0.7 : 1,
-            fontSize: 12,
-            lineHeight: 1.8,
-            fontFamily: "'Press Start 2P', monospace",
-          }}
-        >
-          {i < lineIdx ? line : line.slice(0, charIdx)}
-          {i === lineIdx && !done && (
-            <span style={{ animation: "blink 0.8s infinite", color }}> █</span>
-          )}
+    <div style={{ minHeight: 110, display: "flex", flexDirection: "column", gap: 10 }}>
+      {lines.slice(0, li + 1).map((ln, i) => (
+        <p key={i} style={{
+          margin: 0, color, fontSize: 11, lineHeight: 2,
+          opacity: i < li ? 0.55 : 1,
+          fontFamily: "'Press Start 2P', monospace",
+        }}>
+          {i < li ? ln : ln.slice(0, ci)}
+          {i === li && !done && <span style={{ animation: "blink .7s infinite" }}> █</span>}
         </p>
       ))}
     </div>
   );
 }
 
+function PixelBtn({ children, color, onClick, anim, style: ext = {} }) {
+  const [hover, setHover] = useState(false);
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        background: hover ? color : "transparent",
+        border: `2px solid ${color}`,
+        color: hover ? "#000" : color,
+        fontFamily: "'Press Start 2P', monospace",
+        fontSize: 9, padding: "11px 18px",
+        cursor: "pointer", transition: "all .2s",
+        animation: anim ? `pulse 1.5s infinite` : undefined,
+        boxShadow: `0 0 10px ${color}44`,
+        ...ext,
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+function ProgressBar({ value, max, color, label }) {
+  const pct = Math.min(100, (value / max) * 100);
+  return (
+    <div style={{ marginBottom: 14 }}>
+      {label && (
+        <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 7, color, marginBottom: 6 }}>
+          {label}
+        </div>
+      )}
+      <div style={{ height: 16, background: "#111", border: `2px solid ${color}44`, position: "relative", overflow: "hidden" }}>
+        <div style={{
+          position: "absolute", top: 0, left: 0, height: "100%", width: `${pct}%`,
+          background: `linear-gradient(90deg, ${color}88, ${color})`,
+          transition: "width .25s ease", boxShadow: `0 0 8px ${color}`,
+        }} />
+        <div style={{
+          position: "absolute", inset: 0, display: "flex",
+          alignItems: "center", justifyContent: "center",
+          fontFamily: "'Press Start 2P', monospace", fontSize: 7, color: "#fff",
+        }}>
+          {value}/{max}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────
+// MECHANIC: DIALOGUE (Phase 1)
+// ──────────────────────────────────────────
+
+function MechanicDialogue({ phase, onComplete }) {
+  const [idx, setIdx] = useState(0);
+  const [chosen, setChosen] = useState(false);
+
+  const cur = LAB_DIALOGUE[idx];
+  const isLorena = cur?.speaker === "lorena";
+  const color = phase.color;
+
+  const advance = (choice) => {
+    if (cur.choices && !chosen) {
+      setChosen(true);
+      setTimeout(() => { setIdx(i => i + 1); setChosen(false); }, 600);
+      return;
+    }
+    if (cur.last) { onComplete(); return; }
+    setIdx(i => i + 1);
+  };
+
+  if (!cur) return null;
+
+  return (
+    <div style={{ marginBottom: 20 }}>
+      <p style={{
+        fontFamily: "'Press Start 2P', monospace", fontSize: 7.5,
+        color, textAlign: "center", marginBottom: 14,
+      }}>
+        💬 DIALOGUE — O ENCONTRO
+      </p>
+
+      {/* Scene */}
+      <div style={{
+        background: "#0a1a0a",
+        border: `2px solid ${color}33`,
+        padding: "16px 14px 14px",
+        position: "relative",
+        minHeight: 180,
+      }}>
+        {/* Lab background elements */}
+        <div style={{ position: "absolute", top: 8, left: 10, width: 12, height: 28, background: "#4ade8022", border: "1px solid #4ade8044" }} />
+        <div style={{ position: "absolute", top: 14, left: 28, width: 8, height: 22, background: "#38bdf822", border: "1px solid #38bdf844" }} />
+        <div style={{ position: "absolute", top: 8, right: 14, width: 16, height: 30, background: "#4ade8022", border: "1px solid #4ade8044" }} />
+
+        {/* Speaker label */}
+        <div style={{
+          fontFamily: "'Press Start 2P', monospace", fontSize: 7,
+          color: isLorena ? "#f472b6" : color,
+          marginBottom: 8, textAlign: isLorena ? "left" : "right",
+        }}>
+          {isLorena ? "👗 LORENA" : `🧑 ${HERO_NAME.toUpperCase()}`}
+        </div>
+
+        {/* Speech bubble */}
+        <div style={{
+          background: isLorena ? "#0d1a10" : "#0a0a0a",
+          border: `2px solid ${isLorena ? "#f472b688" : color + "88"}`,
+          padding: "12px 14px",
+          fontFamily: "'Press Start 2P', monospace",
+          fontSize: 9, color: "#ddd", lineHeight: 2,
+          marginBottom: 16,
+          position: "relative",
+        }}>
+          {cur.text}
+          {/* Triangle */}
+          <div style={{
+            position: "absolute", bottom: -8,
+            [isLorena ? "left" : "right"]: 20,
+            width: 0, height: 0,
+            borderLeft: "6px solid transparent",
+            borderRight: "6px solid transparent",
+            borderTop: `8px solid ${isLorena ? "#f472b688" : color + "88"}`,
+          }} />
+        </div>
+
+        {/* Choices or continue */}
+        {cur.choices ? (
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+            {cur.choices.map((ch, i) => (
+              <PixelBtn key={i} color={color} onClick={() => advance(ch)} style={{ fontSize: 8 }}>
+                {ch}
+              </PixelBtn>
+            ))}
+          </div>
+        ) : (
+          <button onClick={() => advance()} style={{
+            background: "transparent", border: "none",
+            fontFamily: "'Press Start 2P', monospace", fontSize: 8,
+            color: "#555", cursor: "pointer",
+            animation: "blink 1s infinite",
+          }}>
+            ▶ continuar
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────
+// MECHANIC: CATCH (Phase 2)
+// ──────────────────────────────────────────
+
+function MechanicCatch({ phase, onComplete }) {
+  const [y, setY] = useState(0);
+  const [x, setX] = useState(45);
+  const [score, setScore] = useState(0);
+  const [status, setStatus] = useState("idle");
+  const yRef = useRef(0);
+  const ivRef = useRef(null);
+  const needed = 3;
+  const color = phase.color;
+
+  const startFall = useCallback(() => {
+    yRef.current = 0;
+    setY(0); setX(35 + Math.random() * 30); setStatus("falling");
+  }, []);
+
+  useEffect(() => {
+    if (status === "idle") {
+      const t = setTimeout(startFall, 700);
+      return () => clearTimeout(t);
+    }
+    if (status === "falling") {
+      ivRef.current = setInterval(() => {
+        yRef.current += 1.5;
+        setY(yRef.current);
+        setX(() => 50 + Math.sin(yRef.current * 0.065) * 24);
+        if (yRef.current >= 84) {
+          clearInterval(ivRef.current);
+          setStatus("missed");
+          setTimeout(() => setStatus("idle"), 1000);
+        }
+      }, 28);
+      return () => clearInterval(ivRef.current);
+    }
+  }, [status, startFall]);
+
+  const catchIt = () => {
+    if (status !== "falling") return;
+    clearInterval(ivRef.current);
+    const ns = score + 1;
+    setScore(ns); setStatus("caught");
+    if (ns >= needed) {
+      setTimeout(() => { setStatus("done"); setTimeout(onComplete, 1200); }, 700);
+    } else {
+      setTimeout(() => setStatus("idle"), 900);
+    }
+  };
+
+  return (
+    <div style={{ marginBottom: 20 }}>
+      {/* Score hearts */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 10, marginBottom: 10 }}>
+        {[...Array(needed)].map((_, i) => (
+          <div key={i} style={{
+            width: 22, height: 22,
+            background: i < score ? color : "transparent",
+            border: `2px solid ${color}`,
+            boxShadow: i < score ? `0 0 10px ${color}` : "none",
+            transition: "all .3s",
+          }} />
+        ))}
+      </div>
+      <p style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 8, color, textAlign: "center", marginBottom: 10 }}>
+        SEGURA ELA ANTES DE CAIR!
+      </p>
+
+      {/* Arena */}
+      <div style={{
+        position: "relative", height: 230,
+        background: "linear-gradient(180deg, #100820 0%, #1a0a00 70%, #0a0600 100%)",
+        border: `2px solid ${color}33`, overflow: "hidden",
+      }}>
+        {/* Pixel buildings */}
+        {[[8,55,22],[18,40,14],[55,65,28],[72,48,16],[83,38,12]].map(([l,h,w],i) => (
+          <div key={i} style={{
+            position: "absolute", bottom: 28, left: `${l}%`,
+            width: w, height: h,
+            background: "#fb923c14", border: "1px solid #fb923c22",
+          }}>
+            {/* Windows */}
+            {[...Array(2)].map((_, j) => (
+              <div key={j} style={{
+                position: "absolute", top: 8 + j * 16,
+                left: "25%", width: "50%", height: 6,
+                background: "#fb923c22",
+              }} />
+            ))}
+          </div>
+        ))}
+
+        {/* Stars */}
+        {[...Array(10)].map((_, i) => (
+          <div key={i} style={{
+            position: "absolute", width: 2, height: 2, background: color,
+            opacity: 0.3, left: `${(i * 10.5) % 100}%`, top: `${(i * 7) % 30}%`,
+          }} />
+        ))}
+
+        {/* Sidewalk */}
+        <div style={{
+          position: "absolute", bottom: 0, left: 0, right: 0, height: 28,
+          background: "repeating-linear-gradient(90deg,#fb923c12 0,#fb923c12 32px,#fb923c06 32px,#fb923c06 64px)",
+          borderTop: `2px solid ${color}`,
+        }}>
+          <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 6, color: color + "66", textAlign: "center", lineHeight: "26px" }}>
+            ── RUA GRANDE ──
+          </div>
+        </div>
+
+        {/* Falling character */}
+        {status === "falling" && (
+          <button onClick={catchIt} style={{
+            position: "absolute",
+            left: `${x}%`, top: `${y}%`,
+            transform: "translateX(-50%) rotate(12deg)",
+            background: "transparent", border: "none",
+            fontSize: 34, cursor: "pointer",
+            filter: `drop-shadow(0 0 8px ${color})`,
+            transition: "left .05s linear", zIndex: 5,
+            animation: "none",
+          }}>
+            👗
+          </button>
+        )}
+
+        {status === "caught" && (
+          <div style={{
+            position: "absolute", inset: 0, display: "flex",
+            flexDirection: "column", alignItems: "center", justifyContent: "center",
+            animation: "popIn .3s ease",
+          }}>
+            <div style={{ fontSize: 30, marginBottom: 8 }}>🤝</div>
+            <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 8, color: "#4ade80" }}>SEGUROU! 💪</div>
+          </div>
+        )}
+
+        {status === "missed" && (
+          <div style={{
+            position: "absolute", bottom: 32, left: 0, right: 0,
+            textAlign: "center", fontFamily: "'Press Start 2P', monospace",
+            fontSize: 8, color: "#ff0055", animation: "slideIn .3s ease",
+          }}>
+            CAIU DE NOVO! 😂
+          </div>
+        )}
+
+        {status === "done" && (
+          <div style={{
+            position: "absolute", inset: 0, display: "flex",
+            flexDirection: "column", alignItems: "center", justifyContent: "center",
+            background: "#00000099", animation: "popIn .4s ease",
+          }}>
+            <div style={{ fontSize: 30, marginBottom: 8 }}>🏆</div>
+            <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 9, color: "#fbbf24" }}>MISSÃO CUMPRIDA!</div>
+          </div>
+        )}
+      </div>
+      <p style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 7, color: "#444", textAlign: "center", marginTop: 8 }}>
+        Clique nela para segurar!
+      </p>
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────
+// MECHANIC: CLICKER (Phase 3)
+// ──────────────────────────────────────────
+
+function MechanicClicker({ phase, onComplete }) {
+  const [clicks, setClicks] = useState(0);
+  const [floaters, setFloaters] = useState([]);
+  const [done, setDone] = useState(false);
+  const needed = 25;
+  const color = phase.color;
+
+  const handleClick = (e) => {
+    if (done) return;
+    const nc = clicks + 1;
+    setClicks(nc);
+    const id = Date.now() + Math.random();
+    const rect = e.currentTarget.getBoundingClientRect();
+    const rx = e.clientX - rect.left;
+    const ry = e.clientY - rect.top;
+    setFloaters(f => [...f, { id, x: rx, y: ry }]);
+    setTimeout(() => setFloaters(f => f.filter(h => h.id !== id)), 1000);
+    if (nc >= needed) {
+      setDone(true);
+      setTimeout(onComplete, 1000);
+    }
+  };
+
+  return (
+    <div style={{ marginBottom: 20 }}>
+      <ProgressBar value={clicks} max={needed} color={color} label="AMOR COLETADO:" />
+
+      {/* Beach scene */}
+      <div
+        onClick={handleClick}
+        style={{
+          position: "relative", height: 200,
+          background: "linear-gradient(180deg, #0a2a4a 0%, #0e4070 40%, #0a2a4a 60%, #0a3a1a 80%, #05200a 100%)",
+          border: `2px solid ${color}44`,
+          cursor: done ? "default" : "pointer",
+          overflow: "hidden", userSelect: "none",
+        }}
+      >
+        {/* Sun */}
+        <div style={{
+          position: "absolute", top: 16, right: 24,
+          width: 36, height: 36, background: "#fbbf24",
+          boxShadow: "0 0 20px #fbbf24",
+          imageRendering: "pixelated",
+        }} />
+        {/* Clouds */}
+        {[[10,12],[35,20],[65,8]].map(([l,t],i) => (
+          <div key={i} style={{ position: "absolute", left: `${l}%`, top: t, display: "flex", gap: 2 }}>
+            <div style={{ width: 16, height: 10, background: "#ffffff18" }} />
+            <div style={{ width: 22, height: 12, background: "#ffffff22" }} />
+            <div style={{ width: 14, height: 10, background: "#ffffff18" }} />
+          </div>
+        ))}
+        {/* Waves */}
+        {[0, 1, 2].map(i => (
+          <div key={i} style={{
+            position: "absolute", bottom: 32 + i * 12, left: 0, right: 0,
+            height: 8,
+            background: `rgba(56,189,248,${0.15 + i * 0.08})`,
+            borderTop: `1px solid ${color}44`,
+          }} />
+        ))}
+        {/* Sand */}
+        <div style={{
+          position: "absolute", bottom: 0, left: 0, right: 0, height: 32,
+          background: "linear-gradient(180deg, #8b6914 0%, #6b4f10 100%)",
+          borderTop: `2px solid #a07820`,
+        }} />
+
+        {/* Big heart to click */}
+        {!done && (
+          <div style={{
+            position: "absolute", top: "50%", left: "50%",
+            transform: "translate(-50%, -50%)",
+            animation: "bob 1.2s infinite",
+          }}>
+            <PixelHeart color={color} size={72} />
+          </div>
+        )}
+
+        {/* Floating hearts on click */}
+        {floaters.map(f => (
+          <div key={f.id} style={{
+            position: "absolute", left: f.x, top: f.y,
+            pointerEvents: "none", animation: "floatUp .9s ease-out forwards",
+            transform: "translate(-50%,-50%)",
+          }}>
+            <PixelHeart color={color} size={20} />
+          </div>
+        ))}
+
+        {done && (
+          <div style={{
+            position: "absolute", inset: 0, display: "flex",
+            flexDirection: "column", alignItems: "center", justifyContent: "center",
+            background: "#00000099", animation: "popIn .4s ease",
+          }}>
+            <div style={{ fontSize: 30, marginBottom: 8 }}>💙</div>
+            <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 9, color }}>AMOR COLETADO!</div>
+          </div>
+        )}
+
+        {/* Hint */}
+        {!done && clicks === 0 && (
+          <div style={{
+            position: "absolute", bottom: 38, left: 0, right: 0,
+            fontFamily: "'Press Start 2P', monospace", fontSize: 7,
+            color: "#ffffff44", textAlign: "center",
+            animation: "blink 1.5s infinite",
+          }}>
+            TOQUE NA TELA!
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────
+// MECHANIC: CHAT (Phase 4)
+// ──────────────────────────────────────────
+
+function MechanicChat({ phase, onComplete }) {
+  const [vis, setVis] = useState(0);
+  const [typing, setTyping] = useState(false);
+  const [done, setDone] = useState(false);
+  const ref = useRef(null);
+  const color = phase.color;
+
+  useEffect(() => {
+    if (vis >= CHAT_MESSAGES.length) {
+      setTyping(false);
+      setTimeout(() => setDone(true), 700);
+      return;
+    }
+    setTyping(true);
+    const t = setTimeout(() => {
+      setTyping(false);
+      setVis(v => v + 1);
+      setTimeout(() => ref.current?.scrollTo({ top: 9999, behavior: "smooth" }), 60);
+    }, CHAT_MESSAGES[vis].delay);
+    return () => clearTimeout(t);
+  }, [vis]);
+
+  return (
+    <div style={{ marginBottom: 16 }}>
+      <p style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 7, color, textAlign: "center", marginBottom: 10 }}>
+        📱 UMA NOITE EM CLARO
+      </p>
+      <div style={{ border: `2px solid ${color}44`, background: "#030308", overflow: "hidden" }}>
+        {/* Header */}
+        <div style={{
+          background: `${color}14`, borderBottom: `1px solid ${color}33`,
+          padding: "8px 12px", display: "flex", alignItems: "center", gap: 10,
+        }}>
+          <div style={{
+            width: 34, height: 34, background: `${color}22`,
+            border: `2px solid ${color}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16,
+          }}>👗</div>
+          <div>
+            <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 7, color: "#fff" }}>Lorena</div>
+            <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 6, color: "#4ade80", marginTop: 3 }}>● online</div>
+          </div>
+          <div style={{ marginLeft: "auto", fontFamily: "'Press Start 2P', monospace", fontSize: 6, color: "#333" }}>🌙 03:47</div>
+        </div>
+
+        {/* Messages */}
+        <div ref={ref} style={{
+          height: 220, overflowY: "auto", padding: "10px 10px",
+          display: "flex", flexDirection: "column", gap: 8,
+        }}>
+          {CHAT_MESSAGES.slice(0, vis).map((msg, i) => {
+            const me = msg.from === "lyelson";
+            return (
+              <div key={i} style={{ display: "flex", justifyContent: me ? "flex-end" : "flex-start", animation: "slideIn .25s ease" }}>
+                <div style={{
+                  background: me ? `${color}1a` : "#0e0e1e",
+                  border: `1px solid ${me ? color + "55" : "#252540"}`,
+                  padding: "7px 11px", maxWidth: "76%",
+                  fontFamily: "'Press Start 2P', monospace",
+                  fontSize: 7.5, color: me ? color : "#ccc", lineHeight: 1.9,
+                }}>
+                  {msg.text}
+                </div>
+              </div>
+            );
+          })}
+          {typing && (
+            <div style={{ display: "flex" }}>
+              <div style={{
+                background: "#0e0e1e", border: "1px solid #252540",
+                padding: "8px 14px", fontSize: 14, color: "#444",
+                letterSpacing: 4, animation: "blink .9s infinite",
+              }}>•••</div>
+            </div>
+          )}
+          {done && (
+            <div style={{
+              textAlign: "center", fontFamily: "'Press Start 2P', monospace",
+              fontSize: 7.5, color, animation: "popIn .4s ease", marginTop: 4,
+            }}>
+              🌙 assim foi a noite...
+            </div>
+          )}
+        </div>
+
+        {done && (
+          <div style={{ borderTop: `1px solid ${color}33`, padding: "10px", textAlign: "center" }}>
+            <PixelBtn color={color} onClick={onComplete} anim>❤️ CONTINUAR</PixelBtn>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────
+// MECHANIC: CARD FLIP (Phase 5)
+// ──────────────────────────────────────────
+
+function MechanicCards({ phase, onComplete }) {
+  const [flipped, setFlipped] = useState(new Set());
+  const [selected, setSelected] = useState(null);
+  const color = phase.color;
+
+  const flip = (i) => {
+    if (flipped.has(i)) { setSelected(i); return; }
+    const nf = new Set(flipped);
+    nf.add(i);
+    setFlipped(nf);
+    setSelected(i);
+    if (nf.size === MEMORY_CARDS.length) {
+      setTimeout(onComplete, 1200);
+    }
+  };
+
+  return (
+    <div style={{ marginBottom: 20 }}>
+      <p style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 7.5, color, textAlign: "center", marginBottom: 12 }}>
+        🃏 DESCUBRA OS PLANOS!
+      </p>
+
+      {/* Card grid */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
+        {MEMORY_CARDS.map((card, i) => {
+          const isFlipped = flipped.has(i);
+          const isSel = selected === i;
+          return (
+            <div
+              key={i}
+              onClick={() => flip(i)}
+              style={{
+                height: 100,
+                border: `2px solid ${isFlipped ? color : "#222"}`,
+                background: isFlipped ? `${color}14` : "#0d0d0d",
+                cursor: "pointer",
+                display: "flex", flexDirection: "column",
+                alignItems: "center", justifyContent: "center",
+                padding: 8, transition: "all .3s",
+                boxShadow: isSel && isFlipped ? `0 0 16px ${color}44` : "none",
+                position: "relative", overflow: "hidden",
+              }}
+            >
+              {!isFlipped ? (
+                <>
+                  <div style={{ fontSize: 24, filter: "grayscale(1) brightness(0.2)", marginBottom: 4 }}>❓</div>
+                  <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 6, color: "#333" }}>CLIQUE</div>
+                </>
+              ) : (
+                <div style={{ textAlign: "center", animation: "popIn .35s ease" }}>
+                  <div style={{ fontSize: 26, marginBottom: 5 }}>{card.emoji}</div>
+                  <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 7, color, marginBottom: 4 }}>{card.title}</div>
+                  <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 5.5, color: "#888", lineHeight: 1.7 }}>{card.desc}</div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 7, color: "#444", textAlign: "center" }}>
+        {flipped.size}/{MEMORY_CARDS.length} planos revelados
+      </div>
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────
+// MECHANIC: BOSS (Phase 6)
+// ──────────────────────────────────────────
+
+function MechanicBoss({ phase, onComplete }) {
+  const [hp, setHp] = useState(100);
+  const [taunt, setTaunt] = useState(BOSS_TAUNTS[0]);
+  const [fdmg, setFdmg] = useState(null);
+  const [shaking, setShaking] = useState(false);
+  const [defeated, setDefeated] = useState(false);
+  const [cd, setCd] = useState(false);
+  const color = phase.color;
+
+  const attack = (atk) => {
+    if (defeated || cd) return;
+    setCd(true);
+    const crit = Math.random() < 0.2;
+    let dmg = Math.floor(Math.random() * (atk.damage[1] - atk.damage[0] + 1) + atk.damage[0]);
+    if (crit) dmg = Math.floor(dmg * 1.8);
+    const nh = Math.max(0, hp - dmg);
+    setHp(nh); setFdmg({ v: dmg, c: atk.color, crit });
+    setShaking(true);
+    setTimeout(() => setShaking(false), 420);
+    setTimeout(() => setFdmg(null), 950);
+    if (nh <= 0) {
+      setDefeated(true);
+      setTimeout(onComplete, 2600);
+    } else {
+      setTimeout(() => {
+        setTaunt(BOSS_TAUNTS[Math.floor(Math.random() * BOSS_TAUNTS.length)]);
+        setCd(false);
+      }, 950);
+    }
+  };
+
+  const hpc = hp > 60 ? "#c084fc" : hp > 30 ? "#fbbf24" : "#ff0055";
+
+  return (
+    <div style={{ marginBottom: 20 }}>
+      {/* HP bar */}
+      <div style={{
+        position: "relative", height: 26,
+        border: `2px solid ${hpc}`, background: "#0a0a0a",
+        marginBottom: 18, overflow: "hidden", transition: "border-color .4s",
+      }}>
+        <div style={{
+          position: "absolute", top: 0, left: 0,
+          height: "100%", width: `${hp}%`,
+          background: `linear-gradient(90deg,${hpc}66,${hpc})`,
+          transition: "width .35s, background .4s",
+          boxShadow: `0 0 10px ${hpc}`,
+        }} />
+        <div style={{
+          position: "absolute", inset: 0, display: "flex",
+          alignItems: "center", justifyContent: "center",
+          fontFamily: "'Press Start 2P', monospace", fontSize: 7.5, color: "#fff",
+          textShadow: "0 1px 3px #000",
+        }}>
+          ⚠ A DÚVIDA — {hp} HP
+        </div>
+      </div>
+
+      {/* Boss */}
+      <div style={{ textAlign: "center", position: "relative", marginBottom: 16 }}>
+        <div style={{ display: "inline-block", position: "relative" }}>
+          <img src="/boss-duvida.png" alt="A Dúvida" style={{
+            width: 140, imageRendering: "pixelated",
+            animation: defeated ? "none" : shaking ? "shake .4s" : "bob 2s infinite",
+            filter: defeated ? "grayscale(1) brightness(.2)" : `drop-shadow(0 0 18px #c084fc)`,
+            opacity: defeated ? .2 : 1, transition: "opacity .9s, filter .5s",
+          }} />
+          {fdmg && (
+            <div style={{
+              position: "absolute", top: -18, right: -28,
+              fontFamily: "'Press Start 2P', monospace",
+              fontSize: fdmg.crit ? 13 : 11, color: fdmg.c,
+              animation: "floatUp .95s ease-out forwards",
+              pointerEvents: "none", textShadow: `0 0 12px ${fdmg.c}`,
+              whiteSpace: "nowrap",
+            }}>
+              {fdmg.crit && <div style={{ fontSize: 7 }}>CRÍTICO!</div>}
+              -{fdmg.v}
+            </div>
+          )}
+          {defeated && (
+            <div style={{
+              position: "absolute", inset: 0, display: "flex",
+              alignItems: "center", justifyContent: "center",
+              fontSize: 52, animation: "popIn .4s ease",
+            }}>💥</div>
+          )}
+        </div>
+
+        {!defeated ? (
+          <div style={{
+            background: "#050010", border: "2px solid #c084fc22",
+            padding: "8px 14px", margin: "12px auto 0", maxWidth: 280,
+            fontFamily: "'Press Start 2P', monospace",
+            fontSize: 7.5, color: "#c084fc77", fontStyle: "italic", lineHeight: 1.8,
+          }}>
+            {taunt}
+          </div>
+        ) : (
+          <div style={{
+            fontFamily: "'Press Start 2P', monospace", fontSize: 10,
+            color: "#fbbf24", marginTop: 14, animation: "blink .5s 4",
+            textShadow: "0 0 14px #fbbf24",
+          }}>
+            🏆 A DÚVIDA FOI DERROTADA!
+          </div>
+        )}
+      </div>
+
+      {!defeated && (
+        <>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+            {ATTACKS.map(atk => (
+              <PixelBtn key={atk.label} color={cd ? "#2a2a2a" : atk.color} onClick={() => attack(atk)} style={{ fontSize: 7, opacity: cd ? 0.4 : 1 }}>
+                {atk.label}
+              </PixelBtn>
+            ))}
+          </div>
+          <p style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 6.5, color: "#2a2a2a", textAlign: "center", marginTop: 10 }}>
+            Derrote a Dúvida com Amor e Confiança!
+          </p>
+        </>
+      )}
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────
+// QUIZ
+// ──────────────────────────────────────────
+
+function Quiz({ onComplete }) {
+  const [qi, setQi] = useState(0);
+  const [sel, setSel] = useState(null);
+  const [score, setScore] = useState(0);
+  const [done, setDone] = useState(false);
+  const q = QUIZ_QUESTIONS[qi];
+
+  const answer = (i) => {
+    if (sel !== null) return;
+    setSel(i);
+    if (i === q.correct) setScore(s => s + 1);
+    setTimeout(() => {
+      if (qi < QUIZ_QUESTIONS.length - 1) { setQi(qi + 1); setSel(null); }
+      else setDone(true);
+    }, 2100);
+  };
+
+  if (done) return (
+    <div style={{
+      textAlign: "center", padding: "32px 24px",
+      border: "3px solid #fbbf24", background: "#060400",
+      animation: "slideIn .5s ease", marginBottom: 24, position: "relative",
+    }}>
+      <Stars color="#fbbf24" n={25} />
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <div style={{ fontSize: 28, marginBottom: 12 }}>🎯</div>
+        <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 10, color: "#fbbf24", marginBottom: 20 }}>QUIZ CONCLUÍDO!</div>
+        <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 9, color: "#bbb", lineHeight: 2.8, marginBottom: 24 }}>
+          <p>Você acertou <span style={{ color: "#fbbf24" }}>{score}/{QUIZ_QUESTIONS.length}</span></p>
+          {score === QUIZ_QUESTIONS.length
+            ? <p style={{ color: "#4ade80", marginTop: 8 }}>PERFEITO! Você me conhece bem 💚</p>
+            : score >= 2
+            ? <p style={{ color: "#f472b6", marginTop: 8 }}>Quase! Mas agora sabe tudo 💕</p>
+            : <p style={{ color: "#f472b6", marginTop: 8 }}>Tudo bem... o importante vem agora 💛</p>
+          }
+        </div>
+        <PixelBtn color="#fbbf24" onClick={onComplete} anim style={{ fontSize: 10, padding: "14px 28px", boxShadow: "0 0 20px #fbbf2466" }}>
+          ❤️ VER DECLARAÇÃO
+        </PixelBtn>
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={{
+      padding: 24, border: "3px solid #f472b6",
+      background: "#06020c", animation: "slideIn .5s ease",
+      marginBottom: 24, position: "relative",
+    }}>
+      <Stars color="#f472b6" n={20} />
+      {["tl","tr","bl","br"].map(p => (
+        <div key={p} style={{
+          position: "absolute", width: 10, height: 10, background: "#f472b6",
+          top: p.startsWith("t") ? -3 : undefined, bottom: p.startsWith("b") ? -3 : undefined,
+          left: p.endsWith("l") ? -3 : undefined, right: p.endsWith("r") ? -3 : undefined,
+        }} />
+      ))}
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+          <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 8, color: "#f472b6" }}>❓ QUIZ SURPRESA</div>
+          <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 8, color: "#444" }}>{qi + 1}/{QUIZ_QUESTIONS.length}</div>
+        </div>
+        <div style={{ height: 4, background: "#1a0a1a", marginBottom: 18, border: "1px solid #f472b633", overflow: "hidden" }}>
+          <div style={{ height: "100%", width: `${(qi / QUIZ_QUESTIONS.length) * 100}%`, background: "#f472b6", transition: "width .4s", boxShadow: "0 0 8px #f472b6" }} />
+        </div>
+        <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 9, color: "#fff", lineHeight: 2.1, marginBottom: 20 }}>
+          {q.q}
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {q.opts.map((opt, i) => {
+            const right = i === q.correct, chosen = i === sel;
+            let bc = "#f472b6", bg = "transparent", tc = "#f472b6";
+            if (sel !== null) {
+              if (right) { bc = "#4ade80"; bg = "#4ade8015"; tc = "#4ade80"; }
+              else if (chosen) { bc = "#ff0055"; bg = "#ff005515"; tc = "#ff0055"; }
+              else { bc = "#1a1a1a"; tc = "#2a2a2a"; }
+            }
+            return (
+              <button key={i} onClick={() => answer(i)} style={{
+                background: bg, border: `2px solid ${bc}`, color: tc,
+                fontFamily: "'Press Start 2P', monospace", fontSize: 8,
+                padding: "11px 14px", cursor: sel === null ? "pointer" : "default",
+                textAlign: "left", transition: "all .25s", lineHeight: 1.8,
+              }}>
+                {right && sel !== null ? "✓ " : chosen && !right ? "✗ " : "  "}{opt}
+              </button>
+            );
+          })}
+        </div>
+        {sel !== null && (
+          <div style={{
+            marginTop: 14, fontFamily: "'Press Start 2P', monospace", fontSize: 8,
+            color: sel === q.correct ? "#4ade80" : "#f472b6",
+            borderLeft: `3px solid ${sel === q.correct ? "#4ade80" : "#f472b6"}`,
+            paddingLeft: 12, lineHeight: 1.9,
+          }}>
+            {sel === q.correct ? q.ok : q.fail}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────
+// PHASE CARD
+// ──────────────────────────────────────────
+
 function PhaseCard({ phase, onComplete, index }) {
+  const [step, setStep] = useState(phase.mechanic);
   const [storyDone, setStoryDone] = useState(false);
   const [cleared, setCleared] = useState(false);
   const [visible, setVisible] = useState(false);
+  const isLast = phase.id === PHASES.length;
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), index * 100);
     return () => clearTimeout(t);
   }, [index]);
 
-  return (
-    <div
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(30px)",
-        transition: "all 0.5s ease",
-        background: phase.bg,
-        border: `3px solid ${phase.color}`,
-        borderRadius: 0,
-        padding: 24,
-        marginBottom: 24,
-        position: "relative",
-        boxShadow: `0 0 20px ${phase.color}44, inset 0 0 40px ${phase.bg}`,
-        imageRendering: "pixelated",
-      }}
-    >
-      <Stars color={phase.stars} />
+  const MECHANIC_MAP = {
+    dialogue: MechanicDialogue,
+    catch:    MechanicCatch,
+    clicker:  MechanicClicker,
+    chat:     MechanicChat,
+    cards:    MechanicCards,
+    boss:     MechanicBoss,
+  };
+  const Mechanic = MECHANIC_MAP[step];
 
-      {/* Corner decorations */}
-      {["topleft", "topright", "bottomleft", "bottomright"].map((pos) => (
-        <div
-          key={pos}
-          style={{
-            position: "absolute",
-            width: 8,
-            height: 8,
-            background: phase.color,
-            ...(pos.includes("top") ? { top: -2 } : { bottom: -2 }),
-            ...(pos.includes("left") ? { left: -2 } : { right: -2 }),
-          }}
-        />
+  return (
+    <div style={{
+      opacity: visible ? 1 : 0,
+      transform: visible ? "translateY(0)" : "translateY(24px)",
+      transition: "all .5s ease",
+      background: phase.bg, border: `3px solid ${phase.color}`,
+      padding: 22, marginBottom: 28, position: "relative",
+      boxShadow: `0 0 28px ${phase.color}22, inset 0 0 60px ${phase.bg}`,
+    }}>
+      <Stars color={phase.stars} n={25} />
+
+      {/* Corner pixels */}
+      {["tl","tr","bl","br"].map(p => (
+        <div key={p} style={{
+          position: "absolute", width: 10, height: 10, background: phase.color,
+          top: p.startsWith("t") ? -3 : undefined, bottom: p.startsWith("b") ? -3 : undefined,
+          left: p.endsWith("l") ? -3 : undefined, right: p.endsWith("r") ? -3 : undefined,
+        }} />
       ))}
 
       <div style={{ position: "relative", zIndex: 1 }}>
         {/* Header */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
           <div>
-            <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 10, color: phase.color, marginBottom: 4 }}>
+            <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 8.5, color: phase.color, marginBottom: 5, textShadow: `0 0 8px ${phase.color}55` }}>
               {phase.title}
             </div>
-            <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 14, color: "#fff" }}>
+            <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 13, color: "#fff", textShadow: "0 2px 4px #000" }}>
               {phase.subtitle}
             </div>
           </div>
-          <PixelChar color={phase.color} emoji={phase.emoji} />
+          <div style={{ fontSize: 36, filter: `drop-shadow(0 0 10px ${phase.color})`, animation: "bob 1.3s infinite" }}>
+            {phase.emoji}
+          </div>
         </div>
 
-        {/* Location bar */}
-        <div
-          style={{
-            background: `${phase.color}22`,
-            border: `1px solid ${phase.color}`,
-            padding: "6px 12px",
-            marginBottom: 20,
-            fontFamily: "'Press Start 2P', monospace",
-            fontSize: 9,
-            color: phase.color,
-          }}
-        >
+        {/* Location */}
+        <div style={{
+          display: "inline-flex", alignItems: "center", gap: 6,
+          background: `${phase.color}14`, border: `1px solid ${phase.color}55`,
+          padding: "5px 12px", marginBottom: 20,
+          fontFamily: "'Press Start 2P', monospace", fontSize: 7.5, color: phase.color,
+        }}>
           📍 {phase.location}
         </div>
 
+        {/* Mechanic */}
+        {Mechanic && step === phase.mechanic && (
+          <Mechanic phase={phase} onComplete={() => setStep("story")} />
+        )}
+
         {/* Illustration */}
-        {phase.illustration && (
+        {step === "story" && phase.illustration && (
           <div style={{
-            marginBottom: 20,
-            border: `2px solid ${phase.color}`,
-            overflow: "hidden",
-            position: "relative",
+            marginBottom: 20, border: `2px solid ${phase.color}`,
+            overflow: "hidden", position: "relative",
+            boxShadow: `0 0 16px ${phase.color}22`,
           }}>
-            <img
-              src={phase.illustration}
-              alt={phase.subtitle}
-              style={{
-                width: "100%",
-                display: "block",
-                imageRendering: "pixelated",
-                filter: `drop-shadow(0 0 6px ${phase.color}44)`,
-              }}
-            />
-            <div style={{
-              position: "absolute",
-              inset: 0,
-              background: `linear-gradient(to bottom, transparent 60%, ${phase.bg}cc)`,
-            }} />
+            <img src={phase.illustration} alt={phase.subtitle} style={{ width: "100%", display: "block", imageRendering: "pixelated" }} />
+            <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to bottom, transparent 55%, ${phase.bg}ee)` }} />
           </div>
         )}
 
         {/* Story */}
-        <TypeWriter lines={phase.story} color="#ddd" onDone={() => setStoryDone(true)} />
+        {step === "story" && (
+          <TypeWriter lines={phase.story} color="#ccc" onDone={() => setStoryDone(true)} />
+        )}
 
-        {/* Button */}
-        {storyDone && !cleared && (
-          <button
-            onClick={() => {
-              setCleared(true);
-              setTimeout(() => onComplete && onComplete(), 400);
-            }}
-            style={{
-              marginTop: 20,
-              background: "transparent",
-              border: `2px solid ${phase.color}`,
-              color: phase.color,
-              fontFamily: "'Press Start 2P', monospace",
-              fontSize: 9,
-              padding: "10px 16px",
-              cursor: "pointer",
-              transition: "all 0.2s",
-              animation: "pulse 1.5s infinite",
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.background = phase.color;
-              e.target.style.color = "#000";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = "transparent";
-              e.target.style.color = phase.color;
-            }}
+        {/* Next button */}
+        {step === "story" && storyDone && !cleared && (
+          <PixelBtn
+            color={phase.color}
+            anim
+            onClick={() => { setCleared(true); setTimeout(() => onComplete?.(), 400); }}
+            style={{ marginTop: 20 }}
           >
-            ▶ PRÓXIMA FASE
-          </button>
+            {isLast ? "▶ VER DECLARAÇÃO" : "▶ PRÓXIMA FASE"}
+          </PixelBtn>
         )}
 
         {cleared && (
-          <div
-            style={{
-              marginTop: 20,
-              fontFamily: "'Press Start 2P', monospace",
-              fontSize: 9,
-              color: phase.color,
-              animation: "blink 0.5s 4",
-            }}
-          >
+          <div style={{
+            marginTop: 20, fontFamily: "'Press Start 2P', monospace",
+            fontSize: 9, color: phase.color, animation: "blink .5s 4",
+            textShadow: `0 0 10px ${phase.color}`,
+          }}>
             ✓ {phase.cleared}
           </div>
         )}
@@ -369,282 +1189,310 @@ function PhaseCard({ phase, onComplete, index }) {
   );
 }
 
+// ──────────────────────────────────────────
+// CONFETTI
+// ──────────────────────────────────────────
+
 function Confetti({ active }) {
   const pieces = useRef(
-    Array.from({ length: 60 }, (_, i) => ({
+    Array.from({ length: 70 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
-      color: ["#f472b6", "#fbbf24", "#4ade80", "#38bdf8", "#c084fc"][Math.floor(Math.random() * 5)],
-      delay: Math.random() * 2,
-      size: Math.random() * 8 + 4,
+      color: ["#f472b6","#fbbf24","#4ade80","#38bdf8","#c084fc","#fb923c"][i % 6],
+      delay: Math.random() * 2.5,
+      size: Math.random() * 9 + 3,
       speed: Math.random() * 3 + 2,
     }))
   );
-
   if (!active) return null;
-
   return (
     <div style={{ position: "fixed", inset: 0, pointerEvents: "none", overflow: "hidden", zIndex: 100 }}>
-      {pieces.current.map((p) => (
-        <div
-          key={p.id}
-          style={{
-            position: "absolute",
-            left: `${p.x}%`,
-            top: -20,
-            width: p.size,
-            height: p.size,
-            background: p.color,
-            animation: `fall ${p.speed}s ${p.delay}s infinite linear`,
-          }}
-        />
+      {pieces.current.map(p => (
+        <div key={p.id} style={{
+          position: "absolute", left: `${p.x}%`, top: -20,
+          width: p.size, height: p.size, background: p.color,
+          animation: `fall ${p.speed}s ${p.delay}s infinite linear`,
+        }} />
       ))}
     </div>
   );
 }
 
+// ──────────────────────────────────────────
+// APP
+// ──────────────────────────────────────────
+
 export default function App() {
-  const [currentPhase, setCurrentPhase] = useState(0);
-  const [completedPhases, setCompletedPhases] = useState([]);
-  const [gameStarted, setGameStarted] = useState(false);
-  const [gameComplete, setGameComplete] = useState(false);
-  const [lives] = useState(3);
+  const [cur, setCur] = useState(0);
+  const [done, setDone] = useState([]);
+  const [started, setStarted] = useState(false);
+  const [quiz, setQuiz] = useState(false);
+  const [victory, setVictory] = useState(false);
   const bottomRef = useRef(null);
 
-  const handlePhaseComplete = (phaseIndex) => {
-    setCompletedPhases((prev) => [...prev, phaseIndex]);
-    if (phaseIndex < phases.length - 1) {
-      setCurrentPhase(phaseIndex + 1);
-      setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
-    } else {
-      setGameComplete(true);
-      setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
-    }
+  const scroll = () => setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }), 150);
+
+  const phaseComplete = (i) => {
+    setDone(p => [...p, i]);
+    if (i < PHASES.length - 1) { setCur(i + 1); scroll(); }
+    else { setQuiz(true); scroll(); }
   };
+
+  const quizComplete = () => { setQuiz(false); setVictory(true); scroll(); };
 
   return (
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-        
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body {
-          background: #050505;
-          min-height: 100vh;
-        }
+        *{box-sizing:border-box;margin:0;padding:0;}
+        body{background:#020202;min-height:100vh;}
 
-        @keyframes bob {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-6px); }
-        }
-        @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
-        }
-        @keyframes pulse {
-          0%, 100% { box-shadow: 0 0 0 0 currentColor; opacity: 1; }
-          50% { opacity: 0.7; }
-        }
-        @keyframes fall {
-          0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
-          100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-        }
-        @keyframes scanline {
-          0% { transform: translateY(-100%); }
-          100% { transform: translateY(100vh); }
-        }
-        @keyframes glow {
-          0%, 100% { text-shadow: 0 0 10px #ff0055, 0 0 20px #ff0055; }
-          50% { text-shadow: 0 0 20px #ff0055, 0 0 40px #ff0055, 0 0 60px #ff0055; }
-        }
-        @keyframes titleGlow {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.85; }
-        }
-        @keyframes slideIn {
-          from { opacity: 0; transform: scale(0.95) translateY(20px); }
-          to { opacity: 1; transform: scale(1) translateY(0); }
-        }
+        @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+        @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+        @keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+        @keyframes glow{0%,100%{text-shadow:0 0 10px #ff0055,0 0 20px #ff0055}50%{text-shadow:0 0 20px #ff0055,0 0 50px #ff0055,0 0 80px #ff0055}}
+        @keyframes titleGlow{0%,100%{opacity:1;filter:brightness(1)}50%{opacity:.88;filter:brightness(1.2)}}
+        @keyframes slideIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+        @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px) rotate(-2deg)}40%{transform:translateX(9px) rotate(2deg)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+        @keyframes floatUp{0%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}100%{opacity:0;transform:translate(-50%,-120%) scale(.8)}}
+        @keyframes popIn{0%{transform:scale(0);opacity:0}70%{transform:scale(1.25);opacity:1}100%{transform:scale(1);opacity:1}}
+        @keyframes heartFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.1)}}
 
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0a0a0a; }
-        ::-webkit-scrollbar-thumb { background: #ff0055; }
+        ::-webkit-scrollbar{width:5px;}
+        ::-webkit-scrollbar-track{background:#0a0a0a;}
+        ::-webkit-scrollbar-thumb{background:#ff0055;}
       `}</style>
 
-      <Confetti active={gameComplete} />
+      <Confetti active={victory} />
 
-      {/* Scanline overlay */}
-      <div
-        style={{
-          position: "fixed",
-          inset: 0,
-          background: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px)",
-          pointerEvents: "none",
-          zIndex: 50,
-        }}
-      />
+      {/* Scanlines */}
+      <div style={{
+        position: "fixed", inset: 0, pointerEvents: "none", zIndex: 50,
+        background: "repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.12) 2px,rgba(0,0,0,.12) 4px)",
+      }} />
 
-      <div style={{ maxWidth: 520, margin: "0 auto", padding: "24px 16px", fontFamily: "'Press Start 2P', monospace" }}>
+      <div style={{ maxWidth: 520, margin: "0 auto", padding: "24px 14px", fontFamily: "'Press Start 2P', monospace" }}>
 
-        {/* Header */}
-        <div style={{ textAlign: "center", marginBottom: 32, padding: 24, border: "3px solid #ff0055", background: "#0a0000", position: "relative" }}>
-          <Stars color="#ff0055" />
+        {/* ── HEADER ── */}
+        <div style={{
+          textAlign: "center", marginBottom: 26, padding: "26px 20px",
+          border: "3px solid #ff0055", background: "#060000", position: "relative",
+          boxShadow: "0 0 40px #ff005518",
+        }}>
+          <Stars color="#ff0055" n={40} />
           <div style={{ position: "relative", zIndex: 1 }}>
-            <div style={{ fontSize: 9, color: "#ff0055", marginBottom: 8, letterSpacing: 4 }}>
-              ★ SPECIAL EDITION ★
+            <div style={{ display: "flex", justifyContent: "center", gap: 5, marginBottom: 10 }}>
+              {[1,0,1,0,1].map((f,i) => (
+                <div key={i} style={{ width: 8, height: 8, background: f ? "#ff0055" : "transparent", border: "1px solid #ff005533" }} />
+              ))}
             </div>
-            <div
-              style={{
-                fontSize: 18,
-                color: "#fff",
-                lineHeight: 1.6,
-                animation: "titleGlow 2s infinite",
-                textShadow: "0 0 10px #ff0055",
-              }}
-            >
+            <div style={{ fontSize: 8, color: "#ff005577", marginBottom: 5, letterSpacing: 5 }}>★ SPECIAL EDITION ★</div>
+            <div style={{
+              fontSize: 22, color: "#fff", lineHeight: 1.5,
+              animation: "titleGlow 2.5s infinite",
+              textShadow: "0 0 15px #ff0055, 0 0 30px #ff005533",
+            }}>
               LORENA
             </div>
-            <div style={{ fontSize: 10, color: "#ff0055", marginTop: 8 }}>
-              THE JOURNEY
-            </div>
-            <div style={{ marginTop: 16, display: "flex", justifyContent: "center", gap: 8 }}>
-              {[...Array(lives)].map((_, i) => (
-                <PixelHeart key={i} color="#ff0055" size={20} />
-              ))}
+            <div style={{ fontSize: 8, color: "#ff0055", marginTop: 5, letterSpacing: 3 }}>THE JOURNEY</div>
+            <div style={{ marginTop: 16, display: "flex", justifyContent: "center", gap: 12 }}>
+              <PixelHeart color="#ff0055" size={22} />
+              <PixelHeart color="#ff0055" size={22} />
+              <PixelHeart color="#ff0055" size={22} />
             </div>
           </div>
         </div>
 
-        {/* Score bar */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            padding: "8px 16px",
-            background: "#111",
-            border: "2px solid #333",
-            marginBottom: 24,
-            fontSize: 8,
-            color: "#888",
-          }}
-        >
-          <span>FASES: {completedPhases.length}/{phases.length}</span>
-          <span>MESES: 11 💕</span>
-          <span>SCORE: {completedPhases.length * 1000}</span>
+        {/* ── HUD ── */}
+        <div style={{
+          display: "flex", justifyContent: "space-between",
+          padding: "9px 16px", background: "#0c0c0c",
+          border: "2px solid #181818", marginBottom: 24,
+          fontSize: 7.5, color: "#444",
+        }}>
+          <span>FASES: <span style={{ color: "#777" }}>{done.length}/{PHASES.length}</span></span>
+          <span style={{ color: "#f472b6" }}>11 MESES 💕</span>
+          <span>SCORE: <span style={{ color: "#777" }}>{done.length * 1000}</span></span>
         </div>
 
-        {/* Start screen */}
-        {!gameStarted && (
-          <div
-            style={{
-              textAlign: "center",
-              padding: 40,
-              border: "3px solid #ff0055",
-              background: "#0a0000",
-              marginBottom: 24,
-              animation: "slideIn 0.5s ease",
-            }}
-          >
-            <div style={{ display: "flex", justifyContent: "center", gap: 24, marginBottom: 16, alignItems: "flex-end" }}>
-              <CharacterSprite src="/lyelson.png" size={90} color="#ff0055" />
-              <CharacterSprite src="/lorena.png" size={90} color="#ff0055" />
+        {/* ── START SCREEN ── */}
+        {!started && (
+          <div style={{
+            padding: "0 0 32px", border: "3px solid #ff0055",
+            background: "#050000", marginBottom: 24,
+            animation: "slideIn .5s ease", position: "relative", overflow: "hidden",
+          }}>
+            <Stars color="#ff0055" n={30} />
+
+            {/* Platform scene */}
+            <div style={{ position: "relative", height: 200 }}>
+              {/* Sky */}
+              <div style={{
+                position: "absolute", inset: 0,
+                background: "linear-gradient(180deg, #0a0010 0%, #150020 50%, #0a0010 100%)",
+              }} />
+
+              {/* Stars in sky */}
+              {[...Array(12)].map((_, i) => (
+                <div key={i} style={{
+                  position: "absolute", width: 2, height: 2, background: "#ff0055",
+                  opacity: .3 + (i % 3) * .15,
+                  left: `${(i * 8.7 + 5) % 95}%`, top: `${(i * 11.3) % 50}%`,
+                }} />
+              ))}
+
+              {/* Left platform */}
+              <div style={{
+                position: "absolute", bottom: 40, left: 20,
+                width: 100, height: 14,
+                background: "#ff0055", boxShadow: "0 4px 0 #aa0033",
+              }}>
+                <div style={{ position: "absolute", top: -4, left: 0, right: 0, height: 4, background: "#ff3377" }} />
+              </div>
+              {/* Right platform */}
+              <div style={{
+                position: "absolute", bottom: 40, right: 20,
+                width: 100, height: 14,
+                background: "#ff0055", boxShadow: "0 4px 0 #aa0033",
+              }}>
+                <div style={{ position: "absolute", top: -4, left: 0, right: 0, height: 4, background: "#ff3377" }} />
+              </div>
+
+              {/* Lyelson on left platform */}
+              <div style={{ position: "absolute", bottom: 54, left: 26, animation: "bob 1.4s .2s infinite" }}>
+                <Sprite src="/lyelson.png" size={72} glow="#ff0055" style={{ animation: "none" }} />
+              </div>
+
+              {/* Lorena on right platform */}
+              <div style={{ position: "absolute", bottom: 54, right: 26, animation: "bob 1.4s .6s infinite" }}>
+                <Sprite src="/lorena.png" size={72} glow="#ff0055" style={{ animation: "none" }} />
+              </div>
+
+              {/* Floating hearts between them */}
+              {[
+                { size: 14, left: "42%", bottom: 80, delay: "0s" },
+                { size: 20, left: "50%", bottom: 100, delay: ".4s" },
+                { size: 14, left: "58%", bottom: 80, delay: ".8s" },
+              ].map((h, i) => (
+                <div key={i} style={{
+                  position: "absolute", left: h.left, bottom: h.bottom,
+                  transform: "translateX(-50%)",
+                  animation: `heartFloat 1.6s ${h.delay} infinite`,
+                }}>
+                  <PixelHeart color="#ff0055" size={h.size} />
+                </div>
+              ))}
+
+              {/* Ground */}
+              <div style={{
+                position: "absolute", bottom: 0, left: 0, right: 0, height: 40,
+                background: "#0a0000", borderTop: "2px solid #ff005522",
+              }} />
             </div>
-            <p style={{ fontSize: 10, color: "#ccc", lineHeight: 2, marginBottom: 8 }}>
-              Para:
-            </p>
-            <p style={{ fontSize: 14, color: "#ff0055", lineHeight: 2, marginBottom: 24, animation: "glow 2s infinite" }}>
-              LORENA
-            </p>
-            <p style={{ fontSize: 9, color: "#888", lineHeight: 2, marginBottom: 32 }}>
-              A nossa história em 5 fases.
-            </p>
-            <button
-              onClick={() => setGameStarted(true)}
-              style={{
-                background: "#ff0055",
-                border: "none",
-                color: "#fff",
-                fontFamily: "'Press Start 2P', monospace",
-                fontSize: 10,
-                padding: "14px 24px",
-                cursor: "pointer",
-                animation: "blink 1s infinite",
-              }}
-            >
-              ▶ INICIAR
-            </button>
+
+            {/* Text */}
+            <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: "0 28px" }}>
+              <p style={{ fontSize: 8.5, color: "#888", lineHeight: 2, marginBottom: 5 }}>Para:</p>
+              <p style={{
+                fontSize: 16, color: "#ff0055", lineHeight: 1.8,
+                marginBottom: 8, animation: "glow 2s infinite",
+              }}>LORENA</p>
+              <p style={{ fontSize: 7.5, color: "#555", lineHeight: 2, marginBottom: 3 }}>A nossa história em 6 fases.</p>
+              <p style={{ fontSize: 6.5, color: "#4ade8077", lineHeight: 2, marginBottom: 24 }}>
+                (ps: são 11 meses, não 9 😂)
+              </p>
+              <PixelBtn color="#ff0055" onClick={() => setStarted(true)} anim style={{ fontSize: 11, padding: "14px 32px", boxShadow: "0 0 24px #ff005555" }}>
+                ▶ INICIAR
+              </PixelBtn>
+            </div>
           </div>
         )}
 
-        {/* Phases */}
-        {gameStarted &&
-          phases.slice(0, currentPhase + 1).map((phase, index) => (
-            <PhaseCard
-              key={phase.id}
-              phase={phase}
-              index={index}
-              onComplete={() => handlePhaseComplete(index)}
-            />
-          ))}
+        {/* ── PHASES ── */}
+        {started && PHASES.slice(0, cur + 1).map((ph, i) => (
+          <PhaseCard key={ph.id} phase={ph} index={i} onComplete={() => phaseComplete(i)} />
+        ))}
 
-        {/* Game complete */}
-        {gameComplete && (
-          <div
-            ref={bottomRef}
-            style={{
-              textAlign: "center",
-              padding: 32,
-              border: "3px solid #fbbf24",
-              background: "#0a0800",
-              animation: "slideIn 0.6s ease",
-              position: "relative",
-            }}
-          >
-            <Stars color="#fbbf24" />
+        {/* ── QUIZ ── */}
+        {quiz && <Quiz onComplete={quizComplete} />}
+
+        {/* ── VICTORY / DECLARATION ── */}
+        {victory && (
+          <div style={{
+            padding: 28, border: "3px solid #fbbf24",
+            background: "#050300", animation: "slideIn .6s ease",
+            position: "relative", boxShadow: "0 0 40px #fbbf2418",
+          }}>
+            <Stars color="#fbbf24" n={50} />
+            {["tl","tr","bl","br"].map(p => (
+              <div key={p} style={{
+                position: "absolute", width: 14, height: 14, background: "#fbbf24",
+                top: p.startsWith("t") ? -4 : undefined, bottom: p.startsWith("b") ? -4 : undefined,
+                left: p.endsWith("l") ? -4 : undefined, right: p.endsWith("r") ? -4 : undefined,
+              }} />
+            ))}
             <div style={{ position: "relative", zIndex: 1 }}>
-              <div
-                style={{
-                  fontSize: 14,
-                  color: "#fbbf24",
-                  marginBottom: 20,
-                  textShadow: "0 0 20px #fbbf24",
-                  animation: "glow 1.5s infinite",
-                }}
-              >
-                VOCÊ VENCEU!
-              </div>
               <div style={{
-                marginBottom: 20,
-                border: "3px solid #fbbf24",
-                overflow: "hidden",
-                position: "relative",
-                boxShadow: "0 0 30px #fbbf2466",
+                fontFamily: "'Press Start 2P', monospace",
+                fontSize: 14, color: "#fbbf24", marginBottom: 22, textAlign: "center",
+                textShadow: "0 0 20px #fbbf24", animation: "titleGlow 1.5s infinite",
               }}>
+                VOCÊ VENCEU! 👑
+              </div>
+
+              {/* Couple illustration */}
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: 24 }}>
                 <img
-                  src="/fase5-final.jpg"
-                  alt="Boss Final"
-                  style={{ width: "100%", display: "block", imageRendering: "pixelated" }}
+                  src="/casal.png"
+                  alt="Lyelson e Lorena"
+                  style={{
+                    width: 200, height: "auto",
+                    imageRendering: "pixelated",
+                    filter: "drop-shadow(0 0 20px #ff0055) drop-shadow(0 0 40px #fbbf2444)",
+                    animation: "bob 1.5s infinite",
+                  }}
                 />
-                <div style={{
-                  position: "absolute",
-                  inset: 0,
-                  background: "linear-gradient(to bottom, transparent 60%, #0a080099)",
-                }} />
               </div>
-              <div style={{ fontSize: 9, color: "#ccc", lineHeight: 2.5, marginBottom: 24 }}>
-                <p>Feliz aniversário de namoro,</p>
-                <p style={{ color: "#ff0055", fontSize: 12 }}>Lorena ❤️</p>
-                <p style={{ marginTop: 12, color: "#888" }}>
-                  11 meses. Muitos mais pela frente.
+
+              {/* Final illustration */}
+              <div style={{
+                marginBottom: 28, border: "3px solid #fbbf24",
+                overflow: "hidden", position: "relative",
+                boxShadow: "0 0 30px #fbbf2433",
+              }}>
+                <img src="/fase5-final.jpg" alt="Boss Final" style={{ width: "100%", display: "block", imageRendering: "pixelated" }} />
+                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom,transparent 55%,#05030099)" }} />
+              </div>
+
+              {/* Declaration */}
+              <div style={{
+                fontFamily: "'Press Start 2P', monospace",
+                fontSize: 9, color: "#aaa", lineHeight: 3.3,
+                marginBottom: 28, textAlign: "left",
+              }}>
+                <p style={{ color: "#f472b6", fontSize: 12 }}>Doidiça,</p>
+                <p style={{ marginTop: 12 }}>Você sempre me pergunta</p>
+                <p>se eu amo muito você.</p>
+                <p style={{ marginTop: 12, color: "#4ade80" }}>Esse jogo é a minha resposta.</p>
+                <p style={{ marginTop: 12 }}>Esses olhos verdes,</p>
+                <p>esse jeitinho autista 😂</p>
+                <p>esse carinho que me derrete todo dia...</p>
+                <p style={{ marginTop: 14, color: "#fbbf24" }}>Minha vida não tinha cor.</p>
+                <p>Você chegou e me fez</p>
+                <p>querer viver de novo.</p>
+                <p style={{ marginTop: 18, color: "#ff0055", fontSize: 12 }}>
+                  Te amo, Amor de Vida Minha. ❤️
                 </p>
+                <p style={{ marginTop: 16, color: "#444" }}>Feliz 11 meses.</p>
+                <p style={{ color: "#444" }}>Muitos mais pela frente.</p>
               </div>
-              <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 16, flexWrap: "wrap" }}>
-                {[...Array(5)].map((_, i) => (
-                  <PixelHeart key={i} color="#ff0055" size={28} />
-                ))}
+
+              <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap", marginBottom: 24 }}>
+                {[...Array(5)].map((_, i) => <PixelHeart key={i} color="#ff0055" size={30} />)}
               </div>
-              <div style={{ marginTop: 24, fontSize: 8, color: "#555" }}>
+
+              <div style={{ textAlign: "right", fontFamily: "'Press Start 2P', monospace", fontSize: 8, color: "#333" }}>
                 — {HERO_NAME}
               </div>
             </div>
