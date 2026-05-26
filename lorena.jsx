@@ -91,6 +91,7 @@ const phases = [
     ],
     emoji: "👑",
     cleared: "VOCÊ COMPLETOU O JOGO! ❤️",
+    illustration: "/fase5-final.jpg",
   },
 ];
 
@@ -613,14 +614,23 @@ export default function App() {
               >
                 VOCÊ VENCEU!
               </div>
-              <div style={{ display: "flex", justifyContent: "center", gap: 16, marginBottom: 20, alignItems: "flex-end" }}>
-                <CharacterSprite src="/lyelson.png" size={100} color="#fbbf24" />
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-                  {[...Array(3)].map((_, i) => (
-                    <PixelHeart key={i} color="#ff0055" size={22} />
-                  ))}
-                </div>
-                <CharacterSprite src="/lorena.png" size={100} color="#fbbf24" />
+              <div style={{
+                marginBottom: 20,
+                border: "3px solid #fbbf24",
+                overflow: "hidden",
+                position: "relative",
+                boxShadow: "0 0 30px #fbbf2466",
+              }}>
+                <img
+                  src="/fase5-final.jpg"
+                  alt="Boss Final"
+                  style={{ width: "100%", display: "block", imageRendering: "pixelated" }}
+                />
+                <div style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: "linear-gradient(to bottom, transparent 60%, #0a080099)",
+                }} />
               </div>
               <div style={{ fontSize: 9, color: "#ccc", lineHeight: 2.5, marginBottom: 24 }}>
                 <p>Feliz aniversário de namoro,</p>
