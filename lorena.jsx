@@ -864,6 +864,7 @@ function MechanicBoss({ phase, onComplete }) {
   const [fdmg, setFdmg] = useState(null);
   const [shaking, setShaking] = useState(false);
   const [attacking, setAttacking] = useState(false);
+  const [flash, setFlash] = useState(false);
   const [defeated, setDefeated] = useState(false);
   const [cd, setCd] = useState(false);
   const color = phase.color;
@@ -872,17 +873,19 @@ function MechanicBoss({ phase, onComplete }) {
     if (defeated || cd) return;
     setCd(true);
     setAttacking(true);
+    setFlash(true);
+    setTimeout(() => setFlash(false), 130);
     const crit = Math.random() < 0.2;
     let dmg = Math.floor(Math.random() * (atk.damage[1] - atk.damage[0] + 1) + atk.damage[0]);
     if (crit) dmg = Math.floor(dmg * 1.8);
     const nh = Math.max(0, hp - dmg);
     setHp(nh); setFdmg({ v: dmg, c: atk.color, crit });
     setShaking(true);
-    setTimeout(() => { setShaking(false); setAttacking(false); }, 450);
-    setTimeout(() => setFdmg(null), 1000);
+    setTimeout(() => { setShaking(false); setAttacking(false); }, 500);
+    setTimeout(() => setFdmg(null), 1100);
     if (nh <= 0) {
       setDefeated(true);
-      setTimeout(onComplete, 2800);
+      setTimeout(onComplete, 3000);
     } else {
       setTimeout(() => {
         setTaunt(BOSS_TAUNTS[Math.floor(Math.random() * BOSS_TAUNTS.length)]);
@@ -899,14 +902,12 @@ function MechanicBoss({ phase, onComplete }) {
       <div style={{
         position: "relative", height: 26,
         border: `2px solid ${hpc}`, background: "#0a0a0a",
-        marginBottom: 14, overflow: "hidden", transition: "border-color .4s",
+        marginBottom: 12, overflow: "hidden", transition: "border-color .4s",
       }}>
         <div style={{
-          position: "absolute", top: 0, left: 0,
-          height: "100%", width: `${hp}%`,
-          background: `linear-gradient(90deg,${hpc}66,${hpc})`,
-          transition: "width .35s, background .4s",
-          boxShadow: `0 0 10px ${hpc}`,
+          position: "absolute", top: 0, left: 0, height: "100%", width: `${hp}%`,
+          background: `linear-gradient(90deg,${hpc}55,${hpc})`,
+          transition: "width .35s, background .4s", boxShadow: `0 0 10px ${hpc}`,
         }} />
         <div style={{
           position: "absolute", inset: 0, display: "flex",
@@ -918,104 +919,165 @@ function MechanicBoss({ phase, onComplete }) {
         </div>
       </div>
 
-      {/* Battle arena: players LEFT vs boss RIGHT */}
+      {/* ── CINEMATIC BATTLE ARENA ── */}
       <div style={{
-        display: "flex", alignItems: "flex-end", justifyContent: "space-between",
-        padding: "0 8px", marginBottom: 10, minHeight: 170,
-        background: "linear-gradient(180deg, #080010 0%, #050005 100%)",
-        border: "2px solid #c084fc22", position: "relative", overflow: "hidden",
+        position: "relative", height: 290,
+        background: "linear-gradient(180deg, #06001a 0%, #0d0020 45%, #060010 100%)",
+        border: `2px solid #c084fc33`,
+        overflow: "hidden", marginBottom: 12,
       }}>
-        {/* Purple atmospheric glow */}
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 50% 110%, #c084fc0a, transparent 70%)" }} />
-
-        {/* Players (left side) */}
-        <div style={{ position: "relative", zIndex: 2 }}>
-          <img src="/ataque-pose.png" alt="Lyelson e Lorena" style={{
-            width: 148, imageRendering: "pixelated",
-            filter: attacking
-              ? `drop-shadow(0 0 20px #fbbf24) drop-shadow(0 0 40px #ff0055)`
-              : `drop-shadow(0 0 8px #ffffff22)`,
-            animation: attacking ? "shake .25s" : "bob 1.6s infinite",
-            transition: "filter .2s",
-          }} />
-          {/* Player label */}
-          <div style={{
-            fontFamily: "'Press Start 2P', monospace", fontSize: 6,
-            color: "#ffffff55", textAlign: "center", marginTop: 4,
-          }}>
-            LYELSON + LORENA
-          </div>
-        </div>
-
-        {/* VS label */}
+        {/* Atmospheric radial glow behind boss */}
         <div style={{
-          position: "absolute", top: "50%", left: "50%",
-          transform: "translate(-50%, -50%)",
-          fontFamily: "'Press Start 2P', monospace", fontSize: 9,
-          color: "#ffffff11", zIndex: 1, letterSpacing: 3,
-        }}>VS</div>
+          position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)",
+          width: "100%", height: "65%",
+          background: "radial-gradient(ellipse at 50% 30%, #c084fc18 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
 
-        {/* Boss (right side) */}
-        <div style={{ position: "relative", zIndex: 2 }}>
-          <img src="/boss-duvida.png" alt="A Dúvida" style={{
-            width: 120, imageRendering: "pixelated",
-            animation: defeated ? "none" : shaking ? "shake .4s" : "bob 2.2s infinite",
-            filter: defeated
-              ? "grayscale(1) brightness(.15)"
-              : `drop-shadow(0 0 16px #c084fc)`,
-            opacity: defeated ? .15 : 1,
-            transition: "opacity .9s, filter .5s",
-          }} />
-          {/* Damage number */}
-          {fdmg && (
-            <div style={{
-              position: "absolute", top: -14, left: "50%",
-              transform: "translateX(-50%)",
-              fontFamily: "'Press Start 2P', monospace",
-              fontSize: fdmg.crit ? 13 : 11, color: fdmg.c,
-              animation: "floatUp .95s ease-out forwards",
-              pointerEvents: "none", textShadow: `0 0 12px ${fdmg.c}`,
-              whiteSpace: "nowrap",
-            }}>
-              {fdmg.crit && <div style={{ fontSize: 7, textAlign: "center" }}>CRÍTICO!</div>}
-              -{fdmg.v}
-            </div>
-          )}
-          {defeated && (
-            <div style={{
-              position: "absolute", inset: 0, display: "flex",
-              alignItems: "center", justifyContent: "center",
-              fontSize: 48, animation: "popIn .4s ease",
-            }}>💥</div>
-          )}
-          {/* Boss label */}
+        {/* Ground floor glow */}
+        <div style={{
+          position: "absolute", bottom: 56, left: 0, right: 0,
+          height: 2, background: "#c084fc15",
+        }} />
+
+        {/* Screen flash on attack */}
+        {flash && (
           <div style={{
-            fontFamily: "'Press Start 2P', monospace", fontSize: 6,
-            color: defeated ? "#333" : "#c084fc77", textAlign: "center", marginTop: 4,
-          }}>
-            A DÚVIDA
+            position: "absolute", inset: 0, zIndex: 20,
+            background: "rgba(255,220,255,0.07)", pointerEvents: "none",
+          }} />
+        )}
+
+        {/* ── BOSS — center, tall ── */}
+        <div style={{
+          position: "absolute", top: 8, left: "50%",
+          transform: "translateX(-50%)", zIndex: 5,
+          textAlign: "center",
+        }}>
+          <div style={{ position: "relative", display: "inline-block" }}>
+            <img src="/boss-duvida.png" alt="A Dúvida" style={{
+              width: 175, imageRendering: "pixelated",
+              animation: defeated ? "none" : shaking ? "shake .4s" : "bob 2.2s infinite",
+              filter: defeated
+                ? "grayscale(1) brightness(.08)"
+                : `drop-shadow(0 0 22px #c084fc) drop-shadow(0 0 55px #c084fc33)`,
+              opacity: defeated ? .1 : 1,
+              transition: "opacity 1s, filter .5s",
+            }} />
+
+            {/* Damage number floats above boss */}
+            {fdmg && (
+              <div style={{
+                position: "absolute", top: -22, left: "50%",
+                transform: "translateX(-50%)",
+                fontFamily: "'Press Start 2P', monospace",
+                fontSize: fdmg.crit ? 15 : 12, color: fdmg.c,
+                animation: "floatUp 1.05s ease-out forwards",
+                pointerEvents: "none", whiteSpace: "nowrap", zIndex: 15,
+                textShadow: `0 0 18px ${fdmg.c}, 0 2px 4px #000`,
+              }}>
+                {fdmg.crit && (
+                  <div style={{ fontSize: 7, textAlign: "center", marginBottom: 2 }}>CRÍTICO!</div>
+                )}
+                -{fdmg.v}
+              </div>
+            )}
+
+            {defeated && (
+              <div style={{
+                position: "absolute", inset: 0, display: "flex",
+                alignItems: "center", justifyContent: "center",
+                fontSize: 60, animation: "popIn .4s ease", zIndex: 10,
+              }}>💥</div>
+            )}
           </div>
+
+          {!defeated && (
+            <div style={{
+              fontFamily: "'Press Start 2P', monospace", fontSize: 6,
+              color: "#c084fc44", marginTop: 2, letterSpacing: 1,
+            }}>A DÚVIDA</div>
+          )}
         </div>
+
+        {/* ── LYELSON — bottom left ── */}
+        <div style={{
+          position: "absolute", bottom: 6, left: 6, zIndex: 6,
+          textAlign: "center",
+          filter: attacking
+            ? "drop-shadow(0 0 18px #fbbf24) drop-shadow(0 0 8px #ff0055)"
+            : "drop-shadow(0 0 5px #c084fc33)",
+          animation: attacking ? "shake .25s" : "bob 1.7s infinite",
+          transition: "filter .15s",
+        }}>
+          <img src="/lyelson.png" alt="Lyelson" style={{
+            width: 72, imageRendering: "pixelated", display: "block",
+          }} />
+          <div style={{
+            fontFamily: "'Press Start 2P', monospace", fontSize: 5.5,
+            color: attacking ? "#fbbf24" : "#c084fc44",
+            marginTop: 3, transition: "color .15s",
+          }}>LYELSON</div>
+        </div>
+
+        {/* ── LORENA — bottom right ── */}
+        <div style={{
+          position: "absolute", bottom: 6, right: 6, zIndex: 6,
+          textAlign: "center",
+          filter: attacking
+            ? "drop-shadow(0 0 18px #f472b6) drop-shadow(0 0 8px #ff0055)"
+            : "drop-shadow(0 0 5px #c084fc33)",
+          animation: attacking ? "shake .25s" : "bob 1.7s .45s infinite",
+          transition: "filter .15s",
+        }}>
+          <img src="/lorena.png" alt="Lorena" style={{
+            width: 72, imageRendering: "pixelated", display: "block",
+          }} />
+          <div style={{
+            fontFamily: "'Press Start 2P', monospace", fontSize: 5.5,
+            color: attacking ? "#f472b6" : "#c084fc44",
+            marginTop: 3, transition: "color .15s",
+          }}>LORENA</div>
+        </div>
+
+        {/* Victory overlay */}
+        {defeated && (
+          <div style={{
+            position: "absolute", inset: 0, zIndex: 8,
+            display: "flex", flexDirection: "column",
+            alignItems: "center", justifyContent: "flex-end",
+            paddingBottom: 14, background: "rgba(0,0,0,0.35)",
+            animation: "popIn .5s ease",
+          }}>
+            <div style={{
+              fontFamily: "'Press Start 2P', monospace", fontSize: 11,
+              color: "#fbbf24", textShadow: "0 0 20px #fbbf24, 0 0 40px #fbbf2466",
+              animation: "blink .5s 5", textAlign: "center", lineHeight: 2,
+            }}>
+              🏆 VITÓRIA!
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Taunt / victory message */}
+      {/* Taunt bubble */}
       {!defeated ? (
         <div style={{
-          background: "#050010", border: "2px solid #c084fc22",
-          padding: "7px 12px", marginBottom: 14,
+          background: "#04000e", border: "1px solid #c084fc1a",
+          padding: "7px 14px", marginBottom: 12,
           fontFamily: "'Press Start 2P', monospace",
-          fontSize: 7, color: "#c084fc66", fontStyle: "italic", lineHeight: 1.9,
-          textAlign: "center",
+          fontSize: 7, color: "#c084fc55", fontStyle: "italic",
+          lineHeight: 2, textAlign: "center",
         }}>
           {taunt}
         </div>
       ) : (
         <div style={{
-          fontFamily: "'Press Start 2P', monospace", fontSize: 10,
+          fontFamily: "'Press Start 2P', monospace", fontSize: 9,
           color: "#fbbf24", marginBottom: 14, textAlign: "center",
-          animation: "blink .5s 4", textShadow: "0 0 14px #fbbf24",
+          textShadow: "0 0 14px #fbbf24",
         }}>
-          🏆 A DÚVIDA FOI DERROTADA!
+          A DÚVIDA FOI DERROTADA! ❤️
         </div>
       )}
 
@@ -1023,12 +1085,20 @@ function MechanicBoss({ phase, onComplete }) {
         <>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
             {ATTACKS.map(atk => (
-              <PixelBtn key={atk.label} color={cd ? "#2a2a2a" : atk.color} onClick={() => attack(atk)} style={{ fontSize: 7, opacity: cd ? 0.4 : 1 }}>
+              <PixelBtn
+                key={atk.label}
+                color={cd ? "#2a2a2a" : atk.color}
+                onClick={() => attack(atk)}
+                style={{ fontSize: 7, opacity: cd ? 0.4 : 1 }}
+              >
                 {atk.label}
               </PixelBtn>
             ))}
           </div>
-          <p style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 6.5, color: "#2a2a2a", textAlign: "center", marginTop: 10 }}>
+          <p style={{
+            fontFamily: "'Press Start 2P', monospace", fontSize: 6.5,
+            color: "#2a2a2a", textAlign: "center", marginTop: 10,
+          }}>
             Derrote a Dúvida com Amor e Confiança!
           </p>
         </>
