@@ -444,44 +444,22 @@ function MechanicCatch({ phase, onComplete }) {
       {/* Arena */}
       <div style={{
         position: "relative", height: 230,
-        background: "linear-gradient(180deg, #100820 0%, #1a0a00 70%, #0a0600 100%)",
-        border: `2px solid ${color}33`, overflow: "hidden",
+        backgroundImage: "url(/cena-rua.jpg)",
+        backgroundSize: "cover", backgroundPosition: "center",
+        imageRendering: "pixelated",
+        border: `2px solid ${color}`, overflow: "hidden",
       }}>
-        {/* Pixel buildings */}
-        {[[8,55,22],[18,40,14],[55,65,28],[72,48,16],[83,38,12]].map(([l,h,w],i) => (
-          <div key={i} style={{
-            position: "absolute", bottom: 28, left: `${l}%`,
-            width: w, height: h,
-            background: "#fb923c14", border: "1px solid #fb923c22",
-          }}>
-            {/* Windows */}
-            {[...Array(2)].map((_, j) => (
-              <div key={j} style={{
-                position: "absolute", top: 8 + j * 16,
-                left: "25%", width: "50%", height: 6,
-                background: "#fb923c22",
-              }} />
-            ))}
-          </div>
-        ))}
+        {/* Darkening overlay for contrast */}
+        <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.15)" }} />
 
-        {/* Stars */}
-        {[...Array(10)].map((_, i) => (
-          <div key={i} style={{
-            position: "absolute", width: 2, height: 2, background: color,
-            opacity: 0.3, left: `${(i * 10.5) % 100}%`, top: `${(i * 7) % 30}%`,
-          }} />
-        ))}
-
-        {/* Sidewalk */}
+        {/* Location label */}
         <div style={{
-          position: "absolute", bottom: 0, left: 0, right: 0, height: 28,
-          background: "repeating-linear-gradient(90deg,#fb923c12 0,#fb923c12 32px,#fb923c06 32px,#fb923c06 64px)",
-          borderTop: `2px solid ${color}`,
+          position: "absolute", top: 6, left: 0, right: 0,
+          fontFamily: "'Press Start 2P', monospace", fontSize: 7,
+          color: "#fff", textAlign: "center",
+          textShadow: "0 1px 4px #000, 0 0 8px #000",
         }}>
-          <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 6, color: color + "66", textAlign: "center", lineHeight: "26px" }}>
-            ── RUA GRANDE ──
-          </div>
+          ── RUA GRANDE ──
         </div>
 
         {/* Falling character */}
