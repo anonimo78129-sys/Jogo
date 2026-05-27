@@ -1615,24 +1615,117 @@ export default function App() {
               {/* Declaration */}
               <div style={{
                 fontFamily: "'Press Start 2P', monospace",
-                fontSize: 9, color: "#553344", lineHeight: 3.3,
+                fontSize: 9, color: "#553344", lineHeight: 3.0,
                 marginBottom: 28, textAlign: "left",
+                background: "linear-gradient(135deg, #fff0f7 0%, #fffbf0 100%)",
+                border: "2px solid #f9a8d4",
+                borderRadius: 12,
+                padding: "22px 18px",
+                boxShadow: "0 4px 24px #f9a8d433",
               }}>
-                <p style={{ color: "#d6308a", fontSize: 12 }}>Doidiça,</p>
-                <p style={{ marginTop: 12 }}>Você sempre me pergunta</p>
-                <p>se eu amo muito você.</p>
-                <p style={{ marginTop: 12, color: "#15a34a" }}>Esse jogo é a minha resposta.</p>
-                <p style={{ marginTop: 12 }}>Esses olhos verdes,</p>
-                <p>esse jeitinho autista 😂</p>
-                <p>esse carinho que me derrete todo dia...</p>
-                <p style={{ marginTop: 14, color: "#c98a06" }}>Minha vida não tinha cor.</p>
-                <p>Você chegou e me fez</p>
-                <p>querer viver de novo.</p>
-                <p style={{ marginTop: 18, color: "#ff0055", fontSize: 12 }}>
-                  Te amo, Amor de Vida Minha. ❤️
+                {/* Saudação */}
+                <p style={{ color: "#d6308a", fontSize: 14, marginBottom: 18, textShadow: "0 1px 8px #f9a8d4" }}>
+                  Doidiça,
                 </p>
-                <p style={{ marginTop: 16, color: "#994466" }}>Feliz 11 meses.</p>
-                <p style={{ color: "#994466" }}>Muitos mais pela frente.</p>
+
+                {/* O laboratório */}
+                <p style={{ marginTop: 10 }}>Naquele dia no laboratório,</p>
+                <p>você chegou com aquele sorriso</p>
+                <p>e me pediu pra ser sua dupla.</p>
+                <p style={{ marginTop: 10, color: "#9333ea" }}>Eu não sabia que naquele</p>
+                <p style={{ color: "#9333ea" }}>momento simples,</p>
+                <p style={{ color: "#9333ea" }}>minha vida inteira ia mudar.</p>
+
+                {/* Bacaba */}
+                <p style={{ marginTop: 18, color: "#0a8fd1" }}>Na Bacaba, do seu lado,</p>
+                <p style={{ color: "#0a8fd1" }}>olhando pro mar,</p>
+                <p style={{ color: "#0a8fd1" }}>senti algo que não sabia nomear.</p>
+                <p style={{ marginTop: 10 }}>Você falou primeiro.</p>
+                <p>Declarou seu amor.</p>
+                <p style={{ marginTop: 10 }}>E eu fiquei calado.</p>
+
+                {/* O silêncio */}
+                <p style={{ marginTop: 16, color: "#e06c0a" }}>Não era frieza.</p>
+                <p style={{ color: "#e06c0a" }}>Era eu tentando entender</p>
+                <p style={{ color: "#e06c0a" }}>como alguém tão incrível</p>
+                <p style={{ color: "#e06c0a" }}>podia querer alguém como eu.</p>
+
+                {/* A madrugada */}
+                <p style={{ marginTop: 18, color: "#15a34a" }}>Naquela madrugada que</p>
+                <p style={{ color: "#15a34a" }}>a gente conversou até o sol nascer,</p>
+                <p style={{ color: "#15a34a" }}>eu te conheci de verdade.</p>
+                <p style={{ marginTop: 10 }}>E percebi:</p>
+                <p>você não chegou por acaso.</p>
+                <p style={{ color: "#d6308a", fontStyle: "italic" }}>Você veio me salvar.</p>
+
+                {/* Antes de você */}
+                <p style={{ marginTop: 18, color: "#c98a06" }}>Antes de você,</p>
+                <p style={{ color: "#c98a06" }}>minha vida não tinha cor.</p>
+                <p style={{ color: "#c98a06" }}>Não tinha sentido.</p>
+                <p style={{ marginTop: 10 }}>Você chegou e de repente</p>
+                <p>eu tinha motivo pra acordar.</p>
+                <p>Pra sorrir.</p>
+                <p>Pra planejar futuro.</p>
+
+                {/* Memórias */}
+                <p style={{ marginTop: 18, color: "#9333ea" }}>A Rua Grande, Alcântara,</p>
+                <p style={{ color: "#9333ea" }}>a praça, a APA...</p>
+                <p style={{ marginTop: 10 }}>Quando você caiu</p>
+                <p>e eu ri antes de te segurar —</p>
+                <p style={{ color: "#15a34a" }}>perdão 😂</p>
+                <p style={{ marginTop: 10 }}>mas você sabe que esse riso</p>
+                <p>foi de puro amor, né?</p>
+
+                {/* A pergunta dela */}
+                <p style={{ marginTop: 22, color: "#d6308a", fontSize: 10 }}>
+                  Você me pergunta toda hora:
+                </p>
+                <p style={{ color: "#d6308a", fontSize: 10, marginTop: 6 }}>
+                  "você me ama muito?"
+                </p>
+                <p style={{ marginTop: 14 }}>Então deixa eu responder aqui,</p>
+                <p>pra você nunca mais duvidar:</p>
+                <p style={{ marginTop: 14, color: "#ff0055", fontSize: 11 }}>Sim.</p>
+                <p style={{ color: "#ff0055", fontSize: 11 }}>Mais do que tudo.</p>
+                <p style={{ color: "#ff0055", fontSize: 11 }}>Mais do que sei contar.</p>
+
+                {/* Detalhes físicos e jeito */}
+                <p style={{ marginTop: 18 }}>Esses olhos verdes seus...</p>
+                <p>esse jeitinho autista 😂</p>
+                <p>esse carinho enorme</p>
+                <p>que cabe demais</p>
+                <p>no meu coração que era</p>
+                <p>pequeno antes de você.</p>
+
+                {/* BK Planos / futuro */}
+                <p style={{ marginTop: 20, color: "#c98a06" }}>Os nossos Planos...</p>
+                <p style={{ color: "#c98a06" }}>cada vez que ouço essa música</p>
+                <p style={{ color: "#c98a06" }}>penso que foi feita pra gente.</p>
+                <p style={{ marginTop: 14 }}>Casa. Família.</p>
+                <p>Futuro.</p>
+                <p style={{ marginTop: 10, color: "#15a34a" }}>Tudo isso eu quero</p>
+                <p style={{ color: "#15a34a" }}>com você.</p>
+                <p style={{ color: "#15a34a" }}>Só com você.</p>
+
+                {/* Encerramento */}
+                <p style={{ marginTop: 26, color: "#553344" }}>Esse jogo foi o jeito que</p>
+                <p>eu encontrei de te mostrar</p>
+                <p>o que você significa pra mim.</p>
+                <p style={{ marginTop: 14 }}>Mas nenhum jogo,</p>
+                <p>nenhuma palavra,</p>
+                <p>nenhuma carta</p>
+                <p>vai ser suficiente</p>
+                <p>pra explicar o tamanho</p>
+                <p style={{ color: "#d6308a" }}>do que sinto por você.</p>
+
+                {/* Assinatura */}
+                <p style={{ marginTop: 28, color: "#ff0055", fontSize: 13, textShadow: "0 1px 12px #ff005566" }}>
+                  Te amo, Amor de Vida Minha.
+                </p>
+                <p style={{ color: "#ff0055", fontSize: 13, marginTop: 4 }}>❤️</p>
+
+                <p style={{ marginTop: 20, color: "#994466", fontSize: 10 }}>Feliz 11 meses, Doidiça.</p>
+                <p style={{ color: "#994466", fontSize: 9, marginTop: 6 }}>Muitos mais pela frente. 🌙</p>
               </div>
 
               <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap", marginBottom: 24 }}>
