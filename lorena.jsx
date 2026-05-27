@@ -43,9 +43,9 @@ const MEMORY_CARDS = [
 
 const ATTACKS = [
   { label: "❤️ AMOR",      damage: [15, 25], color: "#ff0055" },
-  { label: "🛡️ CONFIANÇA", damage: [20, 30], color: "#38bdf8" },
-  { label: "⭐ 11 MESES",  damage: [25, 35], color: "#fbbf24" },
-  { label: "💪 JUNTOS",    damage: [30, 40], color: "#4ade80" },
+  { label: "🛡️ CONFIANÇA", damage: [20, 30], color: "#0a8fd1" },
+  { label: "⭐ 11 MESES",  damage: [25, 35], color: "#c98a06" },
+  { label: "💪 JUNTOS",    damage: [30, 40], color: "#15a34a" },
 ];
 
 const BOSS_TAUNTS = [
@@ -92,7 +92,7 @@ const PHASES = [
   {
     id: 1, title: "FASE 1", subtitle: "O Encontro",
     location: "🧪 LABORATÓRIO DE QUÍMICA",
-    color: "#4ade80", bg: "#f0fff4", stars: "#4ade80",
+    color: "#15a34a", bg: "#eafff1", stars: "#15a34a",
     story: ["No laboratório, dois estranhos.", "Aos poucos, foram virando amigos.", "Sem pressa. Sem saber", "onde aquilo ia chegar. 💚"],
     emoji: "📚", cleared: "AMIZADE CONQUISTADA!",
     illustration: "/fase1-laboratorio.jpg", mechanic: "dialogue",
@@ -100,7 +100,7 @@ const PHASES = [
   {
     id: 2, title: "FASE 2", subtitle: "A Queda",
     location: "😂 RUA GRANDE",
-    color: "#fb923c", bg: "#fff8f0", stars: "#fb923c",
+    color: "#e06c0a", bg: "#fff5e8", stars: "#e06c0a",
     story: ["Ela caiu na minha frente.", "Na Rua Grande. Do nada. 💀", "Eu tentei não rir... não consegui.", "Mas segurei a mão dela. 🧡"],
     emoji: "💨", cleared: "MEMÓRIA ÉPICA SALVA! 😂",
     mechanic: "catch",
@@ -108,7 +108,7 @@ const PHASES = [
   {
     id: 3, title: "FASE 3", subtitle: "A Viagem",
     location: "🌊 PRAIA DO BACABA",
-    color: "#38bdf8", bg: "#f0f8ff", stars: "#38bdf8",
+    color: "#0a8fd1", bg: "#e8f6ff", stars: "#0a8fd1",
     story: ["Uma viagem mudou tudo.", "O Bacaba, o sol, e você do meu lado.", "Foi ali que a gente se reencontrou", "e algo maior começou. 💙"],
     emoji: "🏖️", cleared: "MEMÓRIA ESPECIAL DESBLOQUEADA!",
     illustration: "/fase2-praia.jpg", mechanic: "clicker",
@@ -116,7 +116,7 @@ const PHASES = [
   {
     id: 4, title: "FASE 4", subtitle: "A Noite",
     location: "🌙 UMA NOITE EM CLARO",
-    color: "#f472b6", bg: "#fff0f8", stars: "#f472b6",
+    color: "#d6308a", bg: "#ffeef7", stars: "#d6308a",
     story: ["Você se declarou. Eu fiquei em silêncio.", "Você ficou nervosa. Eu fiquei confuso.", "Mas numa noite em claro te conhecendo,", "eu entendi: era você. 💗"],
     emoji: "💕", cleared: "+11 MESES JUNTOS!",
     illustration: "/fase3-comeco.jpg", mechanic: "chat",
@@ -124,15 +124,15 @@ const PHASES = [
   {
     id: 5, title: "FASE 5", subtitle: "Os Planos",
     location: "🎵 PLANOS — BK",
-    color: "#c084fc", bg: "#faf0ff", stars: "#c084fc",
+    color: "#9333ea", bg: "#f6ecff", stars: "#9333ea",
     story: ["APA, Alcântara, praça, Rua Grande...", "(e aquela queda que nunca vou esquecer 💀)", "Cada memória contigo é minha favorita.", "Tenho planos com você, Doidiça. 💜"],
     emoji: "🏡", cleared: "FUTURO DESBLOQUEADO!",
     illustration: "/fase4-planos.jpg", mechanic: "cards",
   },
   {
     id: 6, title: "FASE 6", subtitle: "Hoje",
-    location: "🏆 BOSS FINAL: A DÚVIDA",
-    color: "#fbbf24", bg: "#fffbf0", stars: "#fbbf24",
+    location: "🏆 CHEFE FINAL: A DÚVIDA",
+    color: "#c98a06", bg: "#fff8e6", stars: "#c98a06",
     story: ["Minha vida não tinha cor.", "Você chegou e me fez querer viver de novo.", "Amor de Vida Minha,", "obrigado por existir. 💛"],
     emoji: "👑", cleared: "A DÚVIDA FOI DERROTADA! ❤️",
     illustration: "/fase5-final.jpg", mechanic: "boss",
@@ -263,6 +263,7 @@ function ProgressBar({ value, max, color, label }) {
           position: "absolute", inset: 0, display: "flex",
           alignItems: "center", justifyContent: "center",
           fontFamily: "'Press Start 2P', monospace", fontSize: 7, color: "#fff",
+          textShadow: "0 1px 2px rgba(120,20,60,.9)",
         }}>
           {value}/{max}
         </div>
@@ -301,7 +302,7 @@ function MechanicDialogue({ phase, onComplete }) {
         fontFamily: "'Press Start 2P', monospace", fontSize: 7.5,
         color, textAlign: "center", marginBottom: 14,
       }}>
-        💬 DIALOGUE — O ENCONTRO
+        💬 DIÁLOGO — O ENCONTRO
       </p>
 
       {/* Scene with real lab background */}
@@ -375,8 +376,7 @@ function MechanicDialogue({ phase, onComplete }) {
             )}
             <div style={{
               fontFamily: "'Press Start 2P', monospace", fontSize: 7,
-              color: isLorena ? "#f472b6" : color,
-              textShadow: `0 0 8px ${isLorena ? "#f472b6" : color}`,
+              color: isLorena ? "#d6308a" : color,
             }}>
               {isLorena ? "LORENA" : HERO_NAME.toUpperCase()}
             </div>
@@ -654,7 +654,7 @@ function MechanicClicker({ phase, onComplete }) {
           <div style={{
             position: "absolute", inset: 0, display: "flex",
             flexDirection: "column", alignItems: "center", justifyContent: "center",
-            background: "#00000099", animation: "popIn .4s ease",
+            background: "#aaddff99", animation: "popIn .4s ease",
           }}>
             <div style={{ fontSize: 30, marginBottom: 8 }}>💙</div>
             <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 9, color }}>AMOR COLETADO!</div>
@@ -666,7 +666,8 @@ function MechanicClicker({ phase, onComplete }) {
           <div style={{
             position: "absolute", bottom: 38, left: 0, right: 0,
             fontFamily: "'Press Start 2P', monospace", fontSize: 7,
-            color: "#ffffff44", textAlign: "center",
+            color: "#fff", textAlign: "center",
+            textShadow: "0 1px 4px #000, 0 0 8px #000",
             animation: "blink 1.5s infinite",
           }}>
             TOQUE NA TELA!
@@ -720,8 +721,8 @@ function MechanicChat({ phase, onComplete }) {
             filter: `drop-shadow(0 0 4px ${color}88)`,
           }} />
           <div>
-            <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 7, color: "#fff" }}>Lorena</div>
-            <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 6, color: "#4ade80", marginTop: 3 }}>● online</div>
+            <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 7, color: "#994466" }}>Lorena</div>
+            <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 6, color: "#22aa55", marginTop: 3 }}>● ativa</div>
           </div>
           <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
             <img src="/lyelson-pensando.png" alt="Lyelson pensando" style={{
@@ -729,7 +730,7 @@ function MechanicChat({ phase, onComplete }) {
               filter: "drop-shadow(0 0 4px #ffffff22)",
               opacity: 0.6,
             }} />
-            <span style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 6, color: "#333" }}>🌙 03:47</span>
+            <span style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 6, color: "#cc6688" }}>🌙 03:47</span>
           </div>
         </div>
 
@@ -747,7 +748,7 @@ function MechanicChat({ phase, onComplete }) {
                   border: `1px solid ${me ? color + "55" : "#ffd6e8"}`,
                   padding: "7px 11px", maxWidth: "76%",
                   fontFamily: "'Press Start 2P', monospace",
-                  fontSize: 7.5, color: me ? color : "#ccc", lineHeight: 1.9,
+                  fontSize: 7.5, color: me ? color : "#994466", lineHeight: 1.9,
                 }}>
                   {msg.text}
                 </div>
@@ -820,7 +821,7 @@ function MechanicCards({ phase, onComplete }) {
               onClick={() => flip(i)}
               style={{
                 height: 100,
-                border: `2px solid ${isFlipped ? color : "#222"}`,
+                border: `2px solid ${isFlipped ? color : "#ddbbdd"}`,
                 background: isFlipped ? `${color}14` : "#fff0f8",
                 cursor: "pointer",
                 display: "flex", flexDirection: "column",
@@ -839,7 +840,7 @@ function MechanicCards({ phase, onComplete }) {
                 <div style={{ textAlign: "center", animation: "popIn .35s ease" }}>
                   <div style={{ fontSize: 26, marginBottom: 5 }}>{card.emoji}</div>
                   <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 7, color, marginBottom: 4 }}>{card.title}</div>
-                  <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 5.5, color: "#888", lineHeight: 1.7 }}>{card.desc}</div>
+                  <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 5.5, color: "#aa7799", lineHeight: 1.7 }}>{card.desc}</div>
                 </div>
               )}
             </div>
@@ -847,7 +848,7 @@ function MechanicCards({ phase, onComplete }) {
         })}
       </div>
 
-      <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 7, color: "#444", textAlign: "center" }}>
+      <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 7, color: "#cc6699", textAlign: "center" }}>
         {flipped.size}/{MEMORY_CARDS.length} planos revelados
       </div>
     </div>
@@ -901,7 +902,7 @@ function MechanicBoss({ phase, onComplete }) {
       {/* HP bar */}
       <div style={{
         position: "relative", height: 26,
-        border: `2px solid ${hpc}`, background: "#0a0a0a",
+        border: `2px solid ${hpc}`, background: "#f8f0ff",
         marginBottom: 12, overflow: "hidden", transition: "border-color .4s",
       }}>
         <div style={{
@@ -912,10 +913,10 @@ function MechanicBoss({ phase, onComplete }) {
         <div style={{
           position: "absolute", inset: 0, display: "flex",
           alignItems: "center", justifyContent: "center",
-          fontFamily: "'Press Start 2P', monospace", fontSize: 7.5, color: "#fff",
-          textShadow: "0 1px 3px #000",
+          fontFamily: "'Press Start 2P', monospace", fontSize: 7.5, color: "#5a0080",
+          textShadow: "0 1px 3px #ddb0ff",
         }}>
-          ⚠ A DÚVIDA — {hp} HP
+          ⚠ A DÚVIDA — {hp} VIDA
         </div>
       </div>
 
@@ -995,7 +996,7 @@ function MechanicBoss({ phase, onComplete }) {
           {!defeated && (
             <div style={{
               fontFamily: "'Press Start 2P', monospace", fontSize: 6,
-              color: "#c084fc", marginTop: 2, letterSpacing: 1,
+              color: "#7c2fc7", marginTop: 2, letterSpacing: 1,
             }}>A DÚVIDA</div>
           )}
         </div>
@@ -1015,7 +1016,7 @@ function MechanicBoss({ phase, onComplete }) {
           }} />
           <div style={{
             fontFamily: "'Press Start 2P', monospace", fontSize: 5.5,
-            color: attacking ? "#fbbf24" : "#c084fc44",
+            color: attacking ? "#c98a06" : "#7c2fc7",
             marginTop: 3, transition: "color .15s",
           }}>LYELSON</div>
         </div>
@@ -1035,7 +1036,7 @@ function MechanicBoss({ phase, onComplete }) {
           }} />
           <div style={{
             fontFamily: "'Press Start 2P', monospace", fontSize: 5.5,
-            color: attacking ? "#f472b6" : "#c084fc44",
+            color: attacking ? "#d6308a" : "#7c2fc7",
             marginTop: 3, transition: "color .15s",
           }}>LORENA</div>
         </div>
@@ -1066,7 +1067,7 @@ function MechanicBoss({ phase, onComplete }) {
           background: "#faf0ff", border: "1px solid #c084fc1a",
           padding: "7px 14px", marginBottom: 12,
           fontFamily: "'Press Start 2P', monospace",
-          fontSize: 7, color: "#9955cc", fontStyle: "italic",
+          fontSize: 7, color: "#7c2fc7", fontStyle: "italic",
           lineHeight: 2, textAlign: "center",
         }}>
           {taunt}
@@ -1074,8 +1075,8 @@ function MechanicBoss({ phase, onComplete }) {
       ) : (
         <div style={{
           fontFamily: "'Press Start 2P', monospace", fontSize: 9,
-          color: "#fbbf24", marginBottom: 14, textAlign: "center",
-          textShadow: "0 0 14px #fbbf24",
+          color: "#c98a06", marginBottom: 14, textAlign: "center",
+          textShadow: "0 2px 6px #fbbf2455",
         }}>
           A DÚVIDA FOI DERROTADA! ❤️
         </div>
@@ -1087,7 +1088,7 @@ function MechanicBoss({ phase, onComplete }) {
             {ATTACKS.map(atk => (
               <PixelBtn
                 key={atk.label}
-                color={cd ? "#2a2a2a" : atk.color}
+                color={cd ? "#ccaacc" : atk.color}
                 onClick={() => attack(atk)}
                 style={{ fontSize: 7, opacity: cd ? 0.4 : 1 }}
               >
@@ -1097,7 +1098,7 @@ function MechanicBoss({ phase, onComplete }) {
           </div>
           <p style={{
             fontFamily: "'Press Start 2P', monospace", fontSize: 6.5,
-            color: "#2a2a2a", textAlign: "center", marginTop: 10,
+            color: "#994466", textAlign: "center", marginTop: 10,
           }}>
             Derrote a Dúvida com Amor e Confiança!
           </p>
@@ -1137,17 +1138,17 @@ function Quiz({ onComplete }) {
       <Stars color="#fbbf24" n={25} />
       <div style={{ position: "relative", zIndex: 1 }}>
         <div style={{ fontSize: 28, marginBottom: 12 }}>🎯</div>
-        <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 10, color: "#fbbf24", marginBottom: 20 }}>QUIZ CONCLUÍDO!</div>
-        <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 9, color: "#bbb", lineHeight: 2.8, marginBottom: 24 }}>
-          <p>Você acertou <span style={{ color: "#fbbf24" }}>{score}/{QUIZ_QUESTIONS.length}</span></p>
+        <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 10, color: "#c98a06", marginBottom: 20 }}>QUIZ CONCLUÍDO!</div>
+        <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 9, color: "#664455", lineHeight: 2.8, marginBottom: 24 }}>
+          <p>Você acertou <span style={{ color: "#c98a06" }}>{score}/{QUIZ_QUESTIONS.length}</span></p>
           {score === QUIZ_QUESTIONS.length
-            ? <p style={{ color: "#4ade80", marginTop: 8 }}>PERFEITO! Você me conhece bem 💚</p>
+            ? <p style={{ color: "#15a34a", marginTop: 8 }}>PERFEITO! Você me conhece bem 💚</p>
             : score >= 2
-            ? <p style={{ color: "#f472b6", marginTop: 8 }}>Quase! Mas agora sabe tudo 💕</p>
-            : <p style={{ color: "#f472b6", marginTop: 8 }}>Tudo bem... o importante vem agora 💛</p>
+            ? <p style={{ color: "#d6308a", marginTop: 8 }}>Quase! Mas agora sabe tudo 💕</p>
+            : <p style={{ color: "#d6308a", marginTop: 8 }}>Tudo bem... o importante vem agora 💛</p>
           }
         </div>
-        <PixelBtn color="#fbbf24" onClick={onComplete} anim style={{ fontSize: 10, padding: "14px 28px", boxShadow: "0 0 20px #fbbf2466" }}>
+        <PixelBtn color="#d6308a" onClick={onComplete} anim style={{ fontSize: 10, padding: "14px 28px", boxShadow: "0 0 20px #d6308a44" }}>
           ❤️ VER DECLARAÇÃO
         </PixelBtn>
       </div>
@@ -1170,23 +1171,23 @@ function Quiz({ onComplete }) {
       ))}
       <div style={{ position: "relative", zIndex: 1 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-          <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 8, color: "#f472b6" }}>❓ QUIZ SURPRESA</div>
-          <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 8, color: "#444" }}>{qi + 1}/{QUIZ_QUESTIONS.length}</div>
+          <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 8, color: "#d6308a" }}>❓ QUIZ SURPRESA</div>
+          <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 8, color: "#994466" }}>{qi + 1}/{QUIZ_QUESTIONS.length}</div>
         </div>
-        <div style={{ height: 4, background: "#1a0a1a", marginBottom: 18, border: "1px solid #f472b633", overflow: "hidden" }}>
+        <div style={{ height: 4, background: "#ffd6e8", marginBottom: 18, border: "1px solid #f472b633", overflow: "hidden" }}>
           <div style={{ height: "100%", width: `${(qi / QUIZ_QUESTIONS.length) * 100}%`, background: "#f472b6", transition: "width .4s", boxShadow: "0 0 8px #f472b6" }} />
         </div>
-        <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 9, color: "#fff", lineHeight: 2.1, marginBottom: 20 }}>
+        <div style={{ fontFamily: "'Press Start 2P', monospace", fontSize: 9, color: "#2d0020", lineHeight: 2.1, marginBottom: 20 }}>
           {q.q}
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {q.opts.map((opt, i) => {
             const right = i === q.correct, chosen = i === sel;
-            let bc = "#f472b6", bg = "transparent", tc = "#f472b6";
+            let bc = "#d6308a", bg = "#fff", tc = "#a3216a";
             if (sel !== null) {
-              if (right) { bc = "#4ade80"; bg = "#4ade8015"; tc = "#4ade80"; }
-              else if (chosen) { bc = "#ff0055"; bg = "#ff005515"; tc = "#ff0055"; }
-              else { bc = "#1a1a1a"; tc = "#2a2a2a"; }
+              if (right) { bc = "#15a34a"; bg = "#eafff1"; tc = "#0e7a37"; }
+              else if (chosen) { bc = "#ff0055"; bg = "#ffe8ee"; tc = "#cc0044"; }
+              else { bc = "#ddaacc"; tc = "#aa7799"; }
             }
             return (
               <button key={i} onClick={() => answer(i)} style={{
@@ -1203,8 +1204,8 @@ function Quiz({ onComplete }) {
         {sel !== null && (
           <div style={{
             marginTop: 14, fontFamily: "'Press Start 2P', monospace", fontSize: 8,
-            color: sel === q.correct ? "#4ade80" : "#f472b6",
-            borderLeft: `3px solid ${sel === q.correct ? "#4ade80" : "#f472b6"}`,
+            color: sel === q.correct ? "#0e7a37" : "#cc0044",
+            borderLeft: `3px solid ${sel === q.correct ? "#15a34a" : "#ff0055"}`,
             paddingLeft: 12, lineHeight: 1.9,
           }}>
             {sel === q.correct ? q.ok : q.fail}
@@ -1412,10 +1413,10 @@ export default function App() {
 
       <Confetti active={victory} />
 
-      {/* Scanlines */}
+      {/* Scanlines — subtle on light theme */}
       <div style={{
         position: "fixed", inset: 0, pointerEvents: "none", zIndex: 50,
-        background: "repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.12) 2px,rgba(0,0,0,.12) 4px)",
+        background: "repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(255,90,150,.04) 3px,rgba(255,90,150,.04) 4px)",
       }} />
 
       <div style={{ maxWidth: 520, margin: "0 auto", padding: "24px 14px", fontFamily: "'Press Start 2P', monospace" }}>
@@ -1433,15 +1434,15 @@ export default function App() {
                 <div key={i} style={{ width: 8, height: 8, background: f ? "#ff0055" : "transparent", border: "1px solid #ff005533" }} />
               ))}
             </div>
-            <div style={{ fontSize: 8, color: "#ff005577", marginBottom: 5, letterSpacing: 5 }}>★ SPECIAL EDITION ★</div>
+            <div style={{ fontSize: 8, color: "#cc3366", marginBottom: 5, letterSpacing: 4 }}>★ EDIÇÃO ESPECIAL ★</div>
             <div style={{
-              fontSize: 22, color: "#fff", lineHeight: 1.5,
+              fontSize: 22, color: "#cc0044", lineHeight: 1.5,
               animation: "titleGlow 2.5s infinite",
-              textShadow: "0 0 15px #ff0055, 0 0 30px #ff005533",
+              textShadow: "0 0 12px #ff005566",
             }}>
               LORENA
             </div>
-            <div style={{ fontSize: 8, color: "#ff0055", marginTop: 5, letterSpacing: 3 }}>THE JOURNEY</div>
+            <div style={{ fontSize: 8, color: "#ff0055", marginTop: 5, letterSpacing: 3 }}>A JORNADA</div>
             <div style={{ marginTop: 16, display: "flex", justifyContent: "center", gap: 12 }}>
               <PixelHeart color="#ff0055" size={22} />
               <PixelHeart color="#ff0055" size={22} />
@@ -1457,9 +1458,9 @@ export default function App() {
           border: "2px solid #ffb3d1", marginBottom: 24,
           fontSize: 7.5, color: "#994466",
         }}>
-          <span>FASES: <span style={{ color: "#cc6688" }}>{done.length}/{PHASES.length}</span></span>
-          <span style={{ color: "#f472b6" }}>11 MESES 💕</span>
-          <span>SCORE: <span style={{ color: "#cc6688" }}>{done.length * 1000}</span></span>
+          <span>FASES: <span style={{ color: "#cc3366" }}>{done.length}/{PHASES.length}</span></span>
+          <span style={{ color: "#e0429a" }}>11 MESES 💕</span>
+          <span>PONTOS: <span style={{ color: "#cc3366" }}>{done.length * 1000}</span></span>
         </div>
 
         {/* ── START SCREEN ── */}
@@ -1544,8 +1545,8 @@ export default function App() {
                 fontSize: 16, color: "#ff0055", lineHeight: 1.8,
                 marginBottom: 8, animation: "glow 2s infinite",
               }}>LORENA</p>
-              <p style={{ fontSize: 7.5, color: "#555", lineHeight: 2, marginBottom: 3 }}>A nossa história em 6 fases.</p>
-              <p style={{ fontSize: 6.5, color: "#4ade8077", lineHeight: 2, marginBottom: 24 }}>
+              <p style={{ fontSize: 7.5, color: "#994466", lineHeight: 2, marginBottom: 3 }}>A nossa história em 6 fases.</p>
+              <p style={{ fontSize: 6.5, color: "#15a34a", lineHeight: 2, marginBottom: 24 }}>
                 (ps: são 11 meses, não 9 😂)
               </p>
               <PixelBtn color="#ff0055" onClick={() => setStarted(true)} anim style={{ fontSize: 11, padding: "14px 32px", boxShadow: "0 0 24px #ff005555" }}>
@@ -1566,14 +1567,14 @@ export default function App() {
         {/* ── VICTORY / DECLARATION ── */}
         {victory && (
           <div style={{
-            padding: 28, border: "3px solid #fbbf24",
-            background: "#050300", animation: "slideIn .6s ease",
-            position: "relative", boxShadow: "0 0 40px #fbbf2418",
+            padding: 28, border: "3px solid #d99a06",
+            background: "#fffbee", animation: "slideIn .6s ease",
+            position: "relative", boxShadow: "0 0 40px #fbbf2433",
           }}>
-            <Stars color="#fbbf24" n={50} />
+            <Stars color="#d99a06" n={50} />
             {["tl","tr","bl","br"].map(p => (
               <div key={p} style={{
-                position: "absolute", width: 14, height: 14, background: "#fbbf24",
+                position: "absolute", width: 14, height: 14, background: "#d99a06",
                 top: p.startsWith("t") ? -4 : undefined, bottom: p.startsWith("b") ? -4 : undefined,
                 left: p.endsWith("l") ? -4 : undefined, right: p.endsWith("r") ? -4 : undefined,
               }} />
@@ -1581,8 +1582,8 @@ export default function App() {
             <div style={{ position: "relative", zIndex: 1 }}>
               <div style={{
                 fontFamily: "'Press Start 2P', monospace",
-                fontSize: 14, color: "#fbbf24", marginBottom: 22, textAlign: "center",
-                textShadow: "0 0 20px #fbbf24", animation: "titleGlow 1.5s infinite",
+                fontSize: 14, color: "#c98a06", marginBottom: 22, textAlign: "center",
+                textShadow: "0 2px 8px #fbbf2455", animation: "titleGlow 1.5s infinite",
               }}>
                 VOCÊ VENCEU! 👑
               </div>
@@ -1608,37 +1609,37 @@ export default function App() {
                 boxShadow: "0 0 30px #fbbf2433",
               }}>
                 <img src="/fase5-final.jpg" alt="Boss Final" style={{ width: "100%", display: "block", imageRendering: "pixelated" }} />
-                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom,transparent 55%,#05030099)" }} />
+                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom,transparent 55%,#fffbee99)" }} />
               </div>
 
               {/* Declaration */}
               <div style={{
                 fontFamily: "'Press Start 2P', monospace",
-                fontSize: 9, color: "#aaa", lineHeight: 3.3,
+                fontSize: 9, color: "#553344", lineHeight: 3.3,
                 marginBottom: 28, textAlign: "left",
               }}>
-                <p style={{ color: "#f472b6", fontSize: 12 }}>Doidiça,</p>
+                <p style={{ color: "#d6308a", fontSize: 12 }}>Doidiça,</p>
                 <p style={{ marginTop: 12 }}>Você sempre me pergunta</p>
                 <p>se eu amo muito você.</p>
-                <p style={{ marginTop: 12, color: "#4ade80" }}>Esse jogo é a minha resposta.</p>
+                <p style={{ marginTop: 12, color: "#15a34a" }}>Esse jogo é a minha resposta.</p>
                 <p style={{ marginTop: 12 }}>Esses olhos verdes,</p>
                 <p>esse jeitinho autista 😂</p>
                 <p>esse carinho que me derrete todo dia...</p>
-                <p style={{ marginTop: 14, color: "#fbbf24" }}>Minha vida não tinha cor.</p>
+                <p style={{ marginTop: 14, color: "#c98a06" }}>Minha vida não tinha cor.</p>
                 <p>Você chegou e me fez</p>
                 <p>querer viver de novo.</p>
                 <p style={{ marginTop: 18, color: "#ff0055", fontSize: 12 }}>
                   Te amo, Amor de Vida Minha. ❤️
                 </p>
-                <p style={{ marginTop: 16, color: "#444" }}>Feliz 11 meses.</p>
-                <p style={{ color: "#444" }}>Muitos mais pela frente.</p>
+                <p style={{ marginTop: 16, color: "#994466" }}>Feliz 11 meses.</p>
+                <p style={{ color: "#994466" }}>Muitos mais pela frente.</p>
               </div>
 
               <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap", marginBottom: 24 }}>
                 {[...Array(5)].map((_, i) => <PixelHeart key={i} color="#ff0055" size={30} />)}
               </div>
 
-              <div style={{ textAlign: "right", fontFamily: "'Press Start 2P', monospace", fontSize: 8, color: "#333" }}>
+              <div style={{ textAlign: "right", fontFamily: "'Press Start 2P', monospace", fontSize: 8, color: "#994466" }}>
                 — {HERO_NAME}
               </div>
             </div>
