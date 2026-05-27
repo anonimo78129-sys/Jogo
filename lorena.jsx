@@ -41,6 +41,23 @@ const MEMORY_CARDS = [
   { emoji: "💒", title: "Família",     desc: "O maior de todos os planos" },
 ];
 
+const GALLERY = [
+  { src: "/g01.png", caption: "❤️ juntos, do jeitinho que eu amo" },
+  { src: "/g02.jpg", caption: "🎈 festa com você é sempre diferente" },
+  { src: "/g03.jpg", caption: "😂 ela me mordeu e achou normal kkkk" },
+  { src: "/g04.jpg", caption: "🤪 a gente é exatamente assim... loucos" },
+  { src: "/g05.png", caption: "🍽️ até na cantina a gente é dupla perfeita" },
+  { src: "/g06.jpg", caption: "💨 você com o cabelo no ventilador... lindo demais" },
+  { src: "/g07.png", caption: "📱 mesmo de longe, você preenche tudo" },
+  { src: "/g08.jpg", caption: "🌳 qualquer lugar fica bonito do seu lado" },
+  { src: "/g09.jpg", caption: "😷 mesmo de máscara, te reconheceria em qualquer lugar" },
+  { src: "/g10.jpg", caption: "😊 esse sorriso é meu favorito no mundo inteiro" },
+  { src: "/g11.jpg", caption: "😄 a touca, o riso... perfeita" },
+  { src: "/g12.jpg", caption: "🐸 artista, doidiça, e ainda linda demais" },
+  { src: "/g13.jpg", caption: "👁️ esses olhos verdes que me derretem todo dia" },
+  { src: "/g14.jpg", caption: "👁️ te olhei e fui, Doidiça" },
+];
+
 const ATTACKS = [
   { label: "❤️ AMOR",      damage: [15, 25], color: "#ff0055" },
   { label: "🛡️ CONFIANÇA", damage: [20, 30], color: "#0a8fd1" },
@@ -1370,6 +1387,133 @@ function Confetti({ active }) {
 }
 
 // ──────────────────────────────────────────
+// PHOTO GALLERY
+// ──────────────────────────────────────────
+
+function PhotoGallery() {
+  const [idx, setIdx] = useState(0);
+  const [dir, setDir] = useState(0); // -1 left, 1 right
+  const touchX = useRef(null);
+  const total = GALLERY.length;
+
+  const go = (next) => {
+    setDir(next > idx ? 1 : -1);
+    setIdx(next);
+  };
+  const prev = () => go((idx - 1 + total) % total);
+  const next = () => go((idx + 1) % total);
+
+  const onTouchStart = (e) => { touchX.current = e.touches[0].clientX; };
+  const onTouchEnd = (e) => {
+    if (touchX.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchX.current;
+    if (dx < -40) next();
+    else if (dx > 40) prev();
+    touchX.current = null;
+  };
+
+  const photo = GALLERY[idx];
+
+  return (
+    <div style={{ marginBottom: 24, border: "3px solid #d6308a", background: "#fff0f7", position: "relative", boxShadow: "0 0 28px #d6308a18" }}>
+      <Stars color="#d6308a" n={18} />
+      <div style={{ position: "relative", zIndex: 1 }}>
+
+        {/* Header */}
+        <div style={{
+          textAlign: "center", fontFamily: "'Press Start 2P', monospace",
+          fontSize: 8, color: "#d6308a", padding: "14px 0 10px", letterSpacing: 2,
+        }}>
+          📸 NOSSA HISTÓRIA
+        </div>
+
+        {/* Photo frame */}
+        <div
+          style={{ position: "relative", width: "100%", overflow: "hidden", background: "#1a0010", cursor: "pointer" }}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+          onClick={next}
+        >
+          <img
+            key={idx}
+            src={photo.src}
+            alt={`foto ${idx + 1}`}
+            style={{
+              width: "100%", height: 320,
+              objectFit: "cover", objectPosition: "center top",
+              display: "block",
+              animation: "fadeIn .35s ease",
+            }}
+          />
+          {/* Dark gradient bottom for caption */}
+          <div style={{
+            position: "absolute", bottom: 0, left: 0, right: 0, height: "45%",
+            background: "linear-gradient(transparent, rgba(30,0,15,.82))",
+          }} />
+          {/* Caption over photo */}
+          <div style={{
+            position: "absolute", bottom: 12, left: 12, right: 12,
+            fontFamily: "'Press Start 2P', monospace", fontSize: 8.5,
+            color: "#fff", lineHeight: 2,
+            textShadow: "0 1px 6px #000, 0 0 20px #ff0055",
+          }}>
+            {photo.caption}
+          </div>
+          {/* Counter badge */}
+          <div style={{
+            position: "absolute", top: 10, right: 10,
+            background: "rgba(30,0,15,.75)", border: "1px solid #ff005544",
+            fontFamily: "'Press Start 2P', monospace", fontSize: 7,
+            color: "#ff6699", padding: "4px 8px",
+          }}>
+            {idx + 1}/{total}
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 12px 4px" }}>
+          <button onClick={prev} style={{
+            background: "transparent", border: "2px solid #d6308a", color: "#d6308a",
+            fontFamily: "'Press Start 2P', monospace", fontSize: 11,
+            padding: "7px 14px", cursor: "pointer",
+          }}>◀</button>
+
+          {/* Dot indicators */}
+          <div style={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "center", maxWidth: "60%" }}>
+            {GALLERY.map((_, i) => (
+              <div
+                key={i}
+                onClick={() => go(i)}
+                style={{
+                  width: i === idx ? 10 : 6, height: i === idx ? 10 : 6,
+                  background: i === idx ? "#d6308a" : "#f9a8d4",
+                  cursor: "pointer", transition: "all .2s",
+                  borderRadius: 0,
+                }}
+              />
+            ))}
+          </div>
+
+          <button onClick={next} style={{
+            background: "transparent", border: "2px solid #d6308a", color: "#d6308a",
+            fontFamily: "'Press Start 2P', monospace", fontSize: 11,
+            padding: "7px 14px", cursor: "pointer",
+          }}>▶</button>
+        </div>
+
+        {/* Hint */}
+        <div style={{
+          textAlign: "center", fontFamily: "'Press Start 2P', monospace",
+          fontSize: 6.5, color: "#cc6699", paddingBottom: 12,
+        }}>
+          ← toque na foto ou arraste →
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────
 // APP
 // ──────────────────────────────────────────
 
@@ -1769,6 +1913,9 @@ export default function App() {
             </div>
           </div>
         )}
+
+        {/* ── PHOTO GALLERY ── */}
+        <PhotoGallery />
 
         {/* ── START SCREEN ── */}
         {!started && (
