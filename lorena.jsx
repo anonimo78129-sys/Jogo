@@ -1422,6 +1422,30 @@ export default function App() {
     }
   }, [introPhase, loadProgress]);
 
+  // ── Live love counter ──
+  const [loveTime, setLoveTime] = useState(null);
+  useEffect(() => {
+    const calc = () => {
+      const start = new Date(2025, 5, 27); // 27 de Junho de 2025
+      const now   = new Date();
+      const diff  = now - start;
+      const totalSecs = Math.floor(diff / 1000);
+      const totalMins = Math.floor(diff / 60000);
+      const totalHrs  = Math.floor(diff / 3600000);
+      const totalDays = Math.floor(diff / 86400000);
+      const secs   = Math.floor((diff % 60000) / 1000);
+      const mins   = Math.floor((diff % 3600000) / 60000);
+      const hrs    = Math.floor((diff % 86400000) / 3600000);
+      const days   = totalDays % 30;
+      const months = Math.floor((totalDays % 365) / 30);
+      const years  = Math.floor(totalDays / 365);
+      setLoveTime({ totalSecs, totalMins, totalHrs, totalDays, secs, mins, hrs, days, months, years });
+    };
+    calc();
+    const iv = setInterval(calc, 1000);
+    return () => clearInterval(iv);
+  }, []);
+
   const scroll = () => setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }), 150);
 
   const phaseComplete = (i) => {
@@ -1649,6 +1673,102 @@ export default function App() {
           <span style={{ color: "#e0429a" }}>11 MESES 💕</span>
           <span>PONTOS: <span style={{ color: "#cc3366" }}>{done.length * 1000}</span></span>
         </div>
+
+        {/* ── LOVE COUNTER ── */}
+        {loveTime && (
+          <div style={{
+            marginBottom: 24, border: "3px solid #ff0055",
+            background: "#fff0f7", position: "relative",
+            padding: "20px 16px 18px",
+            boxShadow: "0 0 28px #ff005514",
+          }}>
+            <Stars color="#ff0055" n={22} />
+            <div style={{ position: "relative", zIndex: 1 }}>
+
+              {/* Title */}
+              <div style={{
+                textAlign: "center", fontFamily: "'Press Start 2P', monospace",
+                fontSize: 8, color: "#d6308a", marginBottom: 18, letterSpacing: 2,
+              }}>
+                💕 JUNTOS HÁ...
+              </div>
+
+              {/* Anos / Meses / Dias */}
+              <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 16 }}>
+                {[
+                  { v: loveTime.years,  l: "ANOS"  },
+                  { v: loveTime.months, l: "MESES" },
+                  { v: loveTime.days,   l: "DIAS"  },
+                ].map(({ v, l }) => (
+                  <div key={l} style={{
+                    background: "#fff", border: "2px solid #ff0055",
+                    padding: "10px 8px", textAlign: "center", minWidth: 68, flex: 1,
+                    boxShadow: "0 2px 8px #ff005511",
+                  }}>
+                    <div style={{
+                      fontFamily: "'Press Start 2P', monospace",
+                      fontSize: 22, color: "#cc0044", lineHeight: 1,
+                    }}>{v}</div>
+                    <div style={{
+                      fontFamily: "'Press Start 2P', monospace",
+                      fontSize: 6.5, color: "#994466", marginTop: 7,
+                    }}>{l}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* HH:MM:SS digital clock */}
+              <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 4, marginBottom: 18 }}>
+                {[
+                  { v: String(loveTime.hrs).padStart(2,"0"),  l: "HRS" },
+                  null,
+                  { v: String(loveTime.mins).padStart(2,"0"), l: "MIN" },
+                  null,
+                  { v: String(loveTime.secs).padStart(2,"0"), l: "SEG" },
+                ].map((item, i) => item === null ? (
+                  <div key={i} style={{
+                    fontFamily: "'Press Start 2P', monospace",
+                    fontSize: 22, color: "#ff0055",
+                    marginBottom: 14,
+                    animation: "blink 1s infinite",
+                  }}>:</div>
+                ) : (
+                  <div key={i} style={{
+                    background: "#2d0020", border: "2px solid #ff0055",
+                    padding: "7px 6px", textAlign: "center", minWidth: 52,
+                    boxShadow: "0 0 12px #ff005533",
+                  }}>
+                    <div style={{
+                      fontFamily: "'Press Start 2P', monospace",
+                      fontSize: 18, color: "#ff3377", lineHeight: 1,
+                    }}>{item.v}</div>
+                    <div style={{
+                      fontFamily: "'Press Start 2P', monospace",
+                      fontSize: 6, color: "#ff6699", marginTop: 5,
+                    }}>{item.l}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Total stats */}
+              <div style={{
+                fontFamily: "'Press Start 2P', monospace",
+                fontSize: 7.5, color: "#994466",
+                lineHeight: 3.2, textAlign: "center",
+                background: "#ffe8f3", padding: "12px 14px",
+                border: "1px solid #ffb3d1",
+              }}>
+                <div>🗓️ {loveTime.totalDays.toLocaleString("pt-BR")} dias juntos</div>
+                <div>⏰ {loveTime.totalHrs.toLocaleString("pt-BR")} horas de amor</div>
+                <div>⚡ {loveTime.totalMins.toLocaleString("pt-BR")} minutos felizes</div>
+                <div style={{ color: "#d6308a", fontSize: 8 }}>
+                  💖 {loveTime.totalSecs.toLocaleString("pt-BR")} segundos com você
+                </div>
+              </div>
+
+            </div>
+          </div>
+        )}
 
         {/* ── START SCREEN ── */}
         {!started && (
