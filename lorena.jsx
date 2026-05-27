@@ -1011,9 +1011,11 @@ function MechanicBoss({ phase, onComplete }) {
           animation: attacking ? "shake .25s" : "bob 1.7s infinite",
           transition: "filter .15s",
         }}>
-          <img src="/lyelson.png" alt="Lyelson" style={{
-            width: 72, imageRendering: "pixelated", display: "block",
-          }} />
+          <img
+            src={attacking ? "/ataque-pose.png" : "/lyelson.png"}
+            alt="Lyelson"
+            style={{ width: 72, imageRendering: "pixelated", display: "block", transition: "none" }}
+          />
           <div style={{
             fontFamily: "'Press Start 2P', monospace", fontSize: 5.5,
             color: attacking ? "#c98a06" : "#7c2fc7",
@@ -1031,9 +1033,11 @@ function MechanicBoss({ phase, onComplete }) {
           animation: attacking ? "shake .25s" : "bob 1.7s .45s infinite",
           transition: "filter .15s",
         }}>
-          <img src="/lorena.png" alt="Lorena" style={{
-            width: 72, imageRendering: "pixelated", display: "block",
-          }} />
+          <img
+            src={attacking ? "/ataque-pose.png" : "/lorena.png"}
+            alt="Lorena"
+            style={{ width: 72, imageRendering: "pixelated", display: "block", transition: "none" }}
+          />
           <div style={{
             fontFamily: "'Press Start 2P', monospace", fontSize: 5.5,
             color: attacking ? "#d6308a" : "#7c2fc7",
