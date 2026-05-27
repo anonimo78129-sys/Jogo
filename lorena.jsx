@@ -1377,6 +1377,47 @@ export default function App() {
   const [victory, setVictory] = useState(false);
   const bottomRef = useRef(null);
 
+  // ── Intro sequence state ──
+  const [introPhase, setIntroPhase] = useState(0); // 0=error 1=troll 2=loading 3=game
+  const [loadProgress, setLoadProgress] = useState(0);
+  const [errCount, setErrCount] = useState(0);
+
+  // Error screen fake progress
+  useEffect(() => {
+    if (introPhase !== 0) return;
+    const iv = setInterval(() => setErrCount(c => Math.min(c + 2, 100)), 100);
+    return () => clearInterval(iv);
+  }, [introPhase]);
+
+  // Error → Troll after 5s
+  useEffect(() => {
+    if (introPhase !== 0) return;
+    const t = setTimeout(() => setIntroPhase(1), 5000);
+    return () => clearTimeout(t);
+  }, [introPhase]);
+
+  // Troll → Loading after 5s
+  useEffect(() => {
+    if (introPhase !== 1) return;
+    const t = setTimeout(() => setIntroPhase(2), 5000);
+    return () => clearTimeout(t);
+  }, [introPhase]);
+
+  // Loading bar fills over ~4.5s
+  useEffect(() => {
+    if (introPhase !== 2) return;
+    const iv = setInterval(() => setLoadProgress(p => Math.min(p + 2, 100)), 90);
+    return () => clearInterval(iv);
+  }, [introPhase]);
+
+  // Loading complete → game
+  useEffect(() => {
+    if (introPhase === 2 && loadProgress >= 100) {
+      const t = setTimeout(() => setIntroPhase(3), 700);
+      return () => clearTimeout(t);
+    }
+  }, [introPhase, loadProgress]);
+
   const scroll = () => setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }), 150);
 
   const phaseComplete = (i) => {
@@ -1406,11 +1447,153 @@ export default function App() {
         @keyframes popIn{0%{transform:scale(0);opacity:0}70%{transform:scale(1.25);opacity:1}100%{transform:scale(1);opacity:1}}
         @keyframes heartFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.1)}}
 
+        @keyframes errBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        @keyframes trollPop{0%{transform:scale(0) rotate(-10deg)}60%{transform:scale(1.2) rotate(3deg)}100%{transform:scale(1) rotate(0)}}
+
         ::-webkit-scrollbar{width:5px;}
         ::-webkit-scrollbar-track{background:#fce4ec;}
         ::-webkit-scrollbar-thumb{background:#ff0055;}
       `}</style>
 
+      {/* ── INTRO: TELA DE ERRO ── */}
+      {introPhase === 0 && (
+        <div style={{
+          position: "fixed", inset: 0, background: "#080808",
+          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+          fontFamily: "monospace", padding: 32, zIndex: 9999,
+          animation: "fadeIn .3s ease",
+        }}>
+          <div style={{ color: "#ff2020", fontSize: 48, marginBottom: 20, animation: "errBlink 1.2s infinite" }}>⚠️</div>
+          <div style={{ color: "#ff2020", fontSize: 20, fontWeight: "bold", marginBottom: 16, letterSpacing: 3, textAlign: "center" }}>
+            ERRO CRÍTICO DO SISTEMA
+          </div>
+          <div style={{ width: "90%", maxWidth: 340, background: "#0d0d0d", border: "1px solid #ff2020", padding: 20, marginBottom: 20 }}>
+            <div style={{ color: "#cc0000", fontSize: 12, lineHeight: 2.2, marginBottom: 16 }}>
+              Este dispositivo encontrou um problema grave e precisa ser reiniciado.
+            </div>
+            <div style={{ color: "#ff4444", fontSize: 11, lineHeight: 2, marginBottom: 16 }}>
+              Código: <span style={{ color: "#ff6666", fontWeight: "bold" }}>0x000LORENA_404</span>
+            </div>
+            <div style={{ color: "#888", fontSize: 11, marginBottom: 8 }}>Coletando informações de erro...</div>
+            <div style={{ height: 6, background: "#1a0000", border: "1px solid #440000", marginBottom: 6 }}>
+              <div style={{ height: "100%", background: "#ff2020", width: `${errCount}%`, transition: "width .15s" }} />
+            </div>
+            <div style={{ color: "#ff2020", fontSize: 11, fontWeight: "bold" }}>{errCount}%</div>
+          </div>
+          <div style={{ color: "#440000", fontSize: 10, textAlign: "center", lineHeight: 2 }}>
+            Reiniciando automaticamente...
+          </div>
+        </div>
+      )}
+
+      {/* ── INTRO: TELA TROUXA ── */}
+      {introPhase === 1 && (
+        <div style={{
+          position: "fixed", inset: 0,
+          background: "linear-gradient(135deg, #1a0010 0%, #0d0020 100%)",
+          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+          fontFamily: "'Press Start 2P', monospace", padding: 32, zIndex: 9999,
+          animation: "fadeIn .2s ease",
+        }}>
+          <div style={{ fontSize: 56, marginBottom: 18, animation: "trollPop .5s ease forwards, bob 1.2s .5s infinite" }}>
+            😂
+          </div>
+          <div style={{
+            color: "#ff0055", fontSize: 24, marginBottom: 14, textAlign: "center",
+            animation: "titleGlow 1s infinite",
+            textShadow: "0 0 20px #ff0055",
+          }}>
+            TROUXA!!
+          </div>
+          <div style={{ color: "#ff6699", fontSize: 14, marginBottom: 10, textAlign: "center", letterSpacing: 2 }}>
+            Kkkkkkkkkkk
+          </div>
+          <div style={{ color: "#ff3377", fontSize: 11, marginBottom: 24, textAlign: "center", lineHeight: 2.2 }}>
+            te enganei hein?? 😂😂
+          </div>
+          <div style={{
+            color: "#cc2255", fontSize: 9, textAlign: "center", lineHeight: 2.5,
+            background: "#1a001088", border: "1px solid #ff005533", padding: "12px 20px",
+          }}>
+            não é vírus não bb ❤️
+          </div>
+          <div style={{ marginTop: 28, display: "flex", gap: 12, animation: "fadeIn 1s .3s both" }}>
+            {[...Array(5)].map((_,i) => (
+              <div key={i} style={{ animation: `bob ${1.2 + i * 0.2}s infinite` }}>
+                <PixelHeart color="#ff0055" size={24} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── INTRO: CARREGAMENTO ROMÂNTICO ── */}
+      {introPhase === 2 && (
+        <div style={{
+          position: "fixed", inset: 0,
+          background: "linear-gradient(135deg, #1a0015 0%, #0a0018 50%, #160010 100%)",
+          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+          fontFamily: "'Press Start 2P', monospace", padding: 32, zIndex: 9999,
+          animation: "fadeIn .5s ease",
+        }}>
+          {/* Floating hearts bg */}
+          {[...Array(8)].map((_,i) => (
+            <div key={i} style={{
+              position: "absolute",
+              left: `${10 + i * 11}%`, top: `${15 + (i % 3) * 20}%`,
+              opacity: 0.12,
+              animation: `bob ${2 + i * 0.4}s ${i * 0.3}s infinite`,
+            }}>
+              <PixelHeart color="#ff0055" size={18} />
+            </div>
+          ))}
+
+          <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <div style={{ display: "flex", gap: 14, marginBottom: 32 }}>
+              {[0,1,2].map(i => (
+                <div key={i} style={{ animation: `bob ${1.2 + i * 0.3}s ${i * 0.2}s infinite` }}>
+                  <PixelHeart color="#ff0055" size={32} />
+                </div>
+              ))}
+            </div>
+
+            <div style={{
+              color: "#ff3377", fontSize: 14, marginBottom: 6, letterSpacing: 3,
+              animation: "titleGlow 2s infinite",
+              textShadow: "0 0 20px #ff005566",
+            }}>
+              CARREGANDO
+            </div>
+            <div style={{ color: "#ff6699", fontSize: 9, marginBottom: 6 }}>uma surpresa especial</div>
+            <div style={{ color: "#cc2244", fontSize: 8, marginBottom: 32 }}>para você, Lorena ❤️</div>
+
+            <div style={{ width: 260, marginBottom: 10 }}>
+              <div style={{ height: 10, background: "#33001188", border: "2px solid #ff005533", marginBottom: 8, overflow: "hidden" }}>
+                <div style={{
+                  height: "100%",
+                  background: "linear-gradient(90deg, #ff0055, #ff66aa, #ff0055)",
+                  backgroundSize: "200% 100%",
+                  width: `${loadProgress}%`, transition: "width .2s",
+                  animation: "titleGlow 1s infinite",
+                }} />
+              </div>
+              <div style={{ color: "#ff3377", fontSize: 9, textAlign: "center" }}>{loadProgress}%</div>
+            </div>
+
+            <div style={{ color: "#cc2244", fontSize: 8, textAlign: "center", lineHeight: 2.8, marginTop: 16, minHeight: 28 }}>
+              {loadProgress < 25 ? "iniciando a jornada..." :
+               loadProgress < 50 ? "carregando memórias..." :
+               loadProgress < 75 ? "preparando com amor..." :
+               loadProgress < 95 ? "quase lá, bb..." :
+               "✨ pronto! ✨"}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── JOGO PRINCIPAL ── */}
+      {introPhase >= 3 && (<>
       <Confetti active={victory} />
 
       {/* Scanlines — subtle on light theme */}
@@ -1697,6 +1880,7 @@ export default function App() {
 
         <div ref={bottomRef} />
       </div>
+      </>)}
     </>
   );
 }
