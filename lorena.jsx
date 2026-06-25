@@ -744,9 +744,31 @@ function FinalSection() {
         </FadeBlock>
 
         <FadeBlock delay={0.5}>
-          <div style={{ fontFamily: "'Dancing Script', cursive", fontSize: 19, color: "#f9d8e4", lineHeight: 1.9, marginBottom: 36 }}>
-            Eu te amo a cada batida do meu coração,<br />
-            e te amarei a cada segundo da minha vida.
+          <div style={{ fontFamily: "'Lato', sans-serif", fontWeight: 300, fontSize: 16, color: "#fbe4ec", lineHeight: 2, marginBottom: 36, textAlign: "left" }}>
+            <p style={{ marginBottom: 18 }}>
+              Há um ano eu aceitei o seu pedido de namoro sem saber que estava
+              dizendo sim pra melhor fase da minha vida.
+            </p>
+            <p style={{ marginBottom: 18 }}>
+              Hoje a gente divide tudo — os planos, as bobeiras, os medos,
+              as conquistas. A gente se cuida, se respeita e empurra um ao
+              outro pra voar cada vez mais alto.
+            </p>
+            <p style={{ marginBottom: 18 }}>
+              Você é minha namorada, minha melhor amiga e minha parceira em
+              absolutamente tudo. E eu não canso de dizer o quanto você é foda,
+              porque é a mais pura verdade.
+            </p>
+            <p style={{ marginBottom: 18 }}>
+              Que venham muitos e muitos anos de muito amor. Eu te amo a cada
+              batida do meu coração, e vou te amar a cada segundo da minha vida.
+            </p>
+            <p style={{
+              fontFamily: "'Dancing Script', cursive", fontSize: 24,
+              color: "#fde68a", textAlign: "center", marginTop: 8,
+            }}>
+              Pra sempre seu. ❤️
+            </p>
           </div>
         </FadeBlock>
 
@@ -792,42 +814,55 @@ function FinalSection() {
 // ─────────────────────────────────────────────────────────
 
 const STEPS = [
-  { type: "say", emoji: "🌸", lines: ["Oi, amor.", "Eu preparei uma coisa", "só pra você."], btn: "começar 💌" },
+  { type: "say", emoji: "🌸", lines: ["Oi, amor.", "Senta aí, respira fundo...", "eu pensei em cada palavra disso", "só pra você."], btn: "começar 💌" },
 
   { type: "ask", q: "Você sabe que dia especial é hoje?", answers: [
-      { label: "Nosso 1 aninho 🥹", reply: "Isso! Hoje faz 1 ano que você me deixou o homem mais feliz do mundo." },
-      { label: "Me lembra? 🙈",     reply: "1 ano da gente, sua linda. Como é que esquece disso? 🥹" },
+      { label: "Nosso 1 aninho 🥹", reply: "Isso. Hoje faz exatamente 1 ano que a minha vida inteira ganhou cor." },
+      { label: "Me lembra? 🙈",     reply: "1 ano da gente, Doidiça. O melhor ano que eu já vivi até hoje." },
   ]},
 
-  { type: "say", emoji: "💍", lines: ["Há 1 ano, eu estava aceitando", "o seu pedido de namoro."], btn: "continuar" },
+  { type: "say", emoji: "🧪", lines: ["Tudo começou simples.", "Você só queria uma dupla.", "Eu não fazia ideia de que ia", "ganhar uma vida inteira."], btn: "continuar" },
 
-  { type: "say", emoji: "🏡", lines: ["E hoje... a gente compartilha a vida.", "Com muita cumplicidade,", "amor e leveza."], btn: "continuar" },
+  { type: "say", emoji: "💍", lines: ["Há 1 ano, eu aceitei", "o seu pedido de namoro.", "E foi o 'sim' mais fácil", "que eu já dei na vida."], btn: "continuar" },
+
+  { type: "say", emoji: "🏡", lines: ["Hoje a gente não só namora.", "A gente divide a vida.", "Com cumplicidade, com amor,", "com uma leveza que eu nunca tinha sentido."], btn: "continuar" },
 
   { type: "ask", q: "Você é feliz comigo?", answers: [
-      { label: "Muito ❤️",  reply: "Eu também. Mais do que cabe no peito." },
-      { label: "Demais 🥹", reply: "Eu também. Mais do que cabe no peito." },
+      { label: "Muito ❤️",  reply: "Eu também. Mais do que eu sei colocar em palavras." },
+      { label: "Demais 🥹", reply: "Eu também. Mais do que eu sei colocar em palavras." },
   ]},
 
-  { type: "say", emoji: "🤍", lines: ["Eu amo o tanto que a gente", "se cuida e se respeita."], btn: "continuar" },
+  { type: "say", emoji: "🤍", lines: ["Eu amo o tanto que a gente se cuida.", "O tanto que a gente se respeita.", "O jeito perfeito", "que um cabe no outro."], btn: "continuar" },
 
-  { type: "say", emoji: "🕊️", lines: ["O jeito como a gente impulsiona", "um ao outro a voar mais alto."], btn: "continuar" },
+  { type: "say", emoji: "🕊️", lines: ["Eu amo como a gente se impulsiona.", "Como você me faz querer", "voar mais alto.", "E voa junto comigo, sempre."], btn: "continuar" },
 
-  { type: "say", emoji: "😏", lines: ["O quanto a gente fala um pro outro", "o quanto cada um é foda."], btn: "continuar" },
+  { type: "say", emoji: "😏", lines: ["E a gente vive falando", "o quanto cada um é foda.", "(porque é verdade, né?", "olha pra você. 😏)"], btn: "continuar" },
 
-  { type: "say", emoji: "🫂", lines: ["O quanto somos amigos.", "O quanto somos parceiros", "em absolutamente tudo."], btn: "continuar" },
+  { type: "say", emoji: "🫂", lines: ["Você é minha namorada,", "mas antes disso é minha amiga.", "Minha parceira em absolutamente", "tudo que a gente enfrenta."], btn: "continuar" },
 
-  { type: "ask", q: "Topa passar muitos anos assim, do meu lado?", answers: [
+  { type: "ask", q: "E aquela sua mania de me morder? 😂", answers: [
+      { label: "Kkkk culpada", reply: "Pode morder pra sempre. Eu deixo, Doidiça. 🥹" },
+      { label: "Foi amor 🥰",  reply: "Eu sei. E eu amo até as mordidas. kkkk" },
+  ]},
+
+  { type: "say", emoji: "👁️", lines: ["Eu me perco nesses", "seus olhos verdes.", "Todo santo dia.", "E não quero me achar nunca."], btn: "continuar" },
+
+  { type: "ask", q: "Topa passar muitos e muitos anos assim, do meu lado?", answers: [
       { label: "Topo ❤️",      reply: "Então tá selado. 🤝✨" },
       { label: "Pra sempre 🥹", reply: "Pra sempre ainda é pouco perto do que eu quero contigo." },
   ]},
 
-  { type: "say", emoji: "🌹", lines: ["Que venham muitos anos", "de muito amor."], btn: "continuar" },
+  { type: "say", emoji: "🌹", lines: ["Que venham muitos anos.", "De muito amor, briga boba,", "risada sem motivo e gente perguntando", "qual é o nosso segredo."], btn: "continuar" },
 
-  { type: "say", emoji: "💗", lines: ["Eu te amo a cada batida", "do meu coração."], btn: "continuar" },
+  { type: "say", emoji: "✨", lines: ["E o segredo é simples:", "é você.", "Sempre foi você."], btn: "continuar" },
 
-  { type: "say", emoji: "♾️", lines: ["E te amarei a cada segundo", "da minha vida."], btn: "continuar", showCounter: true },
+  { type: "say", emoji: "💗", lines: ["Eu te amo", "a cada batida", "do meu coração."], btn: "continuar" },
 
-  { type: "final", emoji: "🎂", lines: ["Feliz 1 ano, Lorena.", "Eu te amo. ❤️"], btn: "ver nossas fotos 📸" },
+  { type: "say", emoji: "♾️", lines: ["E vou te amar", "a cada segundo", "da minha vida."], btn: "continuar", showCounter: true },
+
+  { type: "say", emoji: "🥹", lines: ["Olha quanto tempo", "já é nosso.", "E isso aqui", "é só o começo."], btn: "continuar" },
+
+  { type: "final", emoji: "🎂", lines: ["Feliz 1 ano, Lorena.", "Minha Doidiça, meu amor,", "minha vida inteira."], btn: "ver nossas fotos 📸" },
 ];
 
 function BtnRomantic({ children, onClick, block, gold }) {
@@ -932,6 +967,55 @@ function InteractiveDeclaration({ loveTime, onDone }) {
 }
 
 // ─────────────────────────────────────────────────────────
+// MUSIC PLAYER
+// ─────────────────────────────────────────────────────────
+
+function MusicPlayer() {
+  const audioRef = useRef(null);
+  const startedRef = useRef(false);
+  const [on, setOn] = useState(false);
+
+  useEffect(() => {
+    const tryStart = () => {
+      if (startedRef.current) return;
+      const a = audioRef.current;
+      if (!a) return;
+      a.volume = 0.45;
+      a.play().then(() => { startedRef.current = true; setOn(true); }).catch(() => {});
+    };
+    document.addEventListener("pointerdown", tryStart);
+    return () => document.removeEventListener("pointerdown", tryStart);
+  }, []);
+
+  const toggle = () => {
+    const a = audioRef.current;
+    if (!a) return;
+    if (on) { a.pause(); setOn(false); }
+    else { a.play().then(() => setOn(true)).catch(() => {}); }
+  };
+
+  return (
+    <>
+      <audio ref={audioRef} src="/musica.mp3" loop preload="auto" />
+      <button
+        onClick={toggle}
+        aria-label="música"
+        style={{
+          position: "fixed", bottom: 18, right: 18, zIndex: 9998,
+          width: 46, height: 46, borderRadius: "50%",
+          border: "none", cursor: "pointer",
+          background: "rgba(139,58,82,.85)", color: "#fde68a",
+          fontSize: 18, boxShadow: "0 3px 14px rgba(0,0,0,.3)",
+          backdropFilter: "blur(4px)",
+        }}
+      >
+        {on ? "🔊" : "🎵"}
+      </button>
+    </>
+  );
+}
+
+// ─────────────────────────────────────────────────────────
 // APP
 // ─────────────────────────────────────────────────────────
 
@@ -970,6 +1054,8 @@ export default function App() {
         ::-webkit-scrollbar-track { background: #fdf2f5 }
         ::-webkit-scrollbar-thumb { background: #c9748a }
       `}</style>
+
+      <MusicPlayer />
 
       <div style={{ maxWidth: 520, margin: "0 auto" }}>
         {!done ? (
