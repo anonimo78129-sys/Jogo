@@ -788,11 +788,156 @@ function FinalSection() {
 }
 
 // ─────────────────────────────────────────────────────────
+// INTERACTIVE DECLARATION (página por página)
+// ─────────────────────────────────────────────────────────
+
+const STEPS = [
+  { type: "say", emoji: "🌸", lines: ["Oi, amor.", "Eu preparei uma coisa", "só pra você."], btn: "começar 💌" },
+
+  { type: "ask", q: "Você sabe que dia especial é hoje?", answers: [
+      { label: "Nosso 1 aninho 🥹", reply: "Isso! Hoje faz 1 ano que você me deixou o homem mais feliz do mundo." },
+      { label: "Me lembra? 🙈",     reply: "1 ano da gente, sua linda. Como é que esquece disso? 🥹" },
+  ]},
+
+  { type: "say", emoji: "💍", lines: ["Há 1 ano, eu estava aceitando", "o seu pedido de namoro."], btn: "continuar" },
+
+  { type: "say", emoji: "🏡", lines: ["E hoje... a gente compartilha a vida.", "Com muita cumplicidade,", "amor e leveza."], btn: "continuar" },
+
+  { type: "ask", q: "Você é feliz comigo?", answers: [
+      { label: "Muito ❤️",  reply: "Eu também. Mais do que cabe no peito." },
+      { label: "Demais 🥹", reply: "Eu também. Mais do que cabe no peito." },
+  ]},
+
+  { type: "say", emoji: "🤍", lines: ["Eu amo o tanto que a gente", "se cuida e se respeita."], btn: "continuar" },
+
+  { type: "say", emoji: "🕊️", lines: ["O jeito como a gente impulsiona", "um ao outro a voar mais alto."], btn: "continuar" },
+
+  { type: "say", emoji: "😏", lines: ["O quanto a gente fala um pro outro", "o quanto cada um é foda."], btn: "continuar" },
+
+  { type: "say", emoji: "🫂", lines: ["O quanto somos amigos.", "O quanto somos parceiros", "em absolutamente tudo."], btn: "continuar" },
+
+  { type: "ask", q: "Topa passar muitos anos assim, do meu lado?", answers: [
+      { label: "Topo ❤️",      reply: "Então tá selado. 🤝✨" },
+      { label: "Pra sempre 🥹", reply: "Pra sempre ainda é pouco perto do que eu quero contigo." },
+  ]},
+
+  { type: "say", emoji: "🌹", lines: ["Que venham muitos anos", "de muito amor."], btn: "continuar" },
+
+  { type: "say", emoji: "💗", lines: ["Eu te amo a cada batida", "do meu coração."], btn: "continuar" },
+
+  { type: "say", emoji: "♾️", lines: ["E te amarei a cada segundo", "da minha vida."], btn: "continuar", showCounter: true },
+
+  { type: "final", emoji: "🎂", lines: ["Feliz 1 ano, Lorena.", "Eu te amo. ❤️"], btn: "ver nossas fotos 📸" },
+];
+
+function BtnRomantic({ children, onClick, block, gold }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        fontFamily: "'Playfair Display', serif", fontSize: 16, letterSpacing: 1,
+        color: gold ? "#6b2038" : "#fff",
+        background: gold
+          ? "linear-gradient(135deg,#fde68a,#f6c453)"
+          : "linear-gradient(135deg,#c9748a,#8b3a52)",
+        border: "none", borderRadius: 40,
+        padding: "13px 30px", cursor: "pointer",
+        width: block ? "100%" : "auto", maxWidth: 320,
+        boxShadow: "0 4px 16px rgba(139,58,82,.3)",
+        transition: "transform .15s",
+      }}
+      onMouseDown={(e) => (e.currentTarget.style.transform = "scale(.96)")}
+      onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
+      onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+    >
+      {children}
+    </button>
+  );
+}
+
+function InteractiveDeclaration({ loveTime, onDone }) {
+  const [i, setI] = useState(0);
+  const [reply, setReply] = useState(null);
+  const step = STEPS[i];
+
+  const advance = () => {
+    setReply(null);
+    if (i >= STEPS.length - 1) { onDone(); return; }
+    setI(i + 1);
+  };
+  const pick = (a) => { if (a.reply) setReply(a.reply); else advance(); };
+
+  return (
+    <section style={{
+      minHeight: "100vh",
+      background: "linear-gradient(160deg, #fdf2f5 0%, #fce8ef 45%, #fdf5ec 100%)",
+      display: "flex", alignItems: "center", justifyContent: "center",
+      position: "relative", overflow: "hidden", padding: "60px 24px 40px",
+    }}>
+      <Petals />
+
+      {/* progresso */}
+      <div style={{ position: "absolute", top: 26, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 5, padding: "0 24px", flexWrap: "wrap" }}>
+        {STEPS.map((_, k) => (
+          <div key={k} style={{
+            width: k === i ? 18 : 6, height: 6, borderRadius: 3,
+            background: k <= i ? "#c9748a" : "#e8c4cc",
+            transition: "all .3s",
+          }} />
+        ))}
+      </div>
+
+      <div key={`${i}-${reply ? "r" : "q"}`} style={{
+        position: "relative", zIndex: 1, maxWidth: 440, width: "100%",
+        textAlign: "center", animation: "fadeSlide .5s ease",
+      }}>
+        {reply ? (
+          <>
+            <div style={{ fontSize: 46, marginBottom: 22, animation: "bob 2s infinite" }}>💕</div>
+            <p style={{ fontFamily: "'Dancing Script', cursive", fontSize: 28, color: "#6b2038", lineHeight: 1.4, marginBottom: 36 }}>
+              {reply}
+            </p>
+            <BtnRomantic onClick={advance}>continuar</BtnRomantic>
+          </>
+        ) : step.type === "ask" ? (
+          <>
+            <div style={{ fontSize: 40, marginBottom: 20 }}>💬</div>
+            <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 26, fontStyle: "italic", color: "#6b2038", lineHeight: 1.4, marginBottom: 34 }}>
+              {step.q}
+            </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "center" }}>
+              {step.answers.map((a, k) => (
+                <BtnRomantic key={k} onClick={() => pick(a)} block>{a.label}</BtnRomantic>
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
+            <div style={{ fontSize: 50, marginBottom: 22, animation: "bob 2s infinite" }}>{step.emoji}</div>
+            <div style={{
+              fontFamily: step.type === "final" ? "'Playfair Display', serif" : "'Dancing Script', cursive",
+              fontStyle: step.type === "final" ? "italic" : "normal",
+              fontSize: step.type === "final" ? 34 : 30,
+              color: "#6b2038", lineHeight: 1.5, marginBottom: 32,
+            }}>
+              {step.lines.map((l, k) => <div key={k}>{l}</div>)}
+            </div>
+            {step.showCounter && <div style={{ marginBottom: 32 }}><Counter t={loveTime} /></div>}
+            <BtnRomantic onClick={advance} gold={step.type === "final"}>{step.btn}</BtnRomantic>
+          </>
+        )}
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────
 // APP
 // ─────────────────────────────────────────────────────────
 
 export default function App() {
   const loveTime = useLoveTime();
+  const [done, setDone] = useState(false);
 
   return (
     <>
@@ -827,11 +972,14 @@ export default function App() {
       `}</style>
 
       <div style={{ maxWidth: 520, margin: "0 auto" }}>
-        <HeroSection loveTime={loveTime} />
-        <CartaSection />
-        <TimelineSection />
-        <GallerySection />
-        <FinalSection />
+        {!done ? (
+          <InteractiveDeclaration loveTime={loveTime} onDone={() => setDone(true)} />
+        ) : (
+          <>
+            <GallerySection />
+            <FinalSection />
+          </>
+        )}
       </div>
     </>
   );
