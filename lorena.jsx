@@ -865,6 +865,17 @@ const STEPS = [
   { type: "final", emoji: "🎂", lines: ["Feliz 1 ano, Lorena.", "Minha Doidiça, meu amor,", "minha vida inteira."], btn: "ver nossas fotos 📸" },
 ];
 
+const LETTER_PARAGRAPHS = [
+  { type: "greeting",  text: "Amor," },
+  { type: "body",      text: "Há um ano, você me fez o pedido de namoro. Eu disse sim sem pensar duas vezes — e foi a melhor decisão que eu já tomei na vida." },
+  { type: "body",      text: "Hoje a gente divide tudo. Os planos, as bobeiras, os medos, as conquistas. A gente se cuida, se respeita, e se impulsiona um ao outro a voar cada vez mais alto." },
+  { type: "body",      text: "Você é minha namorada, minha melhor amiga e minha parceira em absolutamente tudo. Eu não canso de te dizer o quanto você é incrível — porque é a mais pura verdade." },
+  { type: "body",      text: "Essa leveza que a gente tem, esse jeito de ser amigos antes de tudo, é o maior presente que eu já recebeu na vida." },
+  { type: "emphasis",  text: "Que venham muitos e muitos anos de muito amor, Doidiça." },
+  { type: "body",      text: "Eu te amo a cada batida do meu coração, e vou te amar a cada segundo da minha vida." },
+  { type: "signature", text: "Com amor eterno,\nLyelson ❤️" },
+];
+
 function BtnRomantic({ children, onClick, block, gold }) {
   return (
     <button
@@ -1013,6 +1024,270 @@ function InteractiveDeclaration({ loveTime, onDone }) {
 // MUSIC PLAYER
 // ─────────────────────────────────────────────────────────
 
+// ─────────────────────────────────────────────────────────
+// 1. ENVELOPE SECTION
+// ─────────────────────────────────────────────────────────
+
+function EnvelopeVisual({ phase, onClick }) {
+  const W = 300, H = 200;
+  return (
+    <div
+      onClick={phase === "sealed" ? onClick : undefined}
+      style={{
+        position: "relative", width: W, height: H + 60,
+        cursor: phase === "sealed" ? "pointer" : "default",
+        animation: phase === "sealed" ? "bob 2.5s ease-in-out infinite" : "none",
+      }}
+    >
+      {/* Body with diamond-fold gradients */}
+      <div style={{
+        position: "absolute", top: 0, left: 0, width: W, height: H,
+        background: `
+          linear-gradient(to bottom right, #f5dde8 50%, transparent 50%) top left    / 50% 50% no-repeat,
+          linear-gradient(to bottom left,  #f5dde8 50%, transparent 50%) top right   / 50% 50% no-repeat,
+          linear-gradient(to top right,    #ede0e9 50%, transparent 50%) bottom left / 50% 50% no-repeat,
+          linear-gradient(to top left,     #ede0e9 50%, transparent 50%) bottom right/ 50% 50% no-repeat,
+          #fef5f8`,
+        border: "1.5px solid #d4a0b0",
+        boxShadow: "0 14px 48px rgba(139,58,82,.2), 0 2px 8px rgba(0,0,0,.06)",
+      }}>
+        <div style={{
+          position: "absolute", inset: 0, display: "flex",
+          flexDirection: "column", alignItems: "center", justifyContent: "center",
+          opacity: phase === "peek" ? 0 : 1, transition: "opacity .3s",
+        }}>
+          <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 10, letterSpacing: 5, color: "#b07080", textTransform: "uppercase", marginBottom: 6 }}>Para</div>
+          <div style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: 36, color: "#8b3a52" }}>Lorena</div>
+          <div style={{ fontSize: 18, marginTop: 8 }}>💌</div>
+        </div>
+      </div>
+
+      {/* Letter peeking */}
+      {phase === "peek" && (
+        <div style={{
+          position: "absolute", left: "8%", right: "8%", top: -50,
+          height: H * 0.9,
+          background: "#fffef9", border: "1px solid #e8d8c0",
+          boxShadow: "0 -6px 20px rgba(0,0,0,.1)", zIndex: 3,
+          animation: "letterRise .8s ease-out forwards",
+          display: "flex", alignItems: "center", justifyContent: "center",
+        }}>
+          <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: 15, color: "#a07060" }}>Amor,</span>
+        </div>
+      )}
+
+      {/* SVG flap that rotates open */}
+      <svg viewBox={`0 0 ${W} ${H / 2 + 10}`} width={W} height={H / 2 + 10}
+        style={{
+          position: "absolute", top: 0, left: 0,
+          transformOrigin: "top center",
+          transform: phase !== "sealed" ? "rotateX(-175deg)" : "rotateX(0deg)",
+          transition: "transform .65s cubic-bezier(.4,0,.2,1)",
+          zIndex: 10, display: "block",
+        }}
+      >
+        <polygon points={`0,0 ${W},0 ${W / 2},${H / 2 + 10}`} fill="#f9e0eb" stroke="#d4a0b0" strokeWidth="1.5" />
+        <text x={W / 2} y={H / 4 + 2} textAnchor="middle" fontSize="18" dy=".35em">❤️</text>
+      </svg>
+    </div>
+  );
+}
+
+function LetterSheet({ onNext }) {
+  const [shown, setShown] = useState(1);
+  const done = shown >= LETTER_PARAGRAPHS.length;
+  return (
+    <div style={{
+      maxWidth: 460, width: "100%", margin: "0 auto",
+      background: "#fffef9",
+      border: "1px solid #e8d5c0",
+      boxShadow: "0 16px 60px rgba(139,58,82,.18)",
+      padding: "36px 28px 32px",
+      position: "relative",
+      animation: "letterExpand .6s ease-out",
+      backgroundImage: "repeating-linear-gradient(transparent, transparent 31px, #f0e4ea 31px, #f0e4ea 32px)",
+      backgroundPositionY: "52px",
+    }}>
+      {/* Corner fold */}
+      <div style={{ position: "absolute", top: 0, right: 0, width: 0, height: 0, borderLeft: "22px solid transparent", borderBottom: "22px solid #f9f0f5", borderTop: "22px solid #fde4ed" }} />
+      <div style={{ textAlign: "right", fontFamily: "'Lato', sans-serif", fontSize: 11, color: "#c9748a88", letterSpacing: 2, marginBottom: 24 }}>27 · 06 · 2026</div>
+      <div style={{ minHeight: 260 }}>
+        {LETTER_PARAGRAPHS.slice(0, shown).map((p, i) => (
+          <div key={i} style={{ animation: i === shown - 1 ? "fadeSlide .5s ease" : "none", marginBottom: 16 }}>
+            {p.type === "greeting"  && <p style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: 22, color: "#6b2038", marginBottom: 20 }}>{p.text}</p>}
+            {p.type === "body"      && <p style={{ fontFamily: "'Lato', sans-serif", fontWeight: 300, fontSize: 15, color: "#3a1a28", lineHeight: 1.9 }}>{p.text}</p>}
+            {p.type === "emphasis"  && <p style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: 17, color: "#8b3a52", lineHeight: 1.6, margin: "20px 0", borderLeft: "3px solid #c9748a", paddingLeft: 14 }}>{p.text}</p>}
+            {p.type === "signature" && <div style={{ marginTop: 24, textAlign: "right" }}><p style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: 16, color: "#6b2038", lineHeight: 1.8, whiteSpace: "pre-line" }}>{p.text}</p></div>}
+          </div>
+        ))}
+      </div>
+      <div style={{ textAlign: "center", marginTop: 24 }}>
+        {!done
+          ? <BtnRomantic onClick={() => setShown(s => s + 1)}>continuar a ler ↓</BtnRomantic>
+          : <BtnRomantic onClick={onNext} gold>continuar ↓</BtnRomantic>
+        }
+      </div>
+    </div>
+  );
+}
+
+function EnvelopeSection({ onNext }) {
+  const [phase, setPhase] = useState("sealed");
+  const open = () => {
+    if (phase !== "sealed") return;
+    setPhase("opening");
+    setTimeout(() => setPhase("peek"), 700);
+    setTimeout(() => setPhase("open"), 1500);
+  };
+  return (
+    <section style={{
+      minHeight: "100vh",
+      background: "linear-gradient(160deg, #fdf2f5 0%, #fce8ef 45%, #fdf5ec 100%)",
+      display: "flex", alignItems: "center", justifyContent: "center",
+      position: "relative", overflow: "hidden", padding: "40px 24px",
+    }}>
+      <Petals />
+      <FallingPhotos />
+      {phase !== "open" ? (
+        <div style={{ textAlign: "center", position: "relative", zIndex: 2 }}>
+          <p style={{ fontFamily: "'Lato', sans-serif", fontSize: 11, color: "#c9748a", letterSpacing: 5, textTransform: "uppercase", marginBottom: 32, animation: "fadeIn 1.2s ease" }}>
+            uma carta para você
+          </p>
+          <EnvelopeVisual phase={phase} onClick={open} />
+          {phase === "sealed" && (
+            <p style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: 13, color: "#c9748a88", marginTop: 24, animation: "blink 2.5s infinite" }}>
+              toque para abrir ✉️
+            </p>
+          )}
+        </div>
+      ) : (
+        <div style={{ position: "relative", zIndex: 2, width: "100%" }}>
+          <LetterSheet onNext={onNext} />
+        </div>
+      )}
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────
+// 2. HEART MOSAIC SECTION
+// ─────────────────────────────────────────────────────────
+
+function HeartMosaicSection() {
+  const [ref, visible] = useInView(0.05);
+  const COLS = 13, ROWS = 12, SIZE = 36;
+
+  const cells = (() => {
+    const result = [];
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        const x = ((c / (COLS - 1)) - 0.5) * 2.4;
+        const y = (0.52 - (r / (ROWS - 1))) * 2.2;
+        if (Math.pow(x * x + y * y - 1, 3) - x * x * y * y * y <= 0.04) {
+          result.push({ r, c, idx: result.length % GALLERY.length });
+        }
+      }
+    }
+    return result;
+  })();
+
+  return (
+    <section ref={ref} style={{
+      padding: "80px 24px 60px",
+      background: "linear-gradient(180deg, #fff5f7, #fef0f0)",
+      textAlign: "center", overflow: "hidden",
+    }}>
+      <FadeBlock>
+        <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 11, color: "#c9748a", letterSpacing: 5, textTransform: "uppercase", marginBottom: 8 }}>
+          Nossas memórias
+        </div>
+        <div style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: 28, color: "#6b2038", marginBottom: 36 }}>
+          72 momentos, um coração
+        </div>
+      </FadeBlock>
+
+      <div style={{ position: "relative", width: COLS * SIZE, height: ROWS * SIZE, margin: "0 auto", maxWidth: "100%" }}>
+        {cells.map(({ r, c, idx }, i) => (
+          <div key={i} style={{
+            position: "absolute", left: c * SIZE, top: r * SIZE,
+            width: SIZE - 1, height: SIZE - 1, overflow: "hidden",
+            opacity: visible ? 1 : 0,
+            transform: visible ? "scale(1)" : "scale(0.3)",
+            transition: `opacity .45s ${(i * 0.012).toFixed(2)}s ease, transform .45s ${(i * 0.012).toFixed(2)}s ease`,
+          }}>
+            <img src={GALLERY[idx].src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          </div>
+        ))}
+      </div>
+
+      <FadeBlock delay={0.6}>
+        <div style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: 16, color: "#c9748a", marginTop: 28 }}>
+          cada foto, uma memória nossa ❤️
+        </div>
+      </FadeBlock>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────
+// 3. FILM STRIP SECTION
+// ─────────────────────────────────────────────────────────
+
+function FilmStripSection() {
+  const [ref, visible] = useInView(0.1);
+  const frames = [...GALLERY, ...GALLERY]; // duplicate for seamless loop
+  const duration = GALLERY.length * 3.5;  // ~4s per photo
+
+  return (
+    <section ref={ref} style={{ background: "#0d0d0d", padding: "52px 0", overflow: "hidden" }}>
+      <FadeBlock>
+        <div style={{
+          textAlign: "center", fontFamily: "'Playfair Display', serif",
+          fontStyle: "italic", fontSize: 22, color: "#fde68a",
+          marginBottom: 28, letterSpacing: 1,
+        }}>
+          nossa película ✨
+        </div>
+      </FadeBlock>
+
+      {/* Sprocket holes top */}
+      <div style={{ height: 22, backgroundImage: "radial-gradient(circle, #2a2a2a 7px, transparent 7px)", backgroundSize: "28px 22px", backgroundRepeat: "repeat-x", backgroundPosition: "14px center" }} />
+
+      {/* Film frames */}
+      <div style={{ overflow: "hidden", padding: "4px 0" }}>
+        <div style={{
+          display: "flex", width: "max-content",
+          animation: visible ? `filmScroll ${duration}s linear infinite` : "none",
+        }}>
+          {frames.map((photo, i) => (
+            <div key={i} style={{
+              width: 145, height: 145, flexShrink: 0, marginRight: 5,
+              border: "3px solid #1e1e1e", overflow: "hidden", position: "relative",
+              background: "#111",
+            }}>
+              <img src={photo.src} alt="" style={{
+                width: "100%", height: "100%", objectFit: "cover",
+                filter: "sepia(0.3) contrast(1.08) brightness(0.92)",
+                display: "block",
+              }} />
+              <div style={{
+                position: "absolute", bottom: 3, right: 5,
+                fontFamily: "monospace", fontSize: 9, color: "rgba(253,230,138,.55)",
+              }}>
+                {String((i % GALLERY.length) + 1).padStart(2, "0")}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Sprocket holes bottom */}
+      <div style={{ height: 22, backgroundImage: "radial-gradient(circle, #2a2a2a 7px, transparent 7px)", backgroundSize: "28px 22px", backgroundRepeat: "repeat-x", backgroundPosition: "14px center" }} />
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────
 function MusicPlayer() {
   const audioRef = useRef(null);
   const startedRef = useRef(false);
@@ -1064,7 +1339,10 @@ function MusicPlayer() {
 
 export default function App() {
   const loveTime = useLoveTime();
-  const [done, setDone] = useState(false);
+  const [step, setStep] = useState(0);
+  // step 0 = interactive declaration
+  // step 1 = envelope + letter
+  // step 2 = gallery, mosaic, film, final
 
   return (
     <>
@@ -1093,6 +1371,19 @@ export default function App() {
           100% { transform: translateY(112vh)  translateX(-8px);   opacity: 0; }
         }
 
+        @keyframes letterRise {
+          from { transform: translateY(55px) scale(.96); opacity: 0; }
+          to   { transform: translateY(0)    scale(1);   opacity: 1; }
+        }
+        @keyframes letterExpand {
+          from { transform: scale(.93) translateY(18px); opacity: 0; }
+          to   { transform: scale(1)   translateY(0);    opacity: 1; }
+        }
+        @keyframes filmScroll {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+
         ::-webkit-scrollbar       { width: 5px }
         ::-webkit-scrollbar-track { background: #fdf2f5 }
         ::-webkit-scrollbar-thumb { background: #c9748a }
@@ -1101,10 +1392,12 @@ export default function App() {
       <MusicPlayer />
 
       <div style={{ maxWidth: 520, margin: "0 auto" }}>
-        {!done ? (
-          <InteractiveDeclaration loveTime={loveTime} onDone={() => setDone(true)} />
-        ) : (
+        {step === 0 && <InteractiveDeclaration loveTime={loveTime} onDone={() => setStep(1)} />}
+        {step === 1 && <EnvelopeSection onNext={() => setStep(2)} />}
+        {step >= 2 && (
           <>
+            <HeartMosaicSection />
+            <FilmStripSection />
             <GallerySection />
             <FinalSection />
           </>
