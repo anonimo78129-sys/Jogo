@@ -61,7 +61,7 @@ const GALLERY = [
 const ATTACKS = [
   { label: "❤️ AMOR",      damage: [15, 25], color: "#ff0055" },
   { label: "🛡️ CONFIANÇA", damage: [20, 30], color: "#0a8fd1" },
-  { label: "⭐ 11 MESES",  damage: [25, 35], color: "#c98a06" },
+  { label: "🎂 1 ANO DE AMOR", damage: [25, 35], color: "#c98a06" },
   { label: "💪 JUNTOS",    damage: [30, 40], color: "#15a34a" },
 ];
 
@@ -83,11 +83,11 @@ const QUIZ_QUESTIONS = [
     fail: "Errou! Fiquei em silêncio. Você ficou nervosa. Mas era amor. 🤍",
   },
   {
-    q: "Quantos meses a gente completa hoje?",
-    opts: ["9 meses 🤔", "11 meses 💕", "1 ano 🎉"],
+    q: "Quanto tempo a gente completa hoje?",
+    opts: ["11 meses 🤔", "1 ano 🎉", "2 anos 😂"],
     correct: 1,
-    ok:   "11 meses! (não 9 como alguém chegou a dizer... 😂💜)",
-    fail: "Não são 9! Alguém errou as datas hein 😂 São 11!",
+    ok:   "1 ANO! Um ano inteiro de amor. E que ano, né? 💛",
+    fail: "Não! São exatamente 1 ANO! 🎉 Feliz aniversário, Doidiça!",
   },
   {
     q: "Qual memória real vocês dois têm?",
@@ -1797,7 +1797,7 @@ export default function App() {
             }}>
               LORENA
             </div>
-            <div style={{ fontSize: 8, color: "#ff0055", marginTop: 5, letterSpacing: 3 }}>A JORNADA</div>
+            <div style={{ fontSize: 8, color: "#c98a06", marginTop: 5, letterSpacing: 3, animation: "titleGlow 2s infinite" }}>🎂 1 ANO DE AMOR 🎂</div>
             <div style={{ marginTop: 16, display: "flex", justifyContent: "center", gap: 12 }}>
               <PixelHeart color="#ff0055" size={22} />
               <PixelHeart color="#ff0055" size={22} />
@@ -1814,7 +1814,7 @@ export default function App() {
           fontSize: 7.5, color: "#994466",
         }}>
           <span>FASES: <span style={{ color: "#cc3366" }}>{done.length}/{PHASES.length}</span></span>
-          <span style={{ color: "#e0429a" }}>11 MESES 💕</span>
+          <span style={{ color: "#c98a06", animation: "titleGlow 2s infinite" }}>🎉 1 ANO ❤️</span>
           <span>PONTOS: <span style={{ color: "#cc3366" }}>{done.length * 1000}</span></span>
         </div>
 
@@ -1999,9 +1999,9 @@ export default function App() {
                 fontSize: 16, color: "#ff0055", lineHeight: 1.8,
                 marginBottom: 8, animation: "glow 2s infinite",
               }}>LORENA</p>
-              <p style={{ fontSize: 7.5, color: "#994466", lineHeight: 2, marginBottom: 3 }}>A nossa história em 6 fases.</p>
-              <p style={{ fontSize: 6.5, color: "#15a34a", lineHeight: 2, marginBottom: 24 }}>
-                (ps: são 11 meses, não 9 😂)
+              <p style={{ fontSize: 7.5, color: "#994466", lineHeight: 2, marginBottom: 3 }}>1 ano da nossa história em 6 fases.</p>
+              <p style={{ fontSize: 6.5, color: "#c98a06", lineHeight: 2, marginBottom: 24 }}>
+                🎉 27 de Junho de 2025 — 27 de Junho de 2026
               </p>
               <PixelBtn color="#ff0055" onClick={() => setStarted(true)} anim style={{ fontSize: 11, padding: "14px 32px", boxShadow: "0 0 24px #ff005555" }}>
                 ▶ INICIAR
@@ -2039,7 +2039,7 @@ export default function App() {
                 fontSize: 14, color: "#c98a06", marginBottom: 22, textAlign: "center",
                 textShadow: "0 2px 8px #fbbf2455", animation: "titleGlow 1.5s infinite",
               }}>
-                VOCÊ VENCEU! 👑
+                🎂 1 ANO DE AMOR! 👑
               </div>
 
               {/* Couple illustration */}
@@ -2066,80 +2066,86 @@ export default function App() {
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom,transparent 55%,#fffbee99)" }} />
               </div>
 
-              {/* Declaration */}
+              {/* Declaration — 1 ANO */}
               <div style={{
                 fontFamily: "'Press Start 2P', monospace",
                 fontSize: 9, color: "#553344", lineHeight: 3.0,
                 marginBottom: 28, textAlign: "left",
-                background: "linear-gradient(135deg, #fff0f7 0%, #fffbf0 100%)",
+                background: "linear-gradient(135deg, #fffbf0 0%, #fff0f7 100%)",
                 border: "2px solid #f9a8d4",
                 borderRadius: 12,
                 padding: "22px 18px",
                 boxShadow: "0 4px 24px #f9a8d433",
               }}>
-                {/* Abertura */}
-                <p style={{ color: "#d6308a", fontSize: 11, marginBottom: 18, textShadow: "0 1px 8px #f9a8d4" }}>
-                  Amor,
-                </p>
+                {/* Cabeçalho 1 ano */}
+                <div style={{
+                  textAlign: "center", marginBottom: 22,
+                  fontFamily: "'Press Start 2P', monospace",
+                  fontSize: 11, color: "#c98a06",
+                  textShadow: "0 0 14px #fbbf2466",
+                  animation: "titleGlow 2s infinite",
+                }}>
+                  🎂 1 ANO JUNTOS 🎂
+                </div>
 
                 {/* Parágrafo 1 */}
-                <p style={{ marginTop: 10 }}>hoje a gente faz 9 meses juntos!</p>
-                <p style={{ color: "#9333ea" }}>opsss, 11 Meses Kkkk</p>
-                <p style={{ marginTop: 10 }}>mas a verdade é que cada dia</p>
-                <p>com você vale por um ano inteiro</p>
-                <p>de tanta coisa boa</p>
-                <p style={{ color: "#15a34a" }}>que a gente vive.</p>
+                <p style={{ color: "#d6308a", fontSize: 10, marginBottom: 6 }}>Amor,</p>
+                <p style={{ marginTop: 10 }}>a 1 ano atrás eu estava</p>
+                <p style={{ color: "#c98a06" }}>aceitando o seu pedido</p>
+                <p style={{ color: "#c98a06" }}>de namoro.</p>
+                <p style={{ marginTop: 12 }}>hoje estamos</p>
+                <p>compartilhando a vida</p>
+                <p style={{ color: "#15a34a" }}>com muita cumplicidade,</p>
+                <p style={{ color: "#15a34a" }}>amor e leveza.</p>
 
                 {/* Parágrafo 2 */}
-                <p style={{ marginTop: 20, color: "#e06c0a" }}>Eu sei bem que não sou</p>
-                <p style={{ color: "#e06c0a" }}>a pessoa mais perfeita do mundo,</p>
-                <p style={{ marginTop: 10 }}>mas por você,</p>
-                <p>e para te ver bem,</p>
-                <p>eu tento ser melhor a cada dia.</p>
-                <p style={{ marginTop: 10, color: "#d6308a" }}>Você desperta</p>
-                <p style={{ color: "#d6308a" }}>o meu melhor lado.</p>
+                <p style={{ marginTop: 22, color: "#0a8fd1" }}>Eu amo muito você,</p>
+                <p style={{ marginTop: 10 }}>e o tanto que a gente</p>
+                <p>se cuida e se respeita,</p>
+                <p style={{ marginTop: 10 }}>o jeito como nos</p>
+                <p>impulsionamos um ao outro</p>
+                <p style={{ color: "#9333ea" }}>a voar mais alto,</p>
+                <p style={{ marginTop: 10 }}>o quanto falamos um pro outro</p>
+                <p style={{ color: "#9333ea" }}>o quanto cada um é foda...</p>
 
                 {/* Parágrafo 3 */}
-                <p style={{ marginTop: 20, color: "#9333ea" }}>Minha gaiata,</p>
-                <p style={{ color: "#9333ea" }}>minha doidiça favorita...</p>
-                <p style={{ marginTop: 10 }}>você ilumina a minha vida</p>
-                <p>de um jeito que ninguém mais</p>
-                <p style={{ color: "#c98a06" }}>conseguiria.</p>
-                <p style={{ marginTop: 14 }}>Eu te quero sorrindo,</p>
-                <p>cantando, calada ou falante.</p>
-                <p style={{ marginTop: 10 }}>Te quero de mãos dadas,</p>
-                <p>grudados ou separados...</p>
-                <p style={{ marginTop: 14, color: "#0a8fd1" }}>te quero de todo jeito,</p>
-                <p style={{ color: "#0a8fd1" }}>com cada defeito e detalhe,</p>
-                <p style={{ color: "#0a8fd1" }}>sem me importar com nada.</p>
-                <p style={{ marginTop: 14, color: "#d6308a", fontSize: 10 }}>
-                  Eu só te quero e pronto,
-                </p>
-                <p style={{ color: "#d6308a", fontSize: 10 }}>isso basta.</p>
+                <p style={{ marginTop: 22, color: "#d6308a" }}>o quanto somos amigos,</p>
+                <p style={{ color: "#d6308a" }}>o quanto somos parceiros</p>
+                <p>em absolutamente tudo</p>
+                <p style={{ color: "#15a34a" }}>que enfrentamos juntos.</p>
 
-                {/* Parágrafo 4 */}
-                <p style={{ marginTop: 22, color: "#553344" }}>Sem você, este ano teria sido</p>
-                <p>infinitamente mais difícil.</p>
-                <p style={{ marginTop: 12 }}>Obrigada por cada risada dividida,</p>
-                <p>pelos momentos simples,</p>
-                <p style={{ marginTop: 10 }}>pelos abraços que curam</p>
-                <p>qualquer cansaço</p>
-                <p style={{ marginTop: 10 }}>e por me mostrar o quanto</p>
-                <p>a vida fica leve e bonita</p>
-                <p style={{ color: "#15a34a" }}>quando a gente ama</p>
-                <p style={{ color: "#15a34a" }}>e é amado de verdade.</p>
+                {/* Desejo */}
+                <p style={{ marginTop: 22, color: "#c98a06", fontSize: 10 }}>
+                  que venha muitos anos
+                </p>
+                <p style={{ color: "#c98a06", fontSize: 10 }}>de muito amor.</p>
 
                 {/* Fechamento */}
-                <p style={{ marginTop: 28, color: "#ff0055", fontSize: 12, textShadow: "0 1px 12px #ff005566" }}>
-                  Feliz 11 meses, meu amor.
-                </p>
-                <p style={{ marginTop: 10, color: "#ff0055", fontSize: 12 }}>
-                  Eu amo você. ❤️
+                <p style={{ marginTop: 28, color: "#553344" }}>Eu te amo a cada batida</p>
+                <p>do meu coração,</p>
+                <p style={{ marginTop: 10 }}>e te amarei a cada segundo</p>
+                <p style={{ color: "#ff0055" }}>da minha vida.</p>
+
+                {/* Assinatura */}
+                <p style={{ marginTop: 28, color: "#ff0055", fontSize: 13, textShadow: "0 1px 12px #ff005566" }}>
+                  Feliz 1 ano, meu amor. ❤️
                 </p>
               </div>
 
-              <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap", marginBottom: 24 }}>
-                {[...Array(5)].map((_, i) => <PixelHeart key={i} color="#ff0055" size={30} />)}
+              <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap", marginBottom: 16 }}>
+                {[...Array(7)].map((_, i) => (
+                  <div key={i} style={{ animation: `bob ${1.2 + i * 0.18}s ${i * 0.12}s infinite` }}>
+                    <PixelHeart color={i % 2 === 0 ? "#ff0055" : "#c98a06"} size={28} />
+                  </div>
+                ))}
+              </div>
+
+              <div style={{
+                textAlign: "center", fontFamily: "'Press Start 2P', monospace",
+                fontSize: 8, color: "#c98a06", marginBottom: 8,
+                letterSpacing: 2, animation: "titleGlow 2s infinite",
+              }}>
+                27/06/2025 — 27/06/2026
               </div>
 
               <div style={{ textAlign: "right", fontFamily: "'Press Start 2P', monospace", fontSize: 8, color: "#994466" }}>
