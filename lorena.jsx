@@ -9,7 +9,7 @@ const START_DATE = new Date(2025, 5, 27);
 const GALLERY = [
   { src: "/g01.png", caption: "❤️ juntos, do jeitinho que eu amo" },
   { src: "/g02.jpg", caption: "🎈 festa com você é sempre diferente" },
-  { src: "/g03.jpg", caption: "😂 ela me mordeu e achou normal kkkk" },
+  { src: "/g03.jpg", caption: "😂 eu mordendo ela e acho completamente normal" },
   { src: "/g04.jpg", caption: "🤪 a gente é exatamente assim... loucos" },
   { src: "/g05.png", caption: "🍽️ até na cantina somos dupla perfeita" },
   { src: "/g06.jpg", caption: "💨 você e o ventilador... lindo demais" },
@@ -62,7 +62,7 @@ const GALLERY = [
   { src: "/g53.jpg", caption: "💌 ela escreveu pra mim... e eu fiquei sem chão" },
   { src: "/g54.jpg", caption: "😏 dois malucos apaixonados, né?" },
   { src: "/g55.jpg", caption: "👶 ela com bebê... meu coração literalmente não aguenta" },
-  { src: "/g56.jpg", caption: "😬 ela me mordeu de novo. E eu deixo kkkk" },
+  { src: "/g56.jpg", caption: "😬 eu mordendo ela de novo, não resisto kkk" },
   { src: "/g57.jpg", caption: "🤭 dizem que amor dói... ela leva a sério kkkk" },
   { src: "/g58.jpg", caption: "🎉 festa com ela é sempre a melhor parte" },
   { src: "/g59.jpg", caption: "💙 ela de vestido azul... impecável como sempre" },
@@ -74,7 +74,7 @@ const GALLERY = [
   { src: "/g65.jpg", caption: "🌇 ela de rosinha e aquele pôr do sol... perfeito" },
   { src: "/g66.jpg", caption: "🦒 ela e a girafa... ambas esplêndidas kkkk" },
   { src: "/g67.jpg", caption: "😂 esse riso... nem precisa fazer nada, me apaixona" },
-  { src: "/g68.jpg", caption: "🎨 frente ao mural e ela ainda tentando me morder" },
+  { src: "/g68.jpg", caption: "🎨 frente ao mural e eu querendo morder kkk" },
   { src: "/g69.jpg", caption: "🦕 ela domando dinossauro... acredito plenamente" },
   { src: "/g70.jpg", caption: "😊 esse sorriso maroto me derruba sempre" },
   { src: "/g71.jpg", caption: "🌈 a gente na frente do mural mais bonito do mundo" },
@@ -265,7 +265,7 @@ function Counter({ t }) {
   ];
   return (
     <div style={{ textAlign: "center" }}>
-      <div style={{ fontFamily: "'Dancing Script', cursive", fontSize: 17, color: "#a06070", marginBottom: 16, letterSpacing: 1 }}>
+      <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 17, color: "#a06070", marginBottom: 16, letterSpacing: 1 }}>
         juntos há...
       </div>
       <div style={{ display: "flex", justifyContent: "center", gap: 10, marginBottom: 14 }}>
@@ -297,7 +297,7 @@ function Counter({ t }) {
           </>
         ))}
       </div>
-      <div style={{ fontFamily: "'Dancing Script', cursive", fontSize: 14, color: "#a06070" }}>
+      <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 14, color: "#a06070" }}>
         {t.total.toLocaleString("pt-BR")} dias · {(t.total * 24 + t.hrs).toLocaleString("pt-BR")} horas de amor
       </div>
     </div>
@@ -325,7 +325,7 @@ function HeroSection({ loveTime }) {
 
         {/* Para: */}
         <div style={{
-          fontFamily: "'Dancing Script', cursive",
+          fontFamily: "'Lato', sans-serif",
           fontSize: 22, color: "#b07888",
           marginBottom: 6, letterSpacing: 1,
           animation: "fadeSlide .8s ease both",
@@ -359,7 +359,7 @@ function HeroSection({ loveTime }) {
 
         {/* Date */}
         <div style={{
-          fontFamily: "'Dancing Script', cursive",
+          fontFamily: "'Lato', sans-serif",
           fontSize: 17, color: "#b09088",
           marginBottom: 44,
           animation: "fadeSlide .9s .45s ease both",
@@ -375,7 +375,7 @@ function HeroSection({ loveTime }) {
         {/* Scroll hint */}
         <div style={{
           marginTop: 50, color: "#c9748a88",
-          fontFamily: "'Dancing Script', cursive", fontSize: 16,
+          fontFamily: "'Lato', sans-serif", fontSize: 16,
           animation: "bob 2.5s 1.2s infinite",
         }}>
           ↓ role para ler ↓
@@ -401,10 +401,10 @@ function CartaSection() {
   }, [sectionVisible, shown]);
 
   const typeStyle = {
-    greeting:  { fontFamily: "'Dancing Script', cursive", fontSize: 34, color: "#8b3a52", fontWeight: "700", marginBottom: 6 },
-    highlight: { fontFamily: "'Dancing Script', cursive", fontSize: 22, color: "#8b3a52", fontWeight: "700" },
+    greeting:  { fontFamily: "'Lato', sans-serif", fontSize: 34, color: "#8b3a52", fontWeight: "700", marginBottom: 6 },
+    highlight: { fontFamily: "'Lato', sans-serif", fontSize: 22, color: "#8b3a52", fontWeight: "700" },
     emphasis:  { fontFamily: "'Playfair Display', serif",  fontSize: 18, color: "#6b2038", fontStyle: "italic", margin: "10px 0 4px" },
-    closing:   { fontFamily: "'Dancing Script', cursive", fontSize: 24, color: "#8b3a52", fontWeight: "700", marginTop: 8 },
+    closing:   { fontFamily: "'Lato', sans-serif", fontSize: 24, color: "#8b3a52", fontWeight: "700", marginTop: 8 },
     normal:    { fontFamily: "'Lato', sans-serif", fontSize: 15, color: "#4a2030", lineHeight: 1.8 },
   };
 
@@ -473,10 +473,10 @@ function CartaSection() {
                 marginTop: 32, textAlign: "right",
                 opacity: 1, transition: "opacity .8s .2s",
               }}>
-                <div style={{ fontFamily: "'Dancing Script', cursive", fontSize: 24, color: "#8b3a52" }}>
+                <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 24, color: "#8b3a52" }}>
                   Com amor,
                 </div>
-                <div style={{ fontFamily: "'Dancing Script', cursive", fontSize: 30, color: "#6b2038", fontWeight: "700" }}>
+                <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 30, color: "#6b2038", fontWeight: "700" }}>
                   Lyelson ❤️
                 </div>
               </div>
@@ -527,13 +527,13 @@ function TimelineItem({ item, idx }) {
         padding: item.special ? "16px 18px" : "2px 0 20px",
         boxShadow: item.special ? "0 2px 16px #e8c4cc18" : "none",
       }}>
-        <div style={{ fontFamily: "'Dancing Script', cursive", fontSize: 13, color: "#c9748a", marginBottom: 2, letterSpacing: 1 }}>
+        <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 13, color: "#c9748a", marginBottom: 2, letterSpacing: 1 }}>
           {item.chapter}
         </div>
         <div style={{ fontFamily: "'Playfair Display', serif", fontSize: item.special ? 18 : 16, color: "#6b2038", fontWeight: "600", marginBottom: 2 }}>
           {item.title}
         </div>
-        <div style={{ fontFamily: "'Dancing Script', cursive", fontSize: 13, color: "#b07888", marginBottom: 8 }}>
+        <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 13, color: "#b07888", marginBottom: 8 }}>
           📍 {item.place}
         </div>
         <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 14, color: "#5a3040", lineHeight: 1.75 }}>
@@ -654,7 +654,7 @@ function GallerySection() {
           letterSpacing: 5, textTransform: "uppercase", marginBottom: 6,
         }}>Nossas Fotos</div>
         <div style={{
-          fontFamily: "'Dancing Script', cursive",
+          fontFamily: "'Lato', sans-serif",
           fontSize: 30, color: "#6b2038",
         }}>cada momento nosso ✨</div>
         <div style={{
@@ -688,7 +688,7 @@ function GallerySection() {
               <img src={lightbox.src} alt="" style={{ width: "100%", display: "block" }} />
               <p style={{
                 textAlign: "center", margin: "10px 0 0",
-                fontFamily: "'Dancing Script', cursive",
+                fontFamily: "'Lato', sans-serif",
                 fontSize: 17, color: "#7a4050",
               }}>{lightbox.caption}</p>
             </div>
@@ -764,7 +764,7 @@ function FinalSection() {
               batida do meu coração, e vou te amar a cada segundo da minha vida.
             </p>
             <p style={{
-              fontFamily: "'Dancing Script', cursive", fontSize: 24,
+              fontFamily: "'Lato', sans-serif", fontSize: 24,
               color: "#fde68a", textAlign: "center", marginTop: 8,
             }}>
               Pra sempre seu. ❤️
@@ -840,9 +840,9 @@ const STEPS = [
 
   { type: "say", emoji: "🫂", lines: ["Você é minha namorada,", "mas antes disso é minha amiga.", "Minha parceira em absolutamente", "tudo que a gente enfrenta."], btn: "continuar" },
 
-  { type: "ask", q: "E aquela sua mania de me morder? 😂", answers: [
-      { label: "Kkkk culpada", reply: "Pode morder pra sempre. Eu deixo, Doidiça. 🥹" },
-      { label: "Foi amor 🥰",  reply: "Eu sei. E eu amo até as mordidas. kkkk" },
+  { type: "ask", q: "E aquela minha mania de te morder? 😂", answers: [
+      { label: "Kkkk deixa ele 😂", reply: "Eu sei que tu deixa. É assim que eu sei que você me ama kkk 🥹" },
+      { label: "Eu deixo 🥰",       reply: "Tem que deixar mesmo. É amor, Doidiça. kkk" },
   ]},
 
   { type: "say", emoji: "👁️", lines: ["Eu me perco nesses", "seus olhos verdes.", "Todo santo dia.", "E não quero me achar nunca."], btn: "continuar" },
@@ -1175,7 +1175,26 @@ function EnvelopeSection({ onNext }) {
 
 function HeartMosaicSection() {
   const [ref, visible] = useInView(0.05);
+  const wrapRef = useRef(null);
   const COLS = 13, ROWS = 12, SIZE = 36;
+  const HEART_W = COLS * SIZE;
+  const HEART_H = ROWS * SIZE;
+
+  const [scale, setScale] = useState(() =>
+    typeof window !== "undefined"
+      ? Math.min(1, (Math.min(window.innerWidth, 520) - 48) / (13 * 36))
+      : 1
+  );
+
+  useEffect(() => {
+    const update = () => {
+      if (!wrapRef.current) return;
+      setScale(Math.min(1, wrapRef.current.offsetWidth / HEART_W));
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, [HEART_W]);
 
   const cells = (() => {
     const result = [];
@@ -1206,18 +1225,22 @@ function HeartMosaicSection() {
         </div>
       </FadeBlock>
 
-      <div style={{ position: "relative", width: COLS * SIZE, height: ROWS * SIZE, margin: "0 auto", maxWidth: "100%" }}>
-        {cells.map(({ r, c, idx }, i) => (
-          <div key={i} style={{
-            position: "absolute", left: c * SIZE, top: r * SIZE,
-            width: SIZE - 1, height: SIZE - 1, overflow: "hidden",
-            opacity: visible ? 1 : 0,
-            transform: visible ? "scale(1)" : "scale(0.3)",
-            transition: `opacity .45s ${(i * 0.012).toFixed(2)}s ease, transform .45s ${(i * 0.012).toFixed(2)}s ease`,
-          }}>
-            <img src={GALLERY[idx].src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+      <div ref={wrapRef} style={{ width: "100%", textAlign: "center" }}>
+        <div style={{ display: "inline-block", animation: "heartbeat 2.2s ease-in-out infinite" }}>
+          <div style={{ position: "relative", width: HEART_W, height: HEART_H, zoom: scale }}>
+            {cells.map(({ r, c, idx }, i) => (
+              <div key={i} style={{
+                position: "absolute", left: c * SIZE, top: r * SIZE,
+                width: SIZE - 1, height: SIZE - 1, overflow: "hidden",
+                opacity: visible ? 1 : 0,
+                transform: visible ? "scale(1)" : "scale(0.3)",
+                transition: `opacity .45s ${(i * 0.012).toFixed(2)}s ease, transform .45s ${(i * 0.012).toFixed(2)}s ease`,
+              }}>
+                <img src={GALLERY[idx].src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
 
       <FadeBlock delay={0.6}>
@@ -1382,6 +1405,13 @@ export default function App() {
         @keyframes filmScroll {
           0%   { transform: translateX(0); }
           100% { transform: translateX(-50%); }
+        }
+        @keyframes heartbeat {
+          0%,100% { transform: scale(1); }
+          14%     { transform: scale(1.08); }
+          28%     { transform: scale(1); }
+          42%     { transform: scale(1.05); }
+          56%     { transform: scale(1); }
         }
 
         ::-webkit-scrollbar       { width: 5px }
