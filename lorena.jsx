@@ -725,13 +725,13 @@ function FinalSection() {
         </FadeBlock>
 
         <FadeBlock delay={0.2}>
-          <div style={{ fontFamily: "'Dancing Script', cursive", fontSize: 20, color: "#f9d8e4", marginBottom: 6 }}>
+          <div style={{ fontFamily: "'Lato', sans-serif", fontWeight: 300, fontSize: 16, color: "#f9d8e4", marginBottom: 8, letterSpacing: 3, textTransform: "uppercase" }}>
             Para sempre com você,
           </div>
           <div style={{
             fontFamily: "'Playfair Display', serif",
-            fontSize: 42, color: "#fde68a",
-            fontStyle: "italic", lineHeight: 1.2,
+            fontSize: 52, color: "#fde68a",
+            fontStyle: "italic", lineHeight: 1.1,
             textShadow: "0 2px 20px rgba(0,0,0,.3)",
             marginBottom: 28,
           }}>
@@ -794,13 +794,13 @@ function FinalSection() {
           }}>
             27 · 06 · 2025 — 27 · 06 · 2026
           </div>
-          <div style={{ fontFamily: "'Dancing Script', cursive", fontSize: 22, color: "#fde68a" }}>
+          <div style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: 22, color: "#fde68a" }}>
             Feliz 1 ano, meu amor 🎂
           </div>
         </FadeBlock>
 
         <FadeBlock delay={0.95}>
-          <div style={{ marginTop: 32, fontFamily: "'Dancing Script', cursive", fontSize: 26, color: "#fff" }}>
+          <div style={{ marginTop: 32, fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: 22, color: "#fde68a99", letterSpacing: 2 }}>
             — Lyelson
           </div>
         </FadeBlock>
@@ -890,6 +890,41 @@ function BtnRomantic({ children, onClick, block, gold }) {
   );
 }
 
+const PHOTO_SLOTS = [
+  { left:  "2%", dur: 13, delay:  0,   size: 54, idx:  3 },
+  { left: "16%", dur:  9, delay: -3.5, size: 44, idx: 11 },
+  { left: "32%", dur: 15, delay: -7,   size: 60, idx: 19 },
+  { left: "56%", dur: 11, delay: -1.5, size: 48, idx: 27 },
+  { left: "72%", dur: 14, delay: -9,   size: 52, idx: 35 },
+  { left: "87%", dur:  9, delay: -5,   size: 46, idx: 43 },
+];
+
+function FallingPhotos() {
+  return (
+    <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 0 }}>
+      {PHOTO_SLOTS.map((s, i) => (
+        <div key={i} style={{
+          position: "absolute", left: s.left, top: 0,
+          animation: `polaroidFall ${s.dur}s linear ${s.delay}s infinite`,
+          opacity: 0.28,
+        }}>
+          <img
+            src={GALLERY[s.idx % GALLERY.length].src}
+            alt=""
+            style={{
+              width: s.size, height: s.size,
+              objectFit: "cover", borderRadius: "50%",
+              border: "2.5px solid rgba(255,255,255,0.7)",
+              display: "block",
+              boxShadow: "0 2px 10px rgba(107,32,56,.2)",
+            }}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function InteractiveDeclaration({ loveTime, onDone }) {
   const [i, setI] = useState(0);
   const [reply, setReply] = useState(null);
@@ -910,9 +945,10 @@ function InteractiveDeclaration({ loveTime, onDone }) {
       position: "relative", overflow: "hidden", padding: "60px 24px 40px",
     }}>
       <Petals />
+      <FallingPhotos />
 
       {/* progresso */}
-      <div style={{ position: "absolute", top: 26, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 5, padding: "0 24px", flexWrap: "wrap" }}>
+      <div style={{ position: "absolute", top: 26, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 5, padding: "0 24px", flexWrap: "wrap", zIndex: 2 }}>
         {STEPS.map((_, k) => (
           <div key={k} style={{
             width: k === i ? 18 : 6, height: 6, borderRadius: 3,
@@ -929,7 +965,10 @@ function InteractiveDeclaration({ loveTime, onDone }) {
         {reply ? (
           <>
             <div style={{ fontSize: 46, marginBottom: 22, animation: "bob 2s infinite" }}>💕</div>
-            <p style={{ fontFamily: "'Dancing Script', cursive", fontSize: 28, color: "#6b2038", lineHeight: 1.4, marginBottom: 36 }}>
+            <p style={{
+              fontFamily: "'Playfair Display', serif", fontStyle: "italic",
+              fontSize: 24, color: "#6b2038", lineHeight: 1.6, marginBottom: 36,
+            }}>
               {reply}
             </p>
             <BtnRomantic onClick={advance}>continuar</BtnRomantic>
@@ -937,7 +976,10 @@ function InteractiveDeclaration({ loveTime, onDone }) {
         ) : step.type === "ask" ? (
           <>
             <div style={{ fontSize: 40, marginBottom: 20 }}>💬</div>
-            <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 26, fontStyle: "italic", color: "#6b2038", lineHeight: 1.4, marginBottom: 34 }}>
+            <p style={{
+              fontFamily: "'Playfair Display', serif", fontStyle: "italic",
+              fontSize: 24, color: "#6b2038", lineHeight: 1.6, marginBottom: 34,
+            }}>
               {step.q}
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "center" }}>
@@ -950,10 +992,11 @@ function InteractiveDeclaration({ loveTime, onDone }) {
           <>
             <div style={{ fontSize: 50, marginBottom: 22, animation: "bob 2s infinite" }}>{step.emoji}</div>
             <div style={{
-              fontFamily: step.type === "final" ? "'Playfair Display', serif" : "'Dancing Script', cursive",
-              fontStyle: step.type === "final" ? "italic" : "normal",
-              fontSize: step.type === "final" ? 34 : 30,
-              color: "#6b2038", lineHeight: 1.5, marginBottom: 32,
+              fontFamily: "'Playfair Display', serif",
+              fontStyle: "italic",
+              fontSize: step.type === "final" ? 32 : 26,
+              fontWeight: step.type === "final" ? 600 : 400,
+              color: "#6b2038", lineHeight: 1.65, marginBottom: 32,
             }}>
               {step.lines.map((l, k) => <div key={k}>{l}</div>)}
             </div>
