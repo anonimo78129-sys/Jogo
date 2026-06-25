@@ -572,109 +572,134 @@ function TimelineSection() {
 // GALLERY SECTION
 // ─────────────────────────────────────────────────────────
 
-function GallerySection() {
-  const [idx, setIdx] = useState(0);
-  const touchX = useRef(null);
-  const total = GALLERY.length;
-
-  const go = (n) => setIdx((n + total) % total);
-  const onTouchStart = (e) => { touchX.current = e.touches[0].clientX; };
-  const onTouchEnd = (e) => {
-    if (touchX.current === null) return;
-    const dx = e.changedTouches[0].clientX - touchX.current;
-    if (dx < -40) go(idx + 1);
-    else if (dx > 40) go(idx - 1);
-    touchX.current = null;
-  };
-
-  const photo = GALLERY[idx];
+function FallingPolaroid({ startIdx, left, duration, delay, rotation, width, onPhotoClick }) {
+  const [step, setStep] = useState(0);
+  const photo = GALLERY[(startIdx + step) % GALLERY.length];
 
   return (
-    <section style={{ background: "#fff", padding: "70px 0 70px", borderTop: "1px solid #f0d8e0" }}>
-      <FadeBlock style={{ maxWidth: 480, margin: "0 auto", padding: "0 24px" }}>
-        <div style={{ textAlign: "center", marginBottom: 36 }}>
-          <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 13, color: "#c9748a", letterSpacing: 5, textTransform: "uppercase", marginBottom: 8 }}>
-            Nossas Fotos
-          </div>
-          <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, color: "#6b2038", fontStyle: "italic", marginBottom: 8 }}>
-            Nossa história em imagens
-          </div>
-          <div style={{ width: 60, height: 2, background: "linear-gradient(to right, transparent, #c9748a, transparent)", margin: "0 auto" }} />
-        </div>
-      </FadeBlock>
-
-      {/* Photo */}
-      <div
-        style={{ position: "relative", cursor: "pointer", marginBottom: 0 }}
-        onTouchStart={onTouchStart}
-        onTouchEnd={onTouchEnd}
-        onClick={() => go(idx + 1)}
-      >
+    <div
+      style={{
+        position: "absolute",
+        left,
+        top: 0,
+        animation: `polaroidFall ${duration}s linear ${delay}s infinite`,
+        willChange: "transform, opacity",
+        cursor: "pointer",
+      }}
+      onAnimationIteration={() => setStep(s => s + 1)}
+      onClick={(e) => { e.stopPropagation(); onPhotoClick(photo); }}
+    >
+      <div style={{
+        background: "#fff",
+        padding: "7px 7px 26px",
+        boxShadow: "2px 6px 18px rgba(0,0,0,.22)",
+        transform: `rotate(${rotation}deg)`,
+        width,
+        borderRadius: 2,
+        userSelect: "none",
+      }}>
         <img
-          key={idx}
           src={photo.src}
-          alt={`foto ${idx + 1}`}
-          style={{
-            width: "100%", maxHeight: 420,
-            objectFit: "cover", objectPosition: "center top",
-            display: "block",
-            animation: "fadeIn .4s ease",
-          }}
+          alt=""
+          style={{ width: "100%", height: Math.round(width * 0.9), objectFit: "cover", display: "block" }}
+          draggable={false}
         />
-        {/* Gradient overlay */}
+        <p style={{
+          fontSize: 9, textAlign: "center", margin: "5px 0 0",
+          color: "#7a4050", fontFamily: "'Lato', sans-serif",
+          lineHeight: 1.3, padding: "0 2px",
+          overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis",
+        }}>{photo.caption}</p>
+      </div>
+    </div>
+  );
+}
+
+function GallerySection() {
+  const [lightbox, setLightbox] = useState(null);
+  const [ref, visible] = useInView(0.05);
+
+  const SLOTS = [
+    { left:  "1%", duration:  9, delay:    0, rotation: -14, width: 115, startIdx:  0 },
+    { left: "14%", duration:  7, delay:   -4, rotation:   8, width: 130, startIdx:  8 },
+    { left: "27%", duration: 11, delay: -1.5, rotation:  -6, width: 105, startIdx: 16 },
+    { left: "39%", duration:  8, delay:   -7, rotation:  17, width: 125, startIdx: 24 },
+    { left: "52%", duration: 13, delay: -2.5, rotation: -11, width: 108, startIdx: 32 },
+    { left: "63%", duration: 10, delay:   -5, rotation:   5, width: 135, startIdx: 40 },
+    { left: "74%", duration:  7, delay:   -9, rotation: -19, width: 110, startIdx: 48 },
+    { left: "84%", duration: 12, delay:   -3, rotation:  12, width: 118, startIdx: 56 },
+    { left: "44%", duration:  9, delay:  -11, rotation:  -3, width: 140, startIdx: 64 },
+  ];
+
+  return (
+    <section
+      ref={ref}
+      style={{
+        position: "relative",
+        height: "92vh",
+        overflow: "hidden",
+        background: "linear-gradient(180deg, #fff5f7 0%, #fef0ea 100%)",
+      }}
+    >
+      {/* Header */}
+      <div style={{
+        position: "absolute", top: 0, left: 0, right: 0,
+        zIndex: 10, padding: "28px 0 0",
+        textAlign: "center",
+        pointerEvents: "none",
+      }}>
         <div style={{
-          position: "absolute", bottom: 0, left: 0, right: 0, height: "50%",
-          background: "linear-gradient(transparent, rgba(107,32,56,.75))",
-          pointerEvents: "none",
-        }} />
-        {/* Caption */}
+          fontFamily: "'Playfair Display', serif",
+          fontSize: 12, color: "#c9748a",
+          letterSpacing: 5, textTransform: "uppercase", marginBottom: 6,
+        }}>Nossas Fotos</div>
         <div style={{
-          position: "absolute", bottom: 18, left: 20, right: 20,
-          fontFamily: "'Dancing Script', cursive", fontSize: 20,
-          color: "#fff", lineHeight: 1.4,
-          textShadow: "0 1px 8px rgba(0,0,0,.5)",
-        }}>
-          {photo.caption}
-        </div>
-        {/* Counter */}
+          fontFamily: "'Dancing Script', cursive",
+          fontSize: 30, color: "#6b2038",
+        }}>cada momento nosso ✨</div>
         <div style={{
-          position: "absolute", top: 14, right: 14,
-          background: "rgba(107,32,56,.65)",
-          fontFamily: "'Lato', sans-serif", fontSize: 11,
-          color: "#fde8ec", padding: "3px 9px",
-        }}>
-          {idx + 1} / {total}
-        </div>
+          fontFamily: "'Lato', sans-serif",
+          fontSize: 11, color: "#a07080", marginTop: 4,
+        }}>toque em uma foto para ver</div>
       </div>
 
-      {/* Dots + nav */}
-      <div style={{ maxWidth: 480, margin: "18px auto 0", padding: "0 24px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <button onClick={() => go(idx - 1)} style={{
-            background: "transparent", border: "1.5px solid #c9748a", color: "#c9748a",
-            fontFamily: "'Playfair Display', serif", fontSize: 18,
-            padding: "6px 16px", cursor: "pointer",
-          }}>←</button>
-          <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "center", maxWidth: "62%" }}>
-            {GALLERY.map((_, i) => (
-              <div key={i} onClick={() => go(i)} style={{
-                width: i === idx ? 12 : 7, height: i === idx ? 12 : 7,
-                background: i === idx ? "#8b3a52" : "#e8c4cc",
-                cursor: "pointer", transition: "all .25s",
-                borderRadius: "50%",
-              }} />
-            ))}
+      {/* Falling polaroids */}
+      {visible && SLOTS.map((slot, i) => (
+        <FallingPolaroid key={i} {...slot} onPhotoClick={setLightbox} />
+      ))}
+
+      {/* Lightbox */}
+      {lightbox && (
+        <div
+          onClick={() => setLightbox(null)}
+          style={{
+            position: "fixed", inset: 0,
+            background: "rgba(0,0,0,.88)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            zIndex: 9999, padding: 20,
+          }}
+        >
+          <div style={{ maxWidth: 400, width: "100%" }}>
+            <div style={{
+              background: "#fff",
+              padding: "12px 12px 36px",
+              boxShadow: "0 8px 40px rgba(0,0,0,.5)",
+            }}>
+              <img src={lightbox.src} alt="" style={{ width: "100%", display: "block" }} />
+              <p style={{
+                textAlign: "center", margin: "10px 0 0",
+                fontFamily: "'Dancing Script', cursive",
+                fontSize: 17, color: "#7a4050",
+              }}>{lightbox.caption}</p>
+            </div>
+            <p style={{
+              color: "rgba(255,255,255,.5)",
+              textAlign: "center", fontSize: 12, marginTop: 10,
+              fontFamily: "'Lato', sans-serif",
+            }}>toque fora para fechar</p>
           </div>
-          <button onClick={() => go(idx + 1)} style={{
-            background: "transparent", border: "1.5px solid #c9748a", color: "#c9748a",
-            fontFamily: "'Playfair Display', serif", fontSize: 18,
-            padding: "6px 16px", cursor: "pointer",
-          }}>→</button>
         </div>
-        <div style={{ textAlign: "center", fontFamily: "'Dancing Script', cursive", fontSize: 13, color: "#c9748a88", marginTop: 10 }}>
-          arraste ou toque para avançar
-        </div>
-      </div>
+      )}
     </section>
   );
 }
@@ -784,6 +809,16 @@ export default function App() {
         @keyframes petalFall {
           0%   { transform: translateY(-20px) rotate(0deg);   opacity: .5 }
           100% { transform: translateY(110vh) rotate(360deg); opacity: 0  }
+        }
+
+        @keyframes polaroidFall {
+          0%   { transform: translateY(-220px) translateX(0px);    opacity: 0; }
+          6%   { opacity: 1; }
+          25%  { transform: translateY(22vh)   translateX(18px);  }
+          50%  { transform: translateY(52vh)   translateX(-12px); }
+          75%  { transform: translateY(78vh)   translateX(22px);  }
+          94%  { opacity: 1; }
+          100% { transform: translateY(112vh)  translateX(-8px);   opacity: 0; }
         }
 
         ::-webkit-scrollbar       { width: 5px }
