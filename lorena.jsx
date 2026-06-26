@@ -841,6 +841,163 @@ function GallerySection() {
 }
 
 // ─────────────────────────────────────────────────────────
+// CAMERA MOMENT ("espelho" — usa a câmera frontal do celular)
+// ─────────────────────────────────────────────────────────
+
+function CameraMoment() {
+  const [phase, setPhase] = useState("idle"); // idle | live | shot | error
+  const [shot, setShot] = useState(null);
+  const videoRef = useRef(null);
+  const streamRef = useRef(null);
+
+  const stop = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(t => t.stop());
+      streamRef.current = null;
+    }
+  };
+
+  const open = async () => {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      setPhase("error");
+      return;
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "user" }, audio: false,
+      });
+      streamRef.current = stream;
+      setShot(null);
+      setPhase("live");
+    } catch (e) {
+      setPhase("error");
+    }
+  };
+
+  const close = () => { stop(); setShot(null); setPhase("idle"); };
+
+  const capture = () => {
+    const v = videoRef.current;
+    if (!v || !v.videoWidth) return;
+    const w = v.videoWidth, h = v.videoHeight;
+    const canvas = document.createElement("canvas");
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext("2d");
+    ctx.translate(w, 0); ctx.scale(-1, 1); // mirror to match preview
+    ctx.drawImage(v, 0, 0, w, h);
+    setShot(canvas.toDataURL("image/png"));
+    setPhase("shot");
+    stop();
+  };
+
+  // attach the live stream to the <video> once it's rendered
+  useEffect(() => {
+    if (phase === "live" && videoRef.current && streamRef.current) {
+      videoRef.current.srcObject = streamRef.current;
+      videoRef.current.play().catch(() => {});
+    }
+  }, [phase]);
+
+  // always release the camera if this unmounts
+  useEffect(() => () => stop(), []);
+
+  return (
+    <>
+      <BtnRomantic gold onClick={open}>ver a pessoa mais importante 📸</BtnRomantic>
+
+      {phase !== "idle" && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 9999,
+          background: "rgba(10,2,8,.94)", backdropFilter: "blur(8px)",
+          display: "flex", flexDirection: "column",
+          alignItems: "center", justifyContent: "center",
+          padding: 22,
+        }}>
+          {phase === "error" ? (
+            <div style={{ textAlign: "center", maxWidth: 340 }}>
+              <div style={{ fontSize: 50, marginBottom: 16 }}>🙈</div>
+              <p style={{
+                fontFamily: "'Lato', sans-serif", fontWeight: 300,
+                fontSize: 16, color: "#fbe4ec", lineHeight: 1.7, marginBottom: 26,
+              }}>
+                Não consegui abrir a câmera. Você precisa permitir o acesso no navegador pra ver essa surpresa 💕
+              </p>
+              <BtnRomantic gold onClick={close}>fechar</BtnRomantic>
+            </div>
+          ) : (
+            <>
+              <div style={{
+                fontFamily: "'Playfair Display', serif", fontStyle: "italic",
+                fontSize: 22, color: "#fde68a", textAlign: "center", marginBottom: 18,
+                animation: "fadeSlide .6s ease both",
+              }}>
+                é você, meu amor ❤️
+              </div>
+
+              <div style={{
+                position: "relative", width: "100%", maxWidth: 360,
+                aspectRatio: "3 / 4", borderRadius: 18, overflow: "hidden",
+                border: "3px solid rgba(253,230,138,.6)",
+                boxShadow: "0 0 60px rgba(201,116,138,.55), 0 18px 50px rgba(0,0,0,.6)",
+                background: "#000",
+              }}>
+                {phase === "live" && (
+                  <video
+                    ref={videoRef}
+                    playsInline
+                    muted
+                    style={{ width: "100%", height: "100%", objectFit: "cover", transform: "scaleX(-1)" }}
+                  />
+                )}
+                {phase === "shot" && shot && (
+                  <img src={shot} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                )}
+
+                {/* romantic overlay */}
+                <FloatingHearts count={7} opacity={0.5} />
+                <div style={{
+                  position: "absolute", inset: 0, pointerEvents: "none",
+                  boxShadow: "inset 0 0 60px rgba(107,32,56,.45)",
+                }} />
+                <div style={{
+                  position: "absolute", bottom: 10, left: 0, right: 0,
+                  textAlign: "center", fontFamily: "'Playfair Display', serif",
+                  fontStyle: "italic", fontSize: 14, color: "#fff",
+                  textShadow: "0 1px 6px rgba(0,0,0,.8)", pointerEvents: "none",
+                }}>
+                  a pessoa mais importante dessa história
+                </div>
+              </div>
+
+              <div style={{ display: "flex", gap: 12, marginTop: 24, flexWrap: "wrap", justifyContent: "center" }}>
+                {phase === "live" && <BtnRomantic gold onClick={capture}>tirar uma foto 📸</BtnRomantic>}
+                {phase === "shot" && (
+                  <>
+                    <a
+                      href={shot}
+                      download="nosso-momento.png"
+                      style={{
+                        fontFamily: "'Playfair Display', serif", fontSize: 16,
+                        color: "#6b2038", textDecoration: "none",
+                        background: "linear-gradient(135deg,#fef0b5,#fde68a,#f6c453)",
+                        borderRadius: 40, padding: "14px 28px",
+                        boxShadow: "0 6px 20px rgba(246,196,83,.4)",
+                      }}
+                    >salvar 💾</a>
+                    <BtnRomantic onClick={open}>tirar outra 🔄</BtnRomantic>
+                  </>
+                )}
+                <BtnRomantic onClick={close}>fechar</BtnRomantic>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </>
+  );
+}
+
+// ─────────────────────────────────────────────────────────
 // FINAL SECTION
 // ─────────────────────────────────────────────────────────
 
@@ -942,6 +1099,12 @@ function FinalSection() {
         <FadeBlock delay={0.95}>
           <div style={{ marginTop: 32, fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: 22, color: "#fde68a99", letterSpacing: 2 }}>
             Lyelson ❤️
+          </div>
+        </FadeBlock>
+
+        <FadeBlock delay={1.1}>
+          <div style={{ marginTop: 44 }}>
+            <CameraMoment />
           </div>
         </FadeBlock>
       </div>
