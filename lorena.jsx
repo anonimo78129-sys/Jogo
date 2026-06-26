@@ -1898,9 +1898,12 @@ function FilmStripSection() {
 }
 
 // ─────────────────────────────────────────────────────────
+const PLAYLIST = ["/musica.mp3", "/musica2.mp3"];
+
 function MusicPlayer() {
   const audioRef = useRef(null);
   const startedRef = useRef(false);
+  const trackRef = useRef(0);
   const [on, setOn] = useState(false);
 
   useEffect(() => {
@@ -1915,6 +1918,15 @@ function MusicPlayer() {
     return () => document.removeEventListener("pointerdown", tryStart);
   }, []);
 
+  // when a track ends, advance to the next and loop the whole playlist
+  const handleEnded = () => {
+    const a = audioRef.current;
+    if (!a) return;
+    trackRef.current = (trackRef.current + 1) % PLAYLIST.length;
+    a.src = PLAYLIST[trackRef.current];
+    a.play().then(() => setOn(true)).catch(() => {});
+  };
+
   const toggle = () => {
     const a = audioRef.current;
     if (!a) return;
@@ -1924,7 +1936,7 @@ function MusicPlayer() {
 
   return (
     <>
-      <audio ref={audioRef} src="/musica.mp3" loop preload="metadata" />
+      <audio ref={audioRef} src={PLAYLIST[0]} onEnded={handleEnded} preload="metadata" />
       <button
         onClick={toggle}
         aria-label="música"
