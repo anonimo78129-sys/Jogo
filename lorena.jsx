@@ -2005,6 +2005,8 @@ function IntroCurtain({ onStart }) {
 function LoadingScreen({ onDone }) {
   const [progress, setProgress] = useState(0);
   const [fading, setFading] = useState(false);
+  const onDoneRef = useRef(onDone);
+  onDoneRef.current = onDone;
 
   useEffect(() => {
     const MIN_MS = 2600;
@@ -2016,7 +2018,7 @@ function LoadingScreen({ onDone }) {
       finished = true;
       setProgress(100);
       setFading(true);
-      setTimeout(onDone, 750);
+      setTimeout(() => onDoneRef.current(), 750);
     };
 
     const iv = setInterval(() => {
@@ -2032,7 +2034,7 @@ function LoadingScreen({ onDone }) {
     const safety = setTimeout(finish, MIN_MS + 1500);
 
     return () => { clearInterval(iv); clearTimeout(safety); };
-  }, [onDone]);
+  }, []);
 
   return (
     <div style={{
