@@ -995,13 +995,13 @@ const STEPS = [
 
 const LETTER_PARAGRAPHS = [
   { type: "greeting",  text: "Amor," },
-  { type: "body",      text: "Há um ano, você me fez o pedido de namoro. Eu disse “vamos tentar” e foi a melhor decisão que eu já tomei na vida." },
-  { type: "body",      text: "Hoje a gente divide tudo. Os planos, as bobeiras, os medos, as conquistas. A gente se cuida, se respeita, e se impulsiona um ao outro a voar cada vez mais alto." },
-  { type: "body",      text: "Você é minha namorada, minha melhor amiga e minha parceira em absolutamente tudo. Eu não canso de te dizer o quanto você é incrível, porque é a mais pura verdade." },
-  { type: "body",      text: "Essa leveza que a gente tem, esse jeito de ser amigos antes de tudo, é o maior presente que eu já recebeu na vida." },
+  { type: "body",      text: "Há um ano, você me fez o pedido de namoro naquele quarto escuro. Eu sem palavras, e no meio daquele silêncio absurdo, disse “vamos tentar” e foi a melhor decisão que eu já tomei na vida. Nem imaginava que passaria tão rápido, que você se tornaria alguém tão importante pra mim." },
+  { type: "body",      text: "Hoje a gente divide tudo. Os planos, as loucuras, os medos, as conquistas, o autismo kkkk. A gente se cuida, se respeita, e se impulsiona um ao outro a voar cada vez mais alto." },
+  { type: "body",      text: "Você é minha namorada, minha melhor amiga e minha parceira em absolutamente tudo. Eu não canso de te dizer o quanto você é incrível, porque é a mais pura verdade. Você é a mulher da minha vida..." },
+  { type: "body",      text: "Essa leveza que a gente tem, esse jeito de ser amigos antes de tudo, é o maior presente que eu já recebi na vida." },
   { type: "emphasis",  text: "Que venham muitos e muitos anos de muito amor, Doidiça." },
   { type: "body",      text: "Eu te amo a cada batida do meu coração, e vou te amar a cada segundo da minha vida." },
-  { type: "signature", text: "Com amor eterno,\nLyelson ❤️" },
+  { type: "signature", text: "Com amor eterno,\nSeu neném, Lyelson ❤️" },
 ];
 
 // ─────────────────────────────────────────────────────────
