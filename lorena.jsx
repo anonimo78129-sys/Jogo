@@ -200,24 +200,27 @@ function useLoveTime() {
 // SMALL COMPONENTS
 // ─────────────────────────────────────────────────────────
 
+const PETAL_EMOJIS = ["🌸", "🌺", "🌹", "💮", "🌷", "✿"];
 function Petals() {
   const items = useRef(
-    Array.from({ length: 14 }, (_, i) => ({
+    Array.from({ length: 18 }, (_, i) => ({
       id: i,
-      left: `${(i * 7.3 + 4) % 94}%`,
-      size: 12 + (i % 4) * 4,
-      dur: 6 + (i % 5),
-      delay: i * 0.65,
+      left: `${(i * 5.7 + 3) % 96}%`,
+      size: 13 + (i % 5) * 4,
+      dur: 7 + (i % 6) * 1.2,
+      delay: i * 0.55,
+      e: PETAL_EMOJIS[i % PETAL_EMOJIS.length],
     }))
   );
   return (
-    <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
+    <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 0 }}>
       {items.current.map(p => (
         <div key={p.id} style={{
-          position: "absolute", top: "-30px", left: p.left,
-          fontSize: p.size, opacity: 0.45,
+          position: "absolute", top: "-36px", left: p.left,
+          fontSize: p.size, opacity: 0.42,
           animation: `petalFall ${p.dur}s ${p.delay}s infinite linear`,
-        }}>🌸</div>
+          willChange: "transform",
+        }}>{p.e}</div>
       ))}
     </div>
   );
@@ -243,6 +246,117 @@ function FadeBlock({ children, delay = 0, style: s = {} }) {
       ...s,
     }}>
       {children}
+    </div>
+  );
+}
+
+// Ambient twinkling sparkles — adds a refined "alive" backdrop
+function Sparkles({ count = 16, color = "#fff" }) {
+  const items = useRef(
+    Array.from({ length: count }, (_, i) => ({
+      id: i,
+      left: `${(i * 37 + 9) % 97}%`,
+      top: `${(i * 53 + 13) % 92}%`,
+      size: 4 + (i % 4) * 3,
+      dur: 2.4 + (i % 5) * 0.6,
+      delay: (i % 7) * 0.5,
+    }))
+  );
+  return (
+    <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 0 }}>
+      {items.current.map(p => (
+        <div key={p.id} style={{
+          position: "absolute", left: p.left, top: p.top,
+          width: p.size, height: p.size, borderRadius: "50%",
+          background: color,
+          boxShadow: `0 0 ${p.size * 1.6}px ${color}`,
+          animation: `twinkle ${p.dur}s ${p.delay}s ease-in-out infinite`,
+        }} />
+      ))}
+    </div>
+  );
+}
+
+// Slow-floating hearts that drift gently — depth layer for romantic sections
+function FloatingHearts({ count = 8, opacity = 0.22 }) {
+  const items = useRef(
+    Array.from({ length: count }, (_, i) => ({
+      id: i,
+      left: `${(i * 13 + 5) % 94}%`,
+      size: 14 + (i % 4) * 7,
+      dur: 5.5 + (i % 5),
+      delay: i * 0.8,
+      rot: (i % 2 ? 1 : -1) * (4 + (i % 5) * 3),
+    }))
+  );
+  return (
+    <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 0 }}>
+      {items.current.map(p => (
+        <div key={p.id} style={{
+          position: "absolute", left: p.left, bottom: `${(p.id * 11) % 70}%`,
+          fontSize: p.size, opacity,
+          "--rot": `${p.rot}deg`,
+          animation: `floatY ${p.dur}s ${p.delay}s ease-in-out infinite`,
+        }}>{["💗", "💕", "🤍", "💖"][p.id % 4]}</div>
+      ))}
+    </div>
+  );
+}
+
+// Global heart/sparkle trail that follows taps & clicks — makes the whole site feel alive
+function HeartTrail() {
+  const [bits, setBits] = useState([]);
+  const seq = useRef(0);
+  useEffect(() => {
+    const spawn = (e) => {
+      const x = e.clientX, y = e.clientY;
+      if (x == null) return;
+      const id = ++seq.current;
+      const emoji = ["❤️", "💕", "✨", "💗", "🌸"][id % 5];
+      const dx = (id % 2 ? 1 : -1) * (10 + (id % 4) * 8);
+      setBits(b => [...b.slice(-14), { id, x, y, emoji, dx, spin: (id % 2 ? 1 : -1) * 24 }]);
+      setTimeout(() => setBits(b => b.filter(p => p.id !== id)), 1100);
+    };
+    window.addEventListener("pointerdown", spawn);
+    return () => window.removeEventListener("pointerdown", spawn);
+  }, []);
+  return (
+    <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 9997, overflow: "hidden" }}>
+      {bits.map(p => (
+        <span key={p.id} style={{
+          position: "fixed", left: p.x, top: p.y,
+          fontSize: 18, transform: "translate(-50%,-50%)",
+          "--dx": `${p.dx}px`, "--spin": `${p.spin}deg`,
+          animation: "heartRise 1.05s ease-out forwards",
+        }}>{p.emoji}</span>
+      ))}
+    </div>
+  );
+}
+
+// Burst of falling hearts/confetti for emotional peaks
+function ConfettiHearts({ count = 28 }) {
+  const items = useRef(
+    Array.from({ length: count }, (_, i) => ({
+      id: i,
+      left: `${(i * 100) / count + ((i * 17) % 7)}%`,
+      size: 12 + (i % 5) * 6,
+      dur: 3.4 + (i % 6) * 0.5,
+      delay: (i % 9) * 0.22,
+      dx: ((i % 2 ? 1 : -1) * (10 + (i % 6) * 14)),
+      cr: 360 + (i % 4) * 180,
+      e: ["❤️", "💕", "💖", "🌸", "✨", "💗"][i % 6],
+    }))
+  );
+  return (
+    <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 5 }}>
+      {items.current.map(p => (
+        <div key={p.id} style={{
+          position: "absolute", top: 0, left: p.left, fontSize: p.size,
+          "--dx": `${p.dx}px`, "--cr": `${p.cr}deg`,
+          animation: `confettiFall ${p.dur}s ${p.delay}s ease-in both`,
+        }}>{p.e}</div>
+      ))}
     </div>
   );
 }
@@ -522,10 +636,14 @@ function TimelineItem({ item, idx }) {
       {/* Right: content */}
       <div style={{
         flex: 1, paddingBottom: 20,
-        background: item.special ? "linear-gradient(135deg, #fff5f7, #fffbf0)" : "transparent",
+        background: item.special
+          ? "linear-gradient(135deg, #fff5f7, #fffbf0, #fff5f7)"
+          : "transparent",
+        backgroundSize: item.special ? "300% 300%" : "auto",
         border: item.special ? "1px solid #e8c4cc" : "none",
         padding: item.special ? "16px 18px" : "2px 0 20px",
-        boxShadow: item.special ? "0 2px 16px #e8c4cc18" : "none",
+        boxShadow: item.special ? "0 4px 24px rgba(201,116,138,.22), 0 1px 6px rgba(0,0,0,.06)" : "none",
+        animation: item.special ? "gradientShift 8s ease infinite" : "none",
       }}>
         <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 13, color: "#c9748a", marginBottom: 2, letterSpacing: 1 }}>
           {item.chapter}
@@ -592,11 +710,12 @@ function FallingPolaroid({ startIdx, left, duration, delay, rotation, width, onP
       <div style={{
         background: "#fff",
         padding: "7px 7px 26px",
-        boxShadow: "2px 6px 18px rgba(0,0,0,.22)",
+        boxShadow: "2px 8px 24px rgba(0,0,0,.26), 0 1px 4px rgba(0,0,0,.1)",
         transform: `rotate(${rotation}deg)`,
         width,
-        borderRadius: 2,
+        borderRadius: 3,
         userSelect: "none",
+        transition: "box-shadow .2s, transform .2s",
       }}>
         <img
           src={photo.src}
@@ -638,7 +757,9 @@ function GallerySection() {
         position: "relative",
         height: "92vh",
         overflow: "hidden",
-        background: "linear-gradient(180deg, #fff5f7 0%, #fef0ea 100%)",
+        background: "linear-gradient(180deg, #fff5f7 0%, #fef0ea 50%, #fff5f7 100%)",
+        backgroundSize: "100% 300%",
+        animation: "gradientShift 12s ease infinite",
       }}
     >
       {/* Header */}
@@ -674,28 +795,30 @@ function GallerySection() {
           onClick={() => setLightbox(null)}
           style={{
             position: "fixed", inset: 0,
-            background: "rgba(0,0,0,.88)",
+            background: "rgba(10,2,8,.92)",
+            backdropFilter: "blur(6px)",
             display: "flex", alignItems: "center", justifyContent: "center",
             zIndex: 9999, padding: 20,
           }}
         >
-          <div style={{ maxWidth: 400, width: "100%" }}>
+          <div style={{ maxWidth: 400, width: "100%", animation: "popIn .35s ease both" }}>
             <div style={{
               background: "#fff",
               padding: "12px 12px 36px",
-              boxShadow: "0 8px 40px rgba(0,0,0,.5)",
+              boxShadow: "0 20px 60px rgba(0,0,0,.65), 0 0 0 1px rgba(255,255,255,.08)",
+              borderRadius: 2,
             }}>
-              <img src={lightbox.src} alt="" style={{ width: "100%", display: "block" }} />
+              <img src={lightbox.src} alt="" style={{ width: "100%", display: "block", borderRadius: 1 }} />
               <p style={{
-                textAlign: "center", margin: "10px 0 0",
-                fontFamily: "'Lato', sans-serif",
-                fontSize: 17, color: "#7a4050",
+                textAlign: "center", margin: "12px 6px 0",
+                fontFamily: "'Playfair Display', serif", fontStyle: "italic",
+                fontSize: 16, color: "#7a4050", lineHeight: 1.5,
               }}>{lightbox.caption}</p>
             </div>
             <p style={{
-              color: "rgba(255,255,255,.5)",
-              textAlign: "center", fontSize: 12, marginTop: 10,
-              fontFamily: "'Lato', sans-serif",
+              color: "rgba(255,255,255,.38)",
+              textAlign: "center", fontSize: 11, marginTop: 14,
+              fontFamily: "'Lato', sans-serif", letterSpacing: 2,
             }}>toque fora para fechar</p>
           </div>
         </div>
@@ -711,17 +834,21 @@ function GallerySection() {
 function FinalSection() {
   return (
     <section style={{
-      background: "linear-gradient(160deg, #6b2038 0%, #8b3a52 40%, #a0566a 100%)",
-      padding: "80px 28px",
+      background: "linear-gradient(150deg, #2a0a16, #6b2038, #8b3a52, #a0566a, #6b2038, #2a0a16)",
+      backgroundSize: "400% 400%",
+      animation: "gradientShift 20s ease infinite",
+      padding: "90px 28px 100px",
       position: "relative",
       overflow: "hidden",
       textAlign: "center",
     }}>
       <Petals />
+      <Sparkles count={28} color="#fde68a" />
+      <FloatingHearts count={12} opacity={0.28} />
       <div style={{ position: "relative", zIndex: 1, maxWidth: 480, margin: "0 auto" }}>
 
         <FadeBlock>
-          <div style={{ fontSize: 60, marginBottom: 24, animation: "bob 2s infinite" }}>❤️</div>
+          <div style={{ fontSize: 72, marginBottom: 24, animation: "glowPulse 2.2s ease-in-out infinite" }}>❤️</div>
         </FadeBlock>
 
         <FadeBlock delay={0.2}>
@@ -877,26 +1004,47 @@ const LETTER_PARAGRAPHS = [
 ];
 
 function BtnRomantic({ children, onClick, block, gold }) {
+  const reset = (e) => {
+    e.currentTarget.style.transform = "translateY(0) scale(1)";
+    e.currentTarget.style.boxShadow = gold
+      ? "0 6px 20px rgba(246,196,83,.4)"
+      : "0 6px 20px rgba(139,58,82,.32)";
+  };
   return (
     <button
       onClick={onClick}
       style={{
+        position: "relative", overflow: "hidden",
         fontFamily: "'Playfair Display', serif", fontSize: 16, letterSpacing: 1,
         color: gold ? "#6b2038" : "#fff",
         background: gold
-          ? "linear-gradient(135deg,#fde68a,#f6c453)"
-          : "linear-gradient(135deg,#c9748a,#8b3a52)",
+          ? "linear-gradient(135deg,#fef0b5,#fde68a,#f6c453)"
+          : "linear-gradient(135deg,#d98aa0,#c9748a,#8b3a52)",
         border: "none", borderRadius: 40,
-        padding: "13px 30px", cursor: "pointer",
+        padding: "14px 32px", cursor: "pointer",
         width: block ? "100%" : "auto", maxWidth: 320,
-        boxShadow: "0 4px 16px rgba(139,58,82,.3)",
-        transition: "transform .15s",
+        boxShadow: gold ? "0 6px 20px rgba(246,196,83,.4)" : "0 6px 20px rgba(139,58,82,.32)",
+        transition: "transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .25s",
+        WebkitTapHighlightColor: "transparent",
       }}
-      onMouseDown={(e) => (e.currentTarget.style.transform = "scale(.96)")}
-      onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
-      onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "translateY(-2px) scale(1.03)";
+        e.currentTarget.style.boxShadow = gold
+          ? "0 10px 28px rgba(246,196,83,.5)"
+          : "0 10px 28px rgba(139,58,82,.45)";
+      }}
+      onMouseDown={(e) => (e.currentTarget.style.transform = "translateY(0) scale(.96)")}
+      onMouseUp={reset}
+      onMouseLeave={reset}
     >
-      {children}
+      {/* shimmer sweep */}
+      <span style={{
+        position: "absolute", top: 0, left: 0, width: "45%", height: "100%",
+        background: "linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent)",
+        animation: "shimmerSweep 3.2s ease-in-out infinite",
+        pointerEvents: "none",
+      }} />
+      <span style={{ position: "relative", zIndex: 1 }}>{children}</span>
     </button>
   );
 }
@@ -939,61 +1087,101 @@ function FallingPhotos() {
 function InteractiveDeclaration({ loveTime, onDone }) {
   const [i, setI] = useState(0);
   const [reply, setReply] = useState(null);
+  const [showConfetti, setShowConfetti] = useState(false);
   const step = STEPS[i];
 
   const advance = () => {
     setReply(null);
+    setShowConfetti(false);
     if (i >= STEPS.length - 1) { onDone(); return; }
     setI(i + 1);
   };
-  const pick = (a) => { if (a.reply) setReply(a.reply); else advance(); };
+  const pick = (a) => {
+    if (a.reply) { setReply(a.reply); setShowConfetti(true); }
+    else advance();
+  };
+
+  // Split all lines into individual words for stagger-in animation
+  const WordReveal = ({ text, baseDelay = 0, size = 26, weight = 400, color = "#6b2038" }) => {
+    const words = text.split(" ");
+    return (
+      <span>
+        {words.map((w, k) => (
+          <span key={k} style={{
+            display: "inline-block",
+            animation: `wordIn .45s ${(baseDelay + k * 0.07).toFixed(2)}s ease both`,
+            marginRight: "0.28em",
+          }}>
+            {w}
+          </span>
+        ))}
+      </span>
+    );
+  };
+
+  const bgPairs = [
+    ["#fdf2f5","#fce8ef"],["#f5ecff","#ffe8f5"],["#e8f5ff","#f0f8ff"],
+    ["#fff5ec","#ffeee8"],["#f0fff4","#f5fef5"],
+  ];
+  const [bg1, bg2] = bgPairs[i % bgPairs.length];
 
   return (
     <section style={{
       minHeight: "100vh",
-      background: "linear-gradient(160deg, #fdf2f5 0%, #fce8ef 45%, #fdf5ec 100%)",
+      background: `linear-gradient(160deg, ${bg1} 0%, ${bg2} 60%, #fdf5ec 100%)`,
+      backgroundSize: "200% 200%",
+      animation: "gradientShift 18s ease infinite",
       display: "flex", alignItems: "center", justifyContent: "center",
       position: "relative", overflow: "hidden", padding: "60px 24px 40px",
+      transition: "background .8s ease",
     }}>
       <Petals />
       <FallingPhotos />
+      <FloatingHearts count={6} opacity={0.18} />
 
-      {/* progresso */}
-      <div style={{ position: "absolute", top: 26, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 5, padding: "0 24px", flexWrap: "wrap", zIndex: 2 }}>
+      {showConfetti && <ConfettiHearts count={32} />}
+
+      {/* progress dots */}
+      <div style={{
+        position: "absolute", top: 22, left: 0, right: 0,
+        display: "flex", justifyContent: "center", gap: 5,
+        padding: "0 24px", flexWrap: "wrap", zIndex: 2,
+      }}>
         {STEPS.map((_, k) => (
           <div key={k} style={{
-            width: k === i ? 18 : 6, height: 6, borderRadius: 3,
-            background: k <= i ? "#c9748a" : "#e8c4cc",
-            transition: "all .3s",
+            width: k === i ? 22 : 6, height: 6, borderRadius: 3,
+            background: k < i ? "#8b3a52" : k === i ? "#c9748a" : "#e8c4cc",
+            transition: "all .35s cubic-bezier(.34,1.56,.64,1)",
+            boxShadow: k === i ? "0 0 8px #c9748a88" : "none",
           }} />
         ))}
       </div>
 
       <div key={`${i}-${reply ? "r" : "q"}`} style={{
         position: "relative", zIndex: 1, maxWidth: 440, width: "100%",
-        textAlign: "center", animation: "fadeSlide .5s ease",
+        textAlign: "center", animation: "fadeSlide .45s ease",
       }}>
         {reply ? (
           <>
-            <div style={{ fontSize: 46, marginBottom: 22, animation: "bob 2s infinite" }}>💕</div>
+            <div style={{ fontSize: 52, marginBottom: 22, animation: "glowPulse 2s infinite" }}>💕</div>
             <p style={{
               fontFamily: "'Playfair Display', serif", fontStyle: "italic",
-              fontSize: 24, color: "#6b2038", lineHeight: 1.6, marginBottom: 36,
+              fontSize: 24, color: "#6b2038", lineHeight: 1.65, marginBottom: 36,
             }}>
-              {reply}
+              <WordReveal text={reply} baseDelay={0.1} size={24} />
             </p>
             <BtnRomantic onClick={advance}>continuar</BtnRomantic>
           </>
         ) : step.type === "ask" ? (
           <>
-            <div style={{ fontSize: 40, marginBottom: 20 }}>💬</div>
+            <div style={{ fontSize: 46, marginBottom: 20, animation: "bob 2s infinite" }}>💬</div>
             <p style={{
               fontFamily: "'Playfair Display', serif", fontStyle: "italic",
               fontSize: 24, color: "#6b2038", lineHeight: 1.6, marginBottom: 34,
             }}>
-              {step.q}
+              <WordReveal text={step.q} baseDelay={0.05} />
             </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "center" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 14, alignItems: "center" }}>
               {step.answers.map((a, k) => (
                 <BtnRomantic key={k} onClick={() => pick(a)} block>{a.label}</BtnRomantic>
               ))}
@@ -1001,16 +1189,29 @@ function InteractiveDeclaration({ loveTime, onDone }) {
           </>
         ) : (
           <>
-            <div style={{ fontSize: 50, marginBottom: 22, animation: "bob 2s infinite" }}>{step.emoji}</div>
             <div style={{
-              fontFamily: "'Playfair Display', serif",
-              fontStyle: "italic",
-              fontSize: step.type === "final" ? 32 : 26,
-              fontWeight: step.type === "final" ? 600 : 400,
-              color: "#6b2038", lineHeight: 1.65, marginBottom: 32,
+              fontSize: step.type === "final" ? 64 : 52,
+              marginBottom: 20,
+              animation: step.type === "final" ? "glowPulse 2.2s ease-in-out infinite" : "bob 2s ease-in-out infinite",
             }}>
-              {step.lines.map((l, k) => <div key={k}>{l}</div>)}
+              {step.emoji}
             </div>
+
+            {step.type === "final" && <ConfettiHearts count={24} />}
+
+            <div style={{
+              fontFamily: "'Playfair Display', serif", fontStyle: "italic",
+              fontSize: step.type === "final" ? 30 : 26,
+              fontWeight: step.type === "final" ? 600 : 400,
+              color: "#6b2038", lineHeight: 1.72, marginBottom: 32,
+            }}>
+              {step.lines.map((l, k) => (
+                <div key={k} style={{ marginBottom: 2 }}>
+                  <WordReveal text={l} baseDelay={k * 0.22} />
+                </div>
+              ))}
+            </div>
+
             {step.showCounter && <div style={{ marginBottom: 32 }}><Counter t={loveTime} /></div>}
             <BtnRomantic onClick={advance} gold={step.type === "final"}>{step.btn}</BtnRomantic>
           </>
@@ -1143,11 +1344,14 @@ function EnvelopeSection({ onNext }) {
     <section style={{
       minHeight: "100vh",
       background: "linear-gradient(160deg, #fdf2f5 0%, #fce8ef 45%, #fdf5ec 100%)",
+      backgroundSize: "200% 200%",
+      animation: "gradientShift 22s ease infinite",
       display: "flex", alignItems: "center", justifyContent: "center",
       position: "relative", overflow: "hidden", padding: "40px 24px",
     }}>
       <Petals />
       <FallingPhotos />
+      <FloatingHearts count={7} opacity={0.15} />
       {phase !== "open" ? (
         <div style={{ textAlign: "center", position: "relative", zIndex: 2 }}>
           <p style={{ fontFamily: "'Lato', sans-serif", fontSize: 11, color: "#c9748a", letterSpacing: 5, textTransform: "uppercase", marginBottom: 32, animation: "fadeIn 1.2s ease" }}>
@@ -1342,12 +1546,18 @@ function MusicPlayer() {
         onClick={toggle}
         aria-label="música"
         style={{
-          position: "fixed", bottom: 18, right: 18, zIndex: 9998,
-          width: 46, height: 46, borderRadius: "50%",
-          border: "none", cursor: "pointer",
-          background: "rgba(139,58,82,.85)", color: "#fde68a",
-          fontSize: 18, boxShadow: "0 3px 14px rgba(0,0,0,.3)",
-          backdropFilter: "blur(4px)",
+          position: "fixed", bottom: 20, right: 20, zIndex: 9998,
+          width: 50, height: 50, borderRadius: "50%",
+          border: "2px solid rgba(253,230,138,.4)", cursor: "pointer",
+          background: "linear-gradient(135deg, rgba(139,58,82,.9), rgba(107,32,56,.9))",
+          color: "#fde68a", fontSize: 19,
+          boxShadow: on
+            ? "0 0 0 5px rgba(201,116,138,.25), 0 4px 18px rgba(0,0,0,.35)"
+            : "0 4px 14px rgba(0,0,0,.28)",
+          backdropFilter: "blur(6px)",
+          animation: on ? "glowPulse 2.4s ease-in-out infinite" : "none",
+          transition: "box-shadow .4s",
+          display: "flex", alignItems: "center", justifyContent: "center",
         }}
       >
         {on ? "🔊" : "🎵"}
@@ -1357,11 +1567,83 @@ function MusicPlayer() {
 }
 
 // ─────────────────────────────────────────────────────────
+// INTRO CURTAIN
+// ─────────────────────────────────────────────────────────
+
+function IntroCurtain({ onStart }) {
+  const [leaving, setLeaving] = useState(false);
+  const go = () => {
+    if (leaving) return;
+    setLeaving(true);
+    setTimeout(onStart, 650);
+  };
+  return (
+    <div
+      onClick={go}
+      style={{
+        position: "fixed", inset: 0, zIndex: 9990,
+        background: "linear-gradient(150deg, #2a0a16, #6b2038, #8b3a52, #2a0a16)",
+        backgroundSize: "300% 300%",
+        animation: `gradientShift 14s ease infinite${leaving ? ", curtainOut .65s ease forwards" : ""}`,
+        display: "flex", flexDirection: "column",
+        alignItems: "center", justifyContent: "center",
+        textAlign: "center", padding: "40px 28px", cursor: "pointer",
+        overflow: "hidden",
+      }}
+    >
+      <Sparkles count={26} color="#fde68a" />
+      <FloatingHearts count={10} opacity={0.3} />
+
+      <div style={{ position: "relative", zIndex: 1, animation: "popIn .9s ease both" }}>
+        <div style={{ fontSize: 76, animation: "glowPulse 2.4s ease-in-out infinite", lineHeight: 1 }}>❤️</div>
+
+        <div style={{
+          fontFamily: "'Lato', sans-serif", fontWeight: 300,
+          fontSize: 13, letterSpacing: 6, textTransform: "uppercase",
+          color: "#f9d8e4", marginTop: 30, marginBottom: 10,
+          animation: "fadeSlide 1s .3s ease both",
+        }}>
+          Para
+        </div>
+        <div style={{
+          fontFamily: "'Playfair Display', serif", fontStyle: "italic",
+          fontSize: 58, color: "#fde68a", lineHeight: 1.05,
+          textShadow: "0 4px 30px rgba(0,0,0,.4)",
+          animation: "fadeSlide 1s .45s ease both",
+        }}>
+          Lorena
+        </div>
+        <div style={{
+          fontFamily: "'Playfair Display', serif",
+          fontSize: 13, color: "#f9d8e4cc", letterSpacing: 5,
+          textTransform: "uppercase", marginTop: 16,
+          animation: "fadeSlide 1s .6s ease both",
+        }}>
+          1 ano de nós · 27 · 06 · 2026
+        </div>
+
+        <div style={{ marginTop: 44, animation: "fadeSlide 1s .9s ease both" }}>
+          <BtnRomantic onClick={go} gold>tocar para começar 💌</BtnRomantic>
+        </div>
+        <div style={{
+          marginTop: 22, fontFamily: "'Lato', sans-serif", fontSize: 11,
+          color: "#f9d8e477", letterSpacing: 2,
+          animation: "blink 2.6s 1.2s infinite",
+        }}>
+          🔊 com som — ajuste o volume
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────
 // APP
 // ─────────────────────────────────────────────────────────
 
 export default function App() {
   const loveTime = useLoveTime();
+  const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
   // step 0 = interactive declaration
   // step 1 = envelope + letter
@@ -1373,7 +1655,8 @@ export default function App() {
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Lato:wght@300;400;700&family=Press+Start+2P&display=swap');
 
         *  { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #fdf8f6; min-height: 100vh; }
+        html { scroll-behavior: smooth; }
+        body { background: #fdf8f6; min-height: 100vh; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
 
         @keyframes fadeIn    { from { opacity: 0 } to { opacity: 1 } }
         @keyframes fadeSlide { from { opacity: 0; transform: translateY(16px) } to { opacity: 1; transform: translateY(0) } }
@@ -1382,6 +1665,59 @@ export default function App() {
         @keyframes petalFall {
           0%   { transform: translateY(-20px) rotate(0deg);   opacity: .5 }
           100% { transform: translateY(110vh) rotate(360deg); opacity: 0  }
+        }
+
+        /* ── professional polish keyframes ── */
+        @keyframes gradientShift {
+          0%   { background-position:   0% 50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position:   0% 50%; }
+        }
+        @keyframes floatY {
+          0%,100% { transform: translateY(0)    rotate(var(--rot,0deg)); }
+          50%     { transform: translateY(-22px) rotate(var(--rot,0deg)); }
+        }
+        @keyframes heartRise {
+          0%   { transform: translateY(0)     scale(.6) rotate(0deg);   opacity: 0;   }
+          12%  { opacity: .9; }
+          100% { transform: translateY(-120px) scale(1.15) rotate(var(--spin,18deg)); opacity: 0; }
+        }
+        @keyframes twinkle {
+          0%,100% { opacity: .15; transform: scale(.7); }
+          50%     { opacity: .9;  transform: scale(1.25); }
+        }
+        @keyframes popIn {
+          0%   { transform: scale(.4); opacity: 0; }
+          70%  { transform: scale(1.12); }
+          100% { transform: scale(1);  opacity: 1; }
+        }
+        @keyframes glowPulse {
+          0%,100% { transform: scale(1);    filter: drop-shadow(0 0 16px rgba(201,116,138,.55)); }
+          50%     { transform: scale(1.07); filter: drop-shadow(0 0 38px rgba(201,116,138,.85)); }
+        }
+        @keyframes shimmerSweep {
+          0%   { transform: translateX(-130%) skewX(-18deg); }
+          100% { transform: translateX(230%)  skewX(-18deg); }
+        }
+        @keyframes wordIn {
+          from { opacity: 0; transform: translateY(10px); filter: blur(4px); }
+          to   { opacity: 1; transform: translateY(0);    filter: blur(0);   }
+        }
+        @keyframes confettiFall {
+          0%   { transform: translate(0,-10px) rotate(0deg);    opacity: 1; }
+          100% { transform: translate(var(--dx,0),104vh) rotate(var(--cr,540deg)); opacity: 0; }
+        }
+        @keyframes curtainOut {
+          to { opacity: 0; transform: scale(1.08); pointer-events: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          *, *::before, *::after {
+            animation-duration: .001ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: .01ms !important;
+            scroll-behavior: auto !important;
+          }
         }
 
         @keyframes polaroidFall {
@@ -1420,6 +1756,9 @@ export default function App() {
       `}</style>
 
       <MusicPlayer />
+      <HeartTrail />
+
+      {!started && <IntroCurtain onStart={() => setStarted(true)} />}
 
       <div style={{ maxWidth: 520, margin: "0 auto" }}>
         {step === 0 && <InteractiveDeclaration loveTime={loveTime} onDone={() => setStep(1)} />}
