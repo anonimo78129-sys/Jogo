@@ -1003,6 +1003,267 @@ const LETTER_PARAGRAPHS = [
   { type: "signature", text: "Com amor eterno,\nLyelson ❤️" },
 ];
 
+// ─────────────────────────────────────────────────────────
+// MONTHS JOURNEY DATA
+// ─────────────────────────────────────────────────────────
+
+const MONTHS = [
+  {
+    n: 1, label: "Julho", year: "2025",
+    emoji: "🌱",
+    title: "O primeiro mês",
+    text: "A gente ainda tava descobrindo o que era aquilo. Cada mensagem parecia um presente. Cada encontro, um coração acelerado. O início de algo que a gente não sabia ainda como ia ser gigante.",
+    photo: GALLERY[0],
+    from: "#fff5f0", to: "#ffe8d6", accent: "#c9748a", numColor: "#c9748a",
+  },
+  {
+    n: 2, label: "Agosto", year: "2025",
+    emoji: "☀️",
+    title: "O mês que começou a virar rotina",
+    text: "Rotina boa. Do tipo que você sente falta quando falta. A gente foi construindo um jeitinho de ser — de falar, de rir, de existir junto. Dois meses e já parecia que não dava mais pra imaginar sem.",
+    photo: GALLERY[7],
+    from: "#fffbec", to: "#fff3c4", accent: "#c9a020", numColor: "#c9a020",
+  },
+  {
+    n: 3, label: "Setembro", year: "2025",
+    emoji: "🍂",
+    title: "O mês da cumplicidade",
+    text: "Três meses e a gente já tinha os nossos cantinhos, as nossas piadas, os nossos segredos. Você deixou de ser a pessoa que eu gosto e virou a pessoa que me entende de um jeito que ninguém mais entende.",
+    photo: GALLERY[13],
+    from: "#fff8ec", to: "#ffe8c0", accent: "#b07030", numColor: "#b07030",
+  },
+  {
+    n: 4, label: "Outubro", year: "2025",
+    emoji: "🌙",
+    title: "O mês dos planos",
+    text: "Quatro meses e a gente começou a falar de futuro sem medo. Não de um futuro distante e abstrato — de um futuro que inclui você do meu lado, simples assim. Esse mês foi o mês que eu soube que era sério.",
+    photo: GALLERY[19],
+    from: "#f5f0ff", to: "#e8d8ff", accent: "#7a40b8", numColor: "#7a40b8",
+  },
+  {
+    n: 5, label: "Novembro", year: "2025",
+    emoji: "💜",
+    title: "O mês da leveza",
+    text: "Cinco meses e a gente descobriu que amor também é leveza. É rir sem motivo, é ficar em silêncio sem precisar preencher nada, é estar junto sem cobrar, sem precisar provar. Só estar — e ser suficiente.",
+    photo: GALLERY[24],
+    from: "#f8f0ff", to: "#e8d0f5", accent: "#9b50c0", numColor: "#9b50c0",
+  },
+  {
+    n: 6, label: "Dezembro", year: "2025",
+    emoji: "🎄",
+    title: "O primeiro Natal juntos",
+    text: "Seis meses e chegou o Natal. O primeiro de muitos com você. Descobri que quero cada final de ano do meu lado do seu. Com aquele sorriso, com aquela energia. Você deixa qualquer data especial ficar mais especial.",
+    photo: GALLERY[30],
+    from: "#f0fff4", to: "#c8f5da", accent: "#2a8a50", numColor: "#2a8a50",
+  },
+  {
+    n: 7, label: "Janeiro", year: "2026",
+    emoji: "🎆",
+    title: "Ano novo, nós dois",
+    text: "Sete meses e a gente virou o ano juntos. Que começo de 2026. A contagem regressiva com você do lado foi um dos momentos que eu mais vou guardar. Pedi ao tempo que nos desse muitos e muitos anos assim.",
+    photo: GALLERY[36],
+    from: "#ecf8ff", to: "#c8e8ff", accent: "#1a78c2", numColor: "#1a78c2",
+  },
+  {
+    n: 8, label: "Fevereiro", year: "2026",
+    emoji: "💌",
+    title: "O mês do amor (ainda mais)",
+    text: "Oito meses e fevereiro chegou só confirmando o que a gente já sabia. Não precisa de data pra eu te amar — mas se tem uma, fica ainda mais bonito. Esse mês foi suave, quentinho e muito nosso.",
+    photo: GALLERY[42],
+    from: "#fff0f5", to: "#ffd8e8", accent: "#c9748a", numColor: "#c9748a",
+  },
+  {
+    n: 9, label: "Março", year: "2026",
+    emoji: "🌿",
+    title: "O mês que a gente cresceu",
+    text: "Nove meses. A gente passou por muita coisa e saiu mais forte de cada uma. Aprendi que crescer junto não é fácil, mas é o mais bonito que existe. Você me faz querer ser melhor — todo mês, todo dia.",
+    photo: GALLERY[48],
+    from: "#f0fff8", to: "#c8f0dc", accent: "#1a9060", numColor: "#1a9060",
+  },
+  {
+    n: 10, label: "Abril", year: "2026",
+    emoji: "🌸",
+    title: "Dez meses de tudo",
+    text: "Dez meses de risos, de conversas até tarde, de planos, de bagunça, de cuidado. Dez meses que me ensinaram o que é ter alguém de verdade do meu lado. Você virou parte de mim de um jeito que não tem volta.",
+    photo: GALLERY[54],
+    from: "#fff5fb", to: "#ffd8f0", accent: "#c040a0", numColor: "#c040a0",
+  },
+  {
+    n: 11, label: "Maio", year: "2026",
+    emoji: "🔥",
+    title: "Onze meses e contando",
+    text: "Onze meses. A gente tá quase lá. E ao invés de diminuir, só aumentou — o amor, a cumplicidade, a vontade de estar junto. Você é a melhor parte de todos os meses que passaram e de todos que vão vir.",
+    photo: GALLERY[60],
+    from: "#fff8ec", to: "#ffe0b0", accent: "#d06000", numColor: "#d06000",
+  },
+  {
+    n: 12, label: "Junho", year: "2026",
+    emoji: "🎂",
+    title: "UM ANO, LORENA!",
+    text: "12 meses. 365 dias. Uma vida que começou a fazer mais sentido. Obrigado por cada momento, cada risada, cada abraço, cada olhar. Feliz 1 ano, Doidiça. Você é o amor da minha vida.",
+    photo: GALLERY[71],
+    from: "#2a0a16", to: "#6b2038", accent: "#fde68a", numColor: "#fde68a",
+    special: true,
+  },
+];
+
+// ─────────────────────────────────────────────────────────
+// MONTHS JOURNEY COMPONENT
+// ─────────────────────────────────────────────────────────
+
+function MonthsJourney({ onDone }) {
+  const [idx, setIdx] = useState(0);
+  const [dir, setDir] = useState("right");
+  const m = MONTHS[idx];
+  const isLast = idx === MONTHS.length - 1;
+
+  const next = () => {
+    setDir("right");
+    if (isLast) { onDone(); return; }
+    setIdx(i => i + 1);
+  };
+
+  return (
+    <section style={{
+      minHeight: "100vh",
+      background: m.special
+        ? "linear-gradient(150deg, #2a0a16, #6b2038, #8b3a52)"
+        : `linear-gradient(150deg, ${m.from} 0%, ${m.to} 100%)`,
+      backgroundSize: "300% 300%",
+      animation: "gradientShift 18s ease infinite",
+      display: "flex", flexDirection: "column",
+      alignItems: "center", justifyContent: "center",
+      position: "relative", overflow: "hidden",
+      padding: "50px 24px 44px",
+      transition: "background 0.8s ease",
+    }}>
+      {m.special && <><Sparkles count={22} color="#fde68a" /><FloatingHearts count={10} opacity={0.3} /></>}
+      {!m.special && <Petals />}
+      {m.special && <ConfettiHearts count={36} />}
+
+      {/* Progress strip */}
+      <div style={{
+        position: "absolute", top: 0, left: 0, right: 0,
+        height: 4,
+        background: `linear-gradient(to right, ${m.accent} ${((idx + 1) / 12) * 100}%, rgba(0,0,0,.12) 0%)`,
+        transition: "all .6s ease",
+      }} />
+
+      {/* Month counter pill */}
+      <div style={{
+        position: "absolute", top: 18, left: 0, right: 0,
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+        padding: "0 22px", zIndex: 2,
+      }}>
+        <div style={{
+          fontFamily: "'Lato', sans-serif", fontSize: 11, letterSpacing: 3,
+          color: m.special ? "#fde68a88" : `${m.accent}99`,
+          textTransform: "uppercase",
+        }}>
+          nossa jornada
+        </div>
+        <div style={{
+          fontFamily: "'Lato', sans-serif", fontSize: 12, letterSpacing: 2,
+          color: m.special ? "#fde68aaa" : `${m.accent}bb`,
+          background: m.special ? "rgba(255,255,255,.08)" : "rgba(255,255,255,.55)",
+          padding: "4px 12px", borderRadius: 20,
+          border: `1px solid ${m.special ? "rgba(253,230,138,.2)" : `${m.accent}33`}`,
+        }}>
+          {idx + 1} / 12
+        </div>
+      </div>
+
+      {/* Content card */}
+      <div
+        key={idx}
+        style={{
+          position: "relative", zIndex: 1, width: "100%", maxWidth: 460,
+          animation: "slideInRight .42s cubic-bezier(.22,1,.36,1) both",
+          textAlign: "center",
+        }}
+      >
+        {/* Big month number */}
+        <div style={{
+          fontFamily: "'Playfair Display', serif",
+          fontSize: m.special ? 110 : 96,
+          fontWeight: 700,
+          lineHeight: 1,
+          color: m.special ? "#fde68a" : m.numColor,
+          animation: "countUp .5s .05s ease both, numberGlow 3s 1s ease-in-out infinite",
+          marginBottom: 2,
+          opacity: 0.92,
+        }}>
+          {m.n}
+        </div>
+
+        {/* Month name + year */}
+        <div style={{
+          fontFamily: "'Lato', sans-serif", fontWeight: 300,
+          fontSize: 15, letterSpacing: 5, textTransform: "uppercase",
+          color: m.special ? "#f9d8e4cc" : `${m.accent}cc`,
+          marginBottom: 4, animation: "fadeSlide .5s .12s ease both",
+        }}>
+          {m.label} · {m.year}
+        </div>
+
+        {/* Emoji */}
+        <div style={{
+          fontSize: 40, marginBottom: 18,
+          animation: m.special ? "glowPulse 2s ease-in-out infinite" : "bob 2.2s ease-in-out infinite",
+        }}>
+          {m.emoji}
+        </div>
+
+        {/* Photo */}
+        <div style={{
+          width: 200, height: 200, margin: "0 auto 22px",
+          borderRadius: "50%",
+          overflow: "hidden",
+          border: `4px solid ${m.special ? "rgba(253,230,138,.5)" : `${m.accent}55`}`,
+          boxShadow: `0 8px 32px ${m.special ? "rgba(253,230,138,.25)" : `${m.accent}33`}, 0 2px 8px rgba(0,0,0,.12)`,
+          animation: "popIn .55s .08s ease both",
+          flexShrink: 0,
+        }}>
+          <img
+            src={m.photo.src} alt=""
+            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          />
+        </div>
+
+        {/* Title */}
+        <div style={{
+          fontFamily: "'Playfair Display', serif", fontStyle: "italic",
+          fontSize: m.special ? 26 : 22,
+          color: m.special ? "#fde68a" : m.accent,
+          marginBottom: 14, fontWeight: m.special ? 600 : 400,
+          animation: "fadeSlide .5s .18s ease both",
+        }}>
+          {m.title}
+        </div>
+
+        {/* Body text */}
+        <p style={{
+          fontFamily: "'Lato', sans-serif", fontWeight: 300,
+          fontSize: 15, lineHeight: 1.85,
+          color: m.special ? "#fbe4ec" : "#3a1a28",
+          marginBottom: 32,
+          animation: "fadeSlide .5s .26s ease both",
+          maxWidth: 380, margin: "0 auto 32px",
+        }}>
+          {m.text}
+        </p>
+
+        {/* Button */}
+        <div style={{ animation: "fadeSlide .5s .36s ease both" }}>
+          <BtnRomantic onClick={next} gold={m.special}>
+            {isLast ? "ver nossas fotos 📸" : `mês ${m.n + 1} →`}
+          </BtnRomantic>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function BtnRomantic({ children, onClick, block, gold }) {
   const reset = (e) => {
     e.currentTarget.style.transform = "translateY(0) scale(1)";
@@ -1648,7 +1909,8 @@ export default function App() {
   const [step, setStep] = useState(0);
   // step 0 = interactive declaration
   // step 1 = envelope + letter
-  // step 2 = gallery, mosaic, film, final
+  // step 2 = months journey (12 pages)
+  // step 3 = mosaic, film strip, gallery, final
 
   return (
     <>
@@ -1711,6 +1973,18 @@ export default function App() {
         @keyframes curtainOut {
           to { opacity: 0; transform: scale(1.08); pointer-events: none; }
         }
+        @keyframes slideInRight {
+          from { opacity: 0; transform: translateX(60px) scale(.97); }
+          to   { opacity: 1; transform: translateX(0)    scale(1);   }
+        }
+        @keyframes countUp {
+          from { opacity: 0; transform: translateY(28px) scale(.8); }
+          to   { opacity: 1; transform: translateY(0)    scale(1);  }
+        }
+        @keyframes numberGlow {
+          0%,100% { text-shadow: 0 0 20px currentColor, 0 0 60px currentColor; }
+          50%     { text-shadow: 0 0 40px currentColor, 0 0 100px currentColor, 0 0 6px #fff; }
+        }
 
         @media (prefers-reduced-motion: reduce) {
           *, *::before, *::after {
@@ -1764,7 +2038,8 @@ export default function App() {
       <div style={{ maxWidth: 520, margin: "0 auto" }}>
         {step === 0 && <InteractiveDeclaration loveTime={loveTime} onDone={() => setStep(1)} />}
         {step === 1 && <EnvelopeSection onNext={() => setStep(2)} />}
-        {step >= 2 && (
+        {step === 2 && <MonthsJourney onDone={() => setStep(3)} />}
+        {step >= 3 && (
           <>
             <HeartMosaicSection />
             <FilmStripSection />
