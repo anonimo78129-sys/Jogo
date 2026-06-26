@@ -1345,8 +1345,9 @@ function FallingPhotos() {
   );
 }
 
-// Module-level so React never remounts it on parent re-renders
-function WordReveal({ text, baseDelay = 0 }) {
+// React.memo prevents re-render every second when loveTime updates,
+// which would cause the browser to restart CSS animations on the spans.
+const WordReveal = React.memo(function WordReveal({ text, baseDelay = 0 }) {
   const words = text.split(" ");
   return (
     <span>
@@ -1361,7 +1362,7 @@ function WordReveal({ text, baseDelay = 0 }) {
       ))}
     </span>
   );
-}
+});
 
 const BG_PAIRS = [
   ["#fdf2f5","#fce8ef"],["#f5ecff","#ffe8f5"],["#e8f5ff","#f0f8ff"],
@@ -1492,65 +1493,162 @@ function InteractiveDeclaration({ loveTime, onDone }) {
 // ─────────────────────────────────────────────────────────
 
 function EnvelopeVisual({ phase, onClick }) {
-  const W = 300, H = 200;
+  const W = 300, H = 190;
+  const W2 = W / 2;
+  const FH = 108; // flap triangle height
+  const BOTTOM_Y = Math.round(H * 0.5); // bottom fold apex from top of body
+
+  const isOpen = phase !== "sealed";
+
   return (
     <div
       onClick={phase === "sealed" ? onClick : undefined}
       style={{
-        position: "relative", width: W, height: H + 60,
+        position: "relative",
+        width: W, height: H + 80,
         cursor: phase === "sealed" ? "pointer" : "default",
+        perspective: 1100,
+        perspectiveOrigin: "50% 8%",
         animation: phase === "sealed" ? "bob 2.5s ease-in-out infinite" : "none",
+        userSelect: "none",
       }}
     >
-      {/* Body with diamond-fold gradients */}
-      <div style={{
-        position: "absolute", top: 0, left: 0, width: W, height: H,
-        background: `
-          linear-gradient(to bottom right, #f5dde8 50%, transparent 50%) top left    / 50% 50% no-repeat,
-          linear-gradient(to bottom left,  #f5dde8 50%, transparent 50%) top right   / 50% 50% no-repeat,
-          linear-gradient(to top right,    #ede0e9 50%, transparent 50%) bottom left / 50% 50% no-repeat,
-          linear-gradient(to top left,     #ede0e9 50%, transparent 50%) bottom right/ 50% 50% no-repeat,
-          #fef5f8`,
-        border: "1.5px solid #d4a0b0",
-        boxShadow: "0 14px 48px rgba(139,58,82,.2), 0 2px 8px rgba(0,0,0,.06)",
-      }}>
+      {/* ── Letter peek ── */}
+      {isOpen && (
         <div style={{
-          position: "absolute", inset: 0, display: "flex",
-          flexDirection: "column", alignItems: "center", justifyContent: "center",
-          opacity: phase === "peek" ? 0 : 1, transition: "opacity .3s",
+          position: "absolute",
+          left: W * 0.1, width: W * 0.8,
+          top: 6, height: 82,
+          background: "linear-gradient(180deg, #fffef7 0%, #fff8ef 100%)",
+          border: "1px solid #e8d5c8",
+          borderBottom: "none",
+          boxShadow: "0 -8px 22px rgba(0,0,0,.1)",
+          zIndex: 1,
+          display: "flex", flexDirection: "column",
+          alignItems: "center", justifyContent: "center", gap: 4,
+          animation: "letterRise .75s cubic-bezier(.22,1,.36,1) both",
         }}>
-          <div style={{ fontFamily: "'Lato', sans-serif", fontSize: 10, letterSpacing: 5, color: "#b07080", textTransform: "uppercase", marginBottom: 6 }}>Para</div>
-          <div style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: 36, color: "#8b3a52" }}>Lorena</div>
-          <div style={{ fontSize: 18, marginTop: 8 }}>💌</div>
-        </div>
-      </div>
-
-      {/* Letter peeking */}
-      {phase === "peek" && (
-        <div style={{
-          position: "absolute", left: "8%", right: "8%", top: -50,
-          height: H * 0.9,
-          background: "#fffef9", border: "1px solid #e8d8c0",
-          boxShadow: "0 -6px 20px rgba(0,0,0,.1)", zIndex: 3,
-          animation: "letterRise .8s ease-out forwards",
-          display: "flex", alignItems: "center", justifyContent: "center",
-        }}>
-          <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: 15, color: "#a07060" }}>Amor,</span>
+          {/* Letterhead decoration */}
+          <div style={{ fontSize: 8, letterSpacing: 4, color: "#c9748a88", fontFamily: "'Lato', sans-serif", textTransform: "uppercase" }}>
+            — com amor —
+          </div>
+          <div style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: 15, color: "#8b5a50" }}>
+            Amor,
+          </div>
+          <div style={{ fontSize: 12, opacity: 0.6 }}>🌹</div>
         </div>
       )}
 
-      {/* SVG flap that rotates open */}
-      <svg viewBox={`0 0 ${W} ${H / 2 + 10}`} width={W} height={H / 2 + 10}
+      {/* ── Envelope body ── */}
+      <div style={{
+        position: "absolute",
+        top: 80, left: 0,
+        width: W, height: H,
+        background: "#fef5f8",
+        border: "1.5px solid #d4a0b0",
+        boxShadow: "0 16px 50px rgba(139,58,82,.22), 0 2px 10px rgba(0,0,0,.08)",
+        zIndex: 2,
+        overflow: "hidden",
+      }}>
+        {/* Left fold triangle */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "linear-gradient(135deg, #f2d8e6 60%, transparent 100%)",
+          clipPath: `polygon(0 0, ${W2}px ${H/2}px, 0 ${H}px)`,
+        }} />
+        {/* Right fold triangle */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "linear-gradient(225deg, #e8d0e4 60%, transparent 100%)",
+          clipPath: `polygon(${W}px 0, ${W2}px ${H/2}px, ${W}px ${H}px)`,
+        }} />
+        {/* Bottom fold triangle */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "linear-gradient(0deg, #f0d5e5 50%, transparent 100%)",
+          clipPath: `polygon(0 ${H}px, ${W2}px ${BOTTOM_Y}px, ${W}px ${H}px)`,
+        }} />
+
+        {/* Content: Para Lorena + stamp */}
+        <div style={{
+          position: "absolute", inset: 0, zIndex: 4,
+          display: "flex", flexDirection: "column",
+          alignItems: "center", justifyContent: "center",
+          opacity: isOpen ? 0 : 1,
+          transition: "opacity .3s .15s",
+        }}>
+          {/* Decorative corner stamp */}
+          <div style={{
+            position: "absolute", top: 10, right: 12,
+            width: 36, height: 36,
+            border: "1.5px solid #d4a0b088",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 16,
+          }}>❤️</div>
+
+          <div style={{
+            fontFamily: "'Lato', sans-serif", fontSize: 9,
+            letterSpacing: 5, color: "#b07080",
+            textTransform: "uppercase", marginBottom: 6,
+          }}>
+            Para
+          </div>
+          <div style={{
+            fontFamily: "'Playfair Display', serif",
+            fontStyle: "italic", fontSize: 34,
+            color: "#8b3a52",
+            textShadow: "0 1px 8px rgba(139,58,82,.15)",
+          }}>
+            Lorena
+          </div>
+          <div style={{
+            fontFamily: "'Lato', sans-serif", fontSize: 9,
+            letterSpacing: 4, color: "#c9748a88",
+            textTransform: "uppercase", marginTop: 8,
+          }}>
+            27 · 06 · 2026
+          </div>
+        </div>
+      </div>
+
+      {/* ── Top flap (SVG) — rotates open ── */}
+      <svg
+        viewBox={`0 0 ${W} ${FH}`}
+        width={W} height={FH}
         style={{
-          position: "absolute", top: 0, left: 0,
-          transformOrigin: "top center",
-          transform: phase !== "sealed" ? "rotateX(-175deg)" : "rotateX(0deg)",
-          transition: "transform .65s cubic-bezier(.4,0,.2,1)",
-          zIndex: 10, display: "block",
+          position: "absolute",
+          top: 80, left: 0,
+          transformOrigin: "50% 0%",
+          transform: isOpen ? "rotateX(-175deg)" : "rotateX(0deg)",
+          transition: "transform .68s cubic-bezier(.4,0,.2,1)",
+          zIndex: isOpen ? 1 : 6,
+          display: "block",
+          backfaceVisibility: "hidden",
+          WebkitBackfaceVisibility: "hidden",
         }}
       >
-        <polygon points={`0,0 ${W},0 ${W / 2},${H / 2 + 10}`} fill="#f9e0eb" stroke="#d4a0b0" strokeWidth="1.5" />
-        <text x={W / 2} y={H / 4 + 2} textAnchor="middle" fontSize="18" dy=".35em">❤️</text>
+        <defs>
+          <linearGradient id="flapGrad" x1="0%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" stopColor="#fce8f0" />
+            <stop offset="100%" stopColor="#f4c8da" />
+          </linearGradient>
+          <filter id="flapDrop">
+            <feDropShadow dx="0" dy="5" stdDeviation="8" floodColor="#c9748a" floodOpacity="0.18" />
+          </filter>
+        </defs>
+        {/* Flap triangle */}
+        <polygon
+          points={`1,1 ${W-1},1 ${W2},${FH-1}`}
+          fill="url(#flapGrad)"
+          stroke="#d4a0b0"
+          strokeWidth="1.5"
+          strokeLinejoin="round"
+          filter="url(#flapDrop)"
+        />
+        {/* Wax seal / heart */}
+        <circle cx={W2} cy={FH * 0.42} r="18" fill="#c9748a" opacity="0.92" />
+        <circle cx={W2} cy={FH * 0.42} r="18" fill="none" stroke="#a05070" strokeWidth="1.5" opacity="0.6" />
+        <text x={W2} y={FH * 0.42} textAnchor="middle" fontSize="16" dy=".38em">❤️</text>
       </svg>
     </div>
   );
