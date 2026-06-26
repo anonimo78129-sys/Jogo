@@ -1999,6 +1999,136 @@ function IntroCurtain({ onStart }) {
 }
 
 // ─────────────────────────────────────────────────────────
+// SOULMATES REVEAL  (g05 → rapid slideshow → "almas gêmeas")
+// ─────────────────────────────────────────────────────────
+
+function SoulmatesReveal({ onDone }) {
+  const FIRST = GALLERY.findIndex(g => g.src.includes("g05"));
+  const startIdx = FIRST < 0 ? 4 : FIRST;
+  const SPEED = 95; // ms per photo during the rush
+
+  const [phase, setPhase] = useState("intro"); // intro | rush | end
+  const [idx, setIdx] = useState(0);
+
+  // preload all gallery images while the intro is on screen
+  useEffect(() => {
+    GALLERY.forEach(g => { const im = new Image(); im.src = g.src; });
+  }, []);
+
+  // the rapid sequence through every photo
+  useEffect(() => {
+    if (phase !== "rush") return;
+    const iv = setInterval(() => {
+      setIdx(i => {
+        if (i >= GALLERY.length - 1) {
+          clearInterval(iv);
+          setPhase("end");
+          return i;
+        }
+        return i + 1;
+      });
+    }, SPEED);
+    return () => clearInterval(iv);
+  }, [phase]);
+
+  return (
+    <section style={{
+      minHeight: "100vh",
+      background: "linear-gradient(150deg, #160008, #3a0c1e, #6b2038, #3a0c1e, #160008)",
+      backgroundSize: "300% 300%",
+      animation: "gradientShift 16s ease infinite",
+      display: "flex", flexDirection: "column",
+      alignItems: "center", justifyContent: "center",
+      position: "relative", overflow: "hidden",
+      padding: "50px 24px",
+    }}>
+      <Sparkles count={16} color="#fde68a" />
+      {phase === "end" && <><FloatingHearts count={12} opacity={0.3} /><ConfettiHearts count={34} /></>}
+
+      {/* ── INTRO ── */}
+      {phase === "intro" && (
+        <div style={{ position: "relative", zIndex: 1, textAlign: "center", animation: "popIn .8s ease both" }}>
+          <div style={{
+            background: "#fff", padding: "12px 12px 40px",
+            boxShadow: "0 18px 50px rgba(0,0,0,.55)",
+            transform: "rotate(-3deg)", borderRadius: 3,
+            width: 260, margin: "0 auto 30px",
+          }}>
+            <img src={GALLERY[startIdx].src} alt="" style={{
+              width: "100%", height: 280, objectFit: "cover", display: "block",
+            }} />
+            <p style={{
+              fontFamily: "'Playfair Display', serif", fontStyle: "italic",
+              fontSize: 18, color: "#7a4050", margin: "14px 6px 0",
+            }}>eles nem imaginavam...</p>
+          </div>
+
+          <BtnRomantic gold onClick={() => setPhase("rush")}>
+            o que o destino preparava 💫
+          </BtnRomantic>
+        </div>
+      )}
+
+      {/* ── RUSH (rapid slideshow) ── */}
+      {phase === "rush" && (
+        <div style={{ position: "relative", zIndex: 1, textAlign: "center" }}>
+          <div style={{
+            width: 300, height: 340, maxWidth: "82vw",
+            margin: "0 auto", borderRadius: 8, overflow: "hidden",
+            boxShadow: "0 0 60px rgba(201,116,138,.6), 0 18px 50px rgba(0,0,0,.6)",
+            border: "3px solid rgba(253,230,138,.5)",
+            background: "#000",
+          }}>
+            <img
+              key={idx}
+              src={GALLERY[idx].src}
+              alt=""
+              style={{
+                width: "100%", height: "100%", objectFit: "cover",
+                display: "block", animation: "flashIn .12s ease both",
+              }}
+            />
+          </div>
+          <div style={{
+            marginTop: 22, height: 3, width: 220, maxWidth: "70vw",
+            margin: "22px auto 0", background: "rgba(255,255,255,.12)",
+            borderRadius: 99, overflow: "hidden",
+          }}>
+            <div style={{
+              height: "100%",
+              width: `${((idx + 1) / GALLERY.length) * 100}%`,
+              background: "linear-gradient(90deg,#c9748a,#fde68a)",
+              borderRadius: 99, transition: "width .1s linear",
+            }} />
+          </div>
+        </div>
+      )}
+
+      {/* ── END ── */}
+      {phase === "end" && (
+        <div style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: 460, animation: "letterExpand 1s ease both" }}>
+          <div style={{ fontSize: 60, marginBottom: 22, animation: "glowPulse 2.2s ease-in-out infinite", lineHeight: 1 }}>💞</div>
+          <div style={{
+            fontFamily: "'Lato', sans-serif", fontWeight: 300,
+            fontSize: 13, letterSpacing: 5, textTransform: "uppercase",
+            color: "#f9d8e4aa", marginBottom: 14,
+          }}>...que um dia descobririam</div>
+          <div style={{
+            fontFamily: "'Playfair Display', serif", fontStyle: "italic",
+            fontSize: 40, color: "#fde68a", lineHeight: 1.2,
+            textShadow: "0 4px 30px rgba(0,0,0,.5)",
+            marginBottom: 40,
+          }}>
+            que seriam almas gêmeas
+          </div>
+          <BtnRomantic gold onClick={onDone}>continuar a nossa história ❤️</BtnRomantic>
+        </div>
+      )}
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────
 // LOADING SCREEN
 // ─────────────────────────────────────────────────────────
 
@@ -2115,7 +2245,8 @@ export default function App() {
   // step 0 = interactive declaration
   // step 1 = envelope + letter
   // step 2 = months journey (12 pages)
-  // step 3 = mosaic, film strip, gallery, final
+  // step 3 = soulmates reveal (g05 -> rapid slideshow)
+  // step 4 = mosaic, film strip, gallery, final
 
   return (
     <>
@@ -2222,6 +2353,10 @@ export default function App() {
           0%   { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
+        @keyframes flashIn {
+          from { opacity: .25; transform: scale(1.04); }
+          to   { opacity: 1;   transform: scale(1);     }
+        }
         @keyframes heartbeat {
           0%,100% { transform: scale(1); }
           14%     { transform: scale(1.08); }
@@ -2246,7 +2381,8 @@ export default function App() {
         {step === 0 && <InteractiveDeclaration loveTime={loveTime} onDone={() => setStep(1)} />}
         {step === 1 && <EnvelopeSection onNext={() => setStep(2)} />}
         {step === 2 && <MonthsJourney onDone={() => setStep(3)} />}
-        {step >= 3 && (
+        {step === 3 && <SoulmatesReveal onDone={() => setStep(4)} />}
+        {step >= 4 && (
           <>
             <HeartMosaicSection />
             <FilmStripSection />
