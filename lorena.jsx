@@ -1786,7 +1786,7 @@ function HeartMosaicSection() {
           Nossas memórias
         </div>
         <div style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: 28, color: "#6b2038", marginBottom: 36 }}>
-          72 momentos, um coração
+          infinitos momentos, um coração
         </div>
       </FadeBlock>
 
