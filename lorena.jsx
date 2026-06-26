@@ -141,14 +141,14 @@ const TIMELINE = [
 ];
 
 const STORY = [
-  { type: "para", text: "Era uma vez um menino comum, que sempre se sentiu meio sozinho. Por algum motivo que nem ele mesmo sabia explicar, ele nunca se encaixava em lugar nenhum; era como um peixe fora d'água, vendo o mundo passar em tons de cinza. Mas, um dia, tudo mudou." },
-  { type: "para", text: "Do nada, apareceu alguém na vida dele. Uma menina que, no começo, parecia só mais uma pessoa aleatória no meio da multidão. Ele mal imaginava o turbilhão que estava prestes a acontecer." },
-  { type: "para", text: "Sem nem perceber o superpoder que tinha nas mãos, ela chegou e mudou tudo. Ela o salvou. Trouxe brilho, devolveu o sorriso e colocou cor de novo na vida dele. Com um jeito só dela, ela transformou o mundo daquele menino." },
+  { type: "para", art: "lyelson", text: "Era uma vez um menino comum, que sempre se sentiu meio sozinho. Por algum motivo que nem ele mesmo sabia explicar, ele nunca se encaixava em lugar nenhum; era como um peixe fora d'água, vendo o mundo passar em tons de cinza. Mas, um dia, tudo mudou." },
+  { type: "para", art: "lorena", text: "Do nada, apareceu alguém na vida dele. Uma menina que, no começo, parecia só mais uma pessoa aleatória no meio da multidão. Ele mal imaginava o turbilhão que estava prestes a acontecer." },
+  { type: "para", art: "duo", text: "Sem nem perceber o superpoder que tinha nas mãos, ela chegou e mudou tudo. Ela o salvou. Trouxe brilho, devolveu o sorriso e colocou cor de novo na vida dele. Com um jeito só dela, ela transformou o mundo daquele menino." },
   { type: "header", text: "O que veio depois..." },
   { type: "para", text: "O que começou como um encontro inesperado virou a certeza mais bonita da vida dele. Aquele sentimento de estar perdido sumiu no primeiro abraço. Cada risada dividida, cada conversa boba e cada dia ao lado dela transformaram os dias comuns em capítulos de uma história que ele nunca mais quis que terminasse." },
   { type: "para", text: "A verdade é que ela não salvou a vida dele apenas naquele dia. Ela salva todos os dias, tornando tudo mais leve, mais bonito e cheio de sentido." },
   { type: "header", text: "Hoje..." },
-  { type: "para", text: "Hoje faz 1 ano que essa história ganhou vida. Um ano desde que o menino que não se encaixava em lugar nenhum descobriu que o seu lugar favorito no mundo é o lado dela." },
+  { type: "para", art: "casal", text: "Hoje faz 1 ano que essa história ganhou vida. Um ano desde que o menino que não se encaixava em lugar nenhum descobriu que o seu lugar favorito no mundo é o lado dela." },
   { type: "closing", text: "Feliz 1 ano de namoro. Obrigado por salvar a minha vida e por ser o meu final feliz todos os dias. Eu te amo!" },
 ];
 
@@ -2024,6 +2024,44 @@ function IntroCurtain({ onStart }) {
 // STORY  (opening "era uma vez" narrative)
 // ─────────────────────────────────────────────────────────
 
+function PixelArt({ src, w, flip = false, delay = 0 }) {
+  return (
+    <img src={src} alt="" style={{
+      width: w, height: "auto", display: "block",
+      imageRendering: "pixelated",
+      filter: "drop-shadow(0 12px 16px rgba(107,32,56,.3))",
+      transform: flip ? "scaleX(-1)" : "none",
+      animation: `bob 3.4s ${delay}s ease-in-out infinite`,
+    }} />
+  );
+}
+
+function StoryArt({ kind }) {
+  const wrap = {
+    display: "flex", justifyContent: "center", alignItems: "flex-end",
+    gap: 8, margin: "6px 0 26px", minHeight: 10,
+  };
+  if (kind === "lyelson") {
+    return <div style={wrap}><PixelArt src="/lyelson.png" w={108} /></div>;
+  }
+  if (kind === "lorena") {
+    return <div style={wrap}><PixelArt src="/lorena.png" w={104} /></div>;
+  }
+  if (kind === "duo") {
+    return (
+      <div style={wrap}>
+        <PixelArt src="/lyelson.png" w={104} delay={0} />
+        <div style={{ fontSize: 26, alignSelf: "center", animation: "glowPulse 2s ease-in-out infinite" }}>💖</div>
+        <PixelArt src="/lorena.png" w={100} delay={0.4} />
+      </div>
+    );
+  }
+  if (kind === "casal") {
+    return <div style={wrap}><PixelArt src="/casal.png" w={210} /></div>;
+  }
+  return null;
+}
+
 function StorySection({ onDone }) {
   return (
     <section style={{
@@ -2090,6 +2128,7 @@ function StorySection({ onDone }) {
           }
           return (
             <FadeBlock key={i} delay={0.05}>
+              {block.art && <StoryArt kind={block.art} />}
               <p style={{
                 fontFamily: "'Lato', sans-serif", fontWeight: 300,
                 fontSize: 17, color: "#5a3a44", lineHeight: 1.9,
