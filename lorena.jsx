@@ -720,6 +720,7 @@ function FallingPolaroid({ startIdx, left, duration, delay, rotation, width, onP
         <img
           src={photo.src}
           alt=""
+          loading="lazy"
           style={{ width: "100%", height: Math.round(width * 0.9), objectFit: "cover", display: "block" }}
           draggable={false}
         />
@@ -1852,7 +1853,7 @@ function FilmStripSection() {
               border: "3px solid #1e1e1e", overflow: "hidden", position: "relative",
               background: "#111",
             }}>
-              <img src={photo.src} alt="" style={{
+              <img src={photo.src} alt="" loading="lazy" style={{
                 width: "100%", height: "100%", objectFit: "cover",
                 filter: "sepia(0.3) contrast(1.08) brightness(0.92)",
                 display: "block",
@@ -1901,7 +1902,7 @@ function MusicPlayer() {
 
   return (
     <>
-      <audio ref={audioRef} src="/musica.mp3" loop preload="auto" />
+      <audio ref={audioRef} src="/musica.mp3" loop preload="metadata" />
       <button
         onClick={toggle}
         aria-label="música"
@@ -1998,11 +1999,117 @@ function IntroCurtain({ onStart }) {
 }
 
 // ─────────────────────────────────────────────────────────
+// LOADING SCREEN
+// ─────────────────────────────────────────────────────────
+
+function LoadingScreen({ onDone }) {
+  const [progress, setProgress] = useState(0);
+  const [fading, setFading] = useState(false);
+
+  useEffect(() => {
+    const MIN_MS = 2600;
+    const start = Date.now();
+    let pageLoaded = document.readyState === "complete";
+    let timerDone = false;
+
+    const tryFinish = () => {
+      if (!pageLoaded || !timerDone) return;
+      setFading(true);
+      setTimeout(onDone, 750);
+    };
+
+    if (!pageLoaded) {
+      const onLoad = () => { pageLoaded = true; tryFinish(); };
+      window.addEventListener("load", onLoad, { once: true });
+    }
+
+    const iv = setInterval(() => {
+      const p = Math.min(100, Math.round(((Date.now() - start) / MIN_MS) * 100));
+      setProgress(p);
+      if (p >= 100) {
+        clearInterval(iv);
+        timerDone = true;
+        tryFinish();
+      }
+    }, 40);
+
+    return () => clearInterval(iv);
+  }, [onDone]);
+
+  return (
+    <div style={{
+      position: "fixed", inset: 0, zIndex: 99999,
+      background: "linear-gradient(150deg, #160008, #4a1028, #6b2038, #4a1028, #160008)",
+      backgroundSize: "300% 300%",
+      animation: "gradientShift 8s ease infinite",
+      display: "flex", flexDirection: "column",
+      alignItems: "center", justifyContent: "center",
+      opacity: fading ? 0 : 1,
+      transition: "opacity .75s ease",
+      pointerEvents: fading ? "none" : "all",
+    }}>
+      <Sparkles count={14} color="#fde68a" />
+      <FloatingHearts count={6} opacity={0.18} />
+
+      <div style={{ position: "relative", zIndex: 1, textAlign: "center" }}>
+        <div style={{ fontSize: 68, animation: "glowPulse 1.5s ease-in-out infinite", marginBottom: 28, lineHeight: 1 }}>
+          ❤️
+        </div>
+
+        <div style={{
+          fontFamily: "'Playfair Display', serif", fontStyle: "italic",
+          fontSize: 46, color: "#fde68a", lineHeight: 1,
+          textShadow: "0 4px 30px rgba(0,0,0,.5)",
+          marginBottom: 6,
+        }}>
+          Lorena
+        </div>
+
+        <div style={{
+          fontFamily: "'Lato', sans-serif", fontWeight: 300,
+          fontSize: 11, color: "#f9d8e466",
+          letterSpacing: 4, textTransform: "uppercase",
+          marginBottom: 44,
+        }}>
+          preparando algo especial
+        </div>
+
+        <div style={{
+          width: 210, height: 3,
+          background: "rgba(255,255,255,.1)",
+          borderRadius: 99, overflow: "hidden",
+          margin: "0 auto",
+        }}>
+          <div style={{
+            height: "100%",
+            background: "linear-gradient(90deg, #c9748a, #fde68a, #c9748a)",
+            backgroundSize: "200% 100%",
+            animation: "gradientShift 1.8s linear infinite",
+            borderRadius: 99,
+            width: `${progress}%`,
+            transition: "width .08s linear",
+          }} />
+        </div>
+
+        <div style={{
+          fontFamily: "'Lato', sans-serif", fontSize: 10,
+          color: "#f9d8e444", letterSpacing: 2,
+          marginTop: 10,
+        }}>
+          {progress}%
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────
 // APP
 // ─────────────────────────────────────────────────────────
 
 export default function App() {
   const loveTime = useLoveTime();
+  const [loading, setLoading] = useState(true);
   const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
   // step 0 = interactive declaration
@@ -2128,10 +2235,12 @@ export default function App() {
         ::-webkit-scrollbar-thumb { background: #c9748a }
       `}</style>
 
+      {loading && <LoadingScreen onDone={() => setLoading(false)} />}
+
       <MusicPlayer />
       <HeartTrail />
 
-      {!started && <IntroCurtain onStart={() => setStarted(true)} />}
+      {!loading && !started && <IntroCurtain onStart={() => setStarted(true)} />}
 
       <div style={{ maxWidth: 520, margin: "0 auto" }}>
         {step === 0 && <InteractiveDeclaration loveTime={loveTime} onDone={() => setStep(1)} />}
