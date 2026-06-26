@@ -2009,31 +2009,29 @@ function LoadingScreen({ onDone }) {
   useEffect(() => {
     const MIN_MS = 2600;
     const start = Date.now();
-    let pageLoaded = document.readyState === "complete";
-    let timerDone = false;
+    let finished = false;
 
-    const tryFinish = () => {
-      if (!pageLoaded || !timerDone) return;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      setProgress(100);
       setFading(true);
       setTimeout(onDone, 750);
     };
-
-    if (!pageLoaded) {
-      const onLoad = () => { pageLoaded = true; tryFinish(); };
-      window.addEventListener("load", onLoad, { once: true });
-    }
 
     const iv = setInterval(() => {
       const p = Math.min(100, Math.round(((Date.now() - start) / MIN_MS) * 100));
       setProgress(p);
       if (p >= 100) {
         clearInterval(iv);
-        timerDone = true;
-        tryFinish();
+        finish();
       }
     }, 40);
 
-    return () => clearInterval(iv);
+    // safety net: always finish even if the interval is throttled
+    const safety = setTimeout(finish, MIN_MS + 1500);
+
+    return () => { clearInterval(iv); clearTimeout(safety); };
   }, [onDone]);
 
   return (
