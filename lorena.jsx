@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 
 // ─────────────────────────────────────────────────────────
 // DATA
@@ -1347,7 +1347,7 @@ function FallingPhotos() {
 
 // React.memo prevents re-render every second when loveTime updates,
 // which would cause the browser to restart CSS animations on the spans.
-const WordReveal = React.memo(function WordReveal({ text, baseDelay = 0 }) {
+const WordReveal = memo(function WordReveal({ text, baseDelay = 0 }) {
   const words = text.split(" ");
   return (
     <span>
