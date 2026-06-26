@@ -1738,7 +1738,7 @@ function EnvelopeSection({ onNext }) {
 // 2. HEART MOSAIC SECTION
 // ─────────────────────────────────────────────────────────
 
-function HeartMosaicSection() {
+function HeartMosaicSection({ onNext }) {
   const [ref, visible] = useInView(0.05);
   const wrapRef = useRef(null);
   const COLS = 13, ROWS = 12, SIZE = 36;
@@ -1777,7 +1777,9 @@ function HeartMosaicSection() {
 
   return (
     <section ref={ref} style={{
-      padding: "80px 24px 60px",
+      minHeight: "100vh",
+      display: "flex", flexDirection: "column", justifyContent: "center",
+      padding: "70px 24px 70px",
       background: "linear-gradient(180deg, #fff5f7, #fef0f0)",
       textAlign: "center", overflow: "hidden",
     }}>
@@ -1813,6 +1815,14 @@ function HeartMosaicSection() {
           cada foto, uma memória nossa ❤️
         </div>
       </FadeBlock>
+
+      {onNext && (
+        <FadeBlock delay={0.85}>
+          <div style={{ marginTop: 40 }}>
+            <BtnRomantic onClick={onNext}>ver a nossa película 🎞️</BtnRomantic>
+          </div>
+        </FadeBlock>
+      )}
     </section>
   );
 }
@@ -2286,7 +2296,8 @@ export default function App() {
   // step 1 = envelope + letter
   // step 2 = months journey (12 pages)
   // step 3 = soulmates reveal (g05 -> rapid slideshow)
-  // step 4 = mosaic, film strip, gallery, final
+  // step 4 = heart mosaic (own page)
+  // step 5 = film strip, gallery, final
 
   return (
     <>
@@ -2426,9 +2437,9 @@ export default function App() {
         {step === 1 && <EnvelopeSection onNext={() => setStep(2)} />}
         {step === 2 && <MonthsJourney onDone={() => setStep(3)} />}
         {step === 3 && <SoulmatesReveal onDone={() => setStep(4)} />}
-        {step >= 4 && (
+        {step === 4 && <HeartMosaicSection onNext={() => setStep(5)} />}
+        {step >= 5 && (
           <>
-            <HeartMosaicSection />
             <FilmStripSection />
             <GallerySection />
             <FinalSection />
