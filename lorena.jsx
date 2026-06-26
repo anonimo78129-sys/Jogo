@@ -1084,6 +1084,29 @@ function FallingPhotos() {
   );
 }
 
+// Module-level so React never remounts it on parent re-renders
+function WordReveal({ text, baseDelay = 0 }) {
+  const words = text.split(" ");
+  return (
+    <span>
+      {words.map((w, k) => (
+        <span key={k} style={{
+          display: "inline-block",
+          animation: `wordIn .45s ${(baseDelay + k * 0.07).toFixed(2)}s ease both`,
+          marginRight: "0.28em",
+        }}>
+          {w}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+const BG_PAIRS = [
+  ["#fdf2f5","#fce8ef"],["#f5ecff","#ffe8f5"],["#e8f5ff","#f0f8ff"],
+  ["#fff5ec","#ffeee8"],["#f0fff4","#f5fef5"],
+];
+
 function InteractiveDeclaration({ loveTime, onDone }) {
   const [i, setI] = useState(0);
   const [reply, setReply] = useState(null);
@@ -1101,29 +1124,7 @@ function InteractiveDeclaration({ loveTime, onDone }) {
     else advance();
   };
 
-  // Split all lines into individual words for stagger-in animation
-  const WordReveal = ({ text, baseDelay = 0, size = 26, weight = 400, color = "#6b2038" }) => {
-    const words = text.split(" ");
-    return (
-      <span>
-        {words.map((w, k) => (
-          <span key={k} style={{
-            display: "inline-block",
-            animation: `wordIn .45s ${(baseDelay + k * 0.07).toFixed(2)}s ease both`,
-            marginRight: "0.28em",
-          }}>
-            {w}
-          </span>
-        ))}
-      </span>
-    );
-  };
-
-  const bgPairs = [
-    ["#fdf2f5","#fce8ef"],["#f5ecff","#ffe8f5"],["#e8f5ff","#f0f8ff"],
-    ["#fff5ec","#ffeee8"],["#f0fff4","#f5fef5"],
-  ];
-  const [bg1, bg2] = bgPairs[i % bgPairs.length];
+  const [bg1, bg2] = BG_PAIRS[i % BG_PAIRS.length];
 
   return (
     <section style={{
