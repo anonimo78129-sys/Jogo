@@ -2005,7 +2005,6 @@ function IntroCurtain({ onStart }) {
 function SoulmatesReveal({ onDone }) {
   const FIRST = GALLERY.findIndex(g => g.src.includes("g05"));
   const startIdx = FIRST < 0 ? 4 : FIRST;
-  const SPEED = 95; // ms per photo during the rush
 
   const [phase, setPhase] = useState("intro"); // intro | rush | end
   const [idx, setIdx] = useState(0);
@@ -2015,20 +2014,24 @@ function SoulmatesReveal({ onDone }) {
     GALLERY.forEach(g => { const im = new Image(); im.src = g.src; });
   }, []);
 
-  // the rapid sequence through every photo
+  // the rapid sequence through every photo — accelerates, then holds on the last
   useEffect(() => {
     if (phase !== "rush") return;
-    const iv = setInterval(() => {
-      setIdx(i => {
-        if (i >= GALLERY.length - 1) {
-          clearInterval(iv);
-          setPhase("end");
-          return i;
-        }
-        return i + 1;
-      });
-    }, SPEED);
-    return () => clearInterval(iv);
+    let i = 0;
+    let t;
+    const tick = () => {
+      setIdx(i);
+      if (i >= GALLERY.length - 1) {
+        t = setTimeout(() => setPhase("end"), 700); // dramatic hold on the last frame
+        return;
+      }
+      const prog = i / GALLERY.length;        // 0 → 1
+      const delay = 185 - prog * 130;          // starts ~185ms, ends ~55ms (builds intensity)
+      i += 1;
+      t = setTimeout(tick, delay);
+    };
+    tick();
+    return () => clearTimeout(t);
   }, [phase]);
 
   return (
@@ -2071,12 +2074,13 @@ function SoulmatesReveal({ onDone }) {
 
       {/* ── RUSH (rapid slideshow) ── */}
       {phase === "rush" && (
-        <div style={{ position: "relative", zIndex: 1, textAlign: "center" }}>
+        <div style={{ position: "relative", zIndex: 1, textAlign: "center", animation: "rushPulse 1.6s ease-in-out infinite" }}>
           <div style={{
+            position: "relative",
             width: 300, height: 340, maxWidth: "82vw",
             margin: "0 auto", borderRadius: 8, overflow: "hidden",
-            boxShadow: "0 0 60px rgba(201,116,138,.6), 0 18px 50px rgba(0,0,0,.6)",
-            border: "3px solid rgba(253,230,138,.5)",
+            boxShadow: "0 0 70px rgba(201,116,138,.7), 0 18px 50px rgba(0,0,0,.6)",
+            border: "3px solid rgba(253,230,138,.55)",
             background: "#000",
           }}>
             <img
@@ -2085,13 +2089,27 @@ function SoulmatesReveal({ onDone }) {
               alt=""
               style={{
                 width: "100%", height: "100%", objectFit: "cover",
-                display: "block", animation: "flashIn .12s ease both",
+                display: "block", animation: "kenBurns .22s ease both",
               }}
             />
+            {/* vignette for cinematic depth */}
+            <div style={{
+              position: "absolute", inset: 0, pointerEvents: "none",
+              boxShadow: "inset 0 0 70px rgba(0,0,0,.55)",
+            }} />
           </div>
+
           <div style={{
-            marginTop: 22, height: 3, width: 220, maxWidth: "70vw",
-            margin: "22px auto 0", background: "rgba(255,255,255,.12)",
+            marginTop: 18, fontFamily: "'Lato', sans-serif",
+            fontSize: 11, letterSpacing: 3, textTransform: "uppercase",
+            color: "#f9d8e488",
+          }}>
+            {idx + 1} de {GALLERY.length} momentos
+          </div>
+
+          <div style={{
+            height: 3, width: 220, maxWidth: "70vw",
+            margin: "12px auto 0", background: "rgba(255,255,255,.12)",
             borderRadius: 99, overflow: "hidden",
           }}>
             <div style={{
@@ -2106,22 +2124,32 @@ function SoulmatesReveal({ onDone }) {
 
       {/* ── END ── */}
       {phase === "end" && (
-        <div style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: 460, animation: "letterExpand 1s ease both" }}>
-          <div style={{ fontSize: 60, marginBottom: 22, animation: "glowPulse 2.2s ease-in-out infinite", lineHeight: 1 }}>💞</div>
+        <div style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: 460 }}>
+          <div style={{
+            fontSize: 60, marginBottom: 18, lineHeight: 1,
+            animation: "glowPulse 2.2s ease-in-out infinite, popIn .7s ease both",
+          }}>💞</div>
+
           <div style={{
             fontFamily: "'Lato', sans-serif", fontWeight: 300,
             fontSize: 13, letterSpacing: 5, textTransform: "uppercase",
             color: "#f9d8e4aa", marginBottom: 14,
+            animation: "fadeSlide .8s .3s ease both",
           }}>...que um dia descobririam</div>
+
           <div style={{
             fontFamily: "'Playfair Display', serif", fontStyle: "italic",
-            fontSize: 40, color: "#fde68a", lineHeight: 1.2,
+            fontSize: 42, color: "#fde68a", lineHeight: 1.2,
             textShadow: "0 4px 30px rgba(0,0,0,.5)",
-            marginBottom: 40,
+            marginBottom: 30,
+            animation: "letterExpand 1s .55s ease both",
           }}>
             que seriam almas gêmeas
           </div>
-          <BtnRomantic gold onClick={onDone}>continuar a nossa história ❤️</BtnRomantic>
+
+          <div style={{ animation: "fadeSlide .8s 1.4s ease both", marginBottom: 36 }}>
+            <BtnRomantic gold onClick={onDone}>continuar a nossa história ❤️</BtnRomantic>
+          </div>
         </div>
       )}
     </section>
@@ -2139,31 +2167,43 @@ function LoadingScreen({ onDone }) {
   onDoneRef.current = onDone;
 
   useEffect(() => {
-    const MIN_MS = 2600;
+    const MIN_MS = 1400;   // keep the screen on at least this long (no flash)
+    const MAX_MS = 15000;  // safety net: never hang forever on a stalled image
     const start = Date.now();
+    const total = GALLERY.length;
+    let loaded = 0;
     let finished = false;
 
     const finish = () => {
       if (finished) return;
       finished = true;
       setProgress(100);
-      setFading(true);
-      setTimeout(() => onDoneRef.current(), 750);
+      const wait = Math.max(0, MIN_MS - (Date.now() - start));
+      setTimeout(() => {
+        setFading(true);
+        setTimeout(() => onDoneRef.current(), 700);
+      }, wait);
     };
 
-    const iv = setInterval(() => {
-      const p = Math.min(100, Math.round(((Date.now() - start) / MIN_MS) * 100));
-      setProgress(p);
-      if (p >= 100) {
-        clearInterval(iv);
-        finish();
-      }
-    }, 40);
+    const bump = () => {
+      loaded += 1;
+      setProgress(Math.min(99, Math.round((loaded / total) * 100)));
+      if (loaded >= total) finish();
+    };
 
-    // safety net: always finish even if the interval is throttled
-    const safety = setTimeout(finish, MIN_MS + 1500);
+    // actually preload every gallery photo; resolve on load OR error
+    GALLERY.forEach(g => {
+      const im = new Image();
+      let done = false;
+      const mark = () => { if (done) return; done = true; bump(); };
+      im.onload = mark;
+      im.onerror = mark;
+      im.src = g.src;
+      if (im.complete) mark(); // already cached
+    });
 
-    return () => { clearInterval(iv); clearTimeout(safety); };
+    const safety = setTimeout(finish, MAX_MS);
+    return () => clearTimeout(safety);
   }, []);
 
   return (
@@ -2353,9 +2393,13 @@ export default function App() {
           0%   { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
-        @keyframes flashIn {
-          from { opacity: .25; transform: scale(1.04); }
-          to   { opacity: 1;   transform: scale(1);     }
+        @keyframes kenBurns {
+          from { opacity: .3; transform: scale(1.08); }
+          to   { opacity: 1;  transform: scale(1);     }
+        }
+        @keyframes rushPulse {
+          0%,100% { transform: scale(1);    }
+          50%     { transform: scale(1.015); }
         }
         @keyframes heartbeat {
           0%,100% { transform: scale(1); }
