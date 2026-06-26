@@ -140,6 +140,18 @@ const TIMELINE = [
   },
 ];
 
+const STORY = [
+  { type: "para", text: "Era uma vez um menino comum, que sempre se sentiu meio sozinho. Por algum motivo que nem ele mesmo sabia explicar, ele nunca se encaixava em lugar nenhum; era como um peixe fora d'água, vendo o mundo passar em tons de cinza. Mas, um dia, tudo mudou." },
+  { type: "para", text: "Do nada, apareceu alguém na vida dele. Uma menina que, no começo, parecia só mais uma pessoa aleatória no meio da multidão. Ele mal imaginava o turbilhão que estava prestes a acontecer." },
+  { type: "para", text: "Sem nem perceber o superpoder que tinha nas mãos, ela chegou e mudou tudo. Ela o salvou. Trouxe brilho, devolveu o sorriso e colocou cor de novo na vida dele. Com um jeito só dela, ela transformou o mundo daquele menino." },
+  { type: "header", text: "O que veio depois..." },
+  { type: "para", text: "O que começou como um encontro inesperado virou a certeza mais bonita da vida dele. Aquele sentimento de estar perdido sumiu no primeiro abraço. Cada risada dividida, cada conversa boba e cada dia ao lado dela transformaram os dias comuns em capítulos de uma história que ele nunca mais quis que terminasse." },
+  { type: "para", text: "A verdade é que ela não salvou a vida dele apenas naquele dia. Ela salva todos os dias, tornando tudo mais leve, mais bonito e cheio de sentido." },
+  { type: "header", text: "Hoje..." },
+  { type: "para", text: "Hoje faz 1 ano que essa história ganhou vida. Um ano desde que o menino que não se encaixava em lugar nenhum descobriu que o seu lugar favorito no mundo é o lado dela." },
+  { type: "closing", text: "Feliz 1 ano de namoro. Obrigado por salvar a minha vida e por ser o meu final feliz todos os dias. Eu te amo!" },
+];
+
 const CARTA = [
   { text: "Amor,", type: "greeting" },
   { text: "a 1 ano atrás eu estava aceitando o seu pedido de namoro,", type: "normal" },
@@ -2009,6 +2021,97 @@ function IntroCurtain({ onStart }) {
 }
 
 // ─────────────────────────────────────────────────────────
+// STORY  (opening "era uma vez" narrative)
+// ─────────────────────────────────────────────────────────
+
+function StorySection({ onDone }) {
+  return (
+    <section style={{
+      minHeight: "100vh",
+      background: "linear-gradient(165deg, #fff6f0 0%, #fdeef0 45%, #f7e3ea 100%)",
+      position: "relative", overflow: "hidden",
+      padding: "70px 28px 90px",
+    }}>
+      <Petals />
+      <Sparkles count={10} color="#e8b0c0" />
+
+      <div style={{ position: "relative", zIndex: 1, maxWidth: 480, margin: "0 auto" }}>
+        <FadeBlock>
+          <div style={{ textAlign: "center", fontSize: 46, marginBottom: 18, animation: "bob 3s ease-in-out infinite" }}>📖</div>
+          <div style={{
+            fontFamily: "'Lato', sans-serif", fontWeight: 300,
+            fontSize: 12, letterSpacing: 4, textTransform: "uppercase",
+            color: "#c9748a", textAlign: "center", marginBottom: 14,
+          }}>
+            a nossa história
+          </div>
+          <div style={{
+            fontFamily: "'Playfair Display', serif", fontStyle: "italic",
+            fontSize: 28, color: "#6b2038", textAlign: "center", lineHeight: 1.3,
+            marginBottom: 12,
+          }}>
+            Senta aí, deixa eu te contar uma história...
+          </div>
+          <div style={{ fontSize: 26, textAlign: "center", marginBottom: 8 }}>✨</div>
+          <Divider color="#d4a8b8" />
+        </FadeBlock>
+
+        {STORY.map((block, i) => {
+          if (block.type === "header") {
+            return (
+              <FadeBlock key={i} delay={0.05}>
+                <div style={{
+                  fontFamily: "'Playfair Display', serif", fontStyle: "italic",
+                  fontSize: 22, color: "#c9748a", textAlign: "center",
+                  margin: "34px 0 18px", letterSpacing: 1,
+                }}>
+                  {block.text}
+                </div>
+              </FadeBlock>
+            );
+          }
+          if (block.type === "closing") {
+            return (
+              <FadeBlock key={i} delay={0.05}>
+                <div style={{ margin: "38px 0 8px" }}>
+                  <Divider color="#d4a8b8" />
+                  <div style={{
+                    fontFamily: "'Playfair Display', serif", fontStyle: "italic",
+                    fontSize: 21, color: "#6b2038", textAlign: "center",
+                    lineHeight: 1.6, fontWeight: 600,
+                    textShadow: "0 1px 12px rgba(201,116,138,.25)",
+                  }}>
+                    {block.text}
+                  </div>
+                  <div style={{ fontSize: 34, textAlign: "center", marginTop: 16, animation: "glowPulse 2.4s ease-in-out infinite" }}>❤️</div>
+                </div>
+              </FadeBlock>
+            );
+          }
+          return (
+            <FadeBlock key={i} delay={0.05}>
+              <p style={{
+                fontFamily: "'Lato', sans-serif", fontWeight: 300,
+                fontSize: 17, color: "#5a3a44", lineHeight: 1.9,
+                textAlign: "center", marginBottom: 22,
+              }}>
+                {block.text}
+              </p>
+            </FadeBlock>
+          );
+        })}
+
+        <FadeBlock delay={0.1}>
+          <div style={{ textAlign: "center", marginTop: 44 }}>
+            <BtnRomantic gold onClick={onDone}>começar a nossa jornada 💌</BtnRomantic>
+          </div>
+        </FadeBlock>
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────
 // SOULMATES REVEAL  (g05 → rapid slideshow → "almas gêmeas")
 // ─────────────────────────────────────────────────────────
 
@@ -2291,6 +2394,7 @@ export default function App() {
   const loveTime = useLoveTime();
   const [loading, setLoading] = useState(true);
   const [started, setStarted] = useState(false);
+  const [storyRead, setStoryRead] = useState(false);
   const [step, setStep] = useState(0);
   // step 0 = interactive declaration
   // step 1 = envelope + letter
@@ -2433,7 +2537,8 @@ export default function App() {
       {!loading && !started && <IntroCurtain onStart={() => setStarted(true)} />}
 
       <div style={{ maxWidth: 520, margin: "0 auto" }}>
-        {step === 0 && <InteractiveDeclaration loveTime={loveTime} onDone={() => setStep(1)} />}
+        {started && !storyRead && <StorySection onDone={() => setStoryRead(true)} />}
+        {started && storyRead && step === 0 && <InteractiveDeclaration loveTime={loveTime} onDone={() => setStep(1)} />}
         {step === 1 && <EnvelopeSection onNext={() => setStep(2)} />}
         {step === 2 && <MonthsJourney onDone={() => setStep(3)} />}
         {step === 3 && <SoulmatesReveal onDone={() => setStep(4)} />}
