@@ -46,7 +46,7 @@ const GALLERY = [
   { src: "/g37.jpg", caption: "🌊 sentados juntos no fim do cais, sem pressa" },
   { src: "/g38.jpg", caption: "💙 a paz que sinto quando estou do seu lado" },
   { src: "/g39.jpg", caption: "🌇 dois contra o mundo, pôr do sol como testemunha" },
-  { src: "/g40.jpg", caption: "🌿 na mata, na cachoeira, em qualquer lugar — juntos" },
+  { src: "/g40.jpg", caption: "🌿 na mata, na cachoeira, em qualquer lugar, juntos" },
   { src: "/g41.jpg", caption: "💚 a natureza ao redor e a gente no centro" },
   { src: "/g42.jpg", caption: "🌳 embaixo da árvore, onde o tempo para" },
   { src: "/g43.jpg", caption: "😄 ela sorri assim e eu esqueço de tudo" },
@@ -104,13 +104,13 @@ const TIMELINE = [
     icon: "💬", chapter: "Capítulo 4",
     title: "A Declaração",
     place: "Com o coração na mão",
-    desc: "Você falou primeiro. Declarou seu amor. Eu fiquei em silêncio — não era frieza. Era eu tentando entender como alguém tão incrível podia querer alguém como eu.",
+    desc: "Você falou primeiro. Declarou seu amor. Eu fiquei em silêncio, não era frieza. Era eu tentando entender como alguém tão incrível podia querer alguém como eu.",
   },
   {
     icon: "🌙", chapter: "Capítulo 5",
     title: "A Madrugada",
     place: "Uma noite até o sol nascer",
-    desc: "Conversamos até o amanhecer. Eu te conheci de verdade naquela noite. E percebi: você não chegou por acaso — você veio me salvar.",
+    desc: "Conversamos até o amanhecer. Eu te conheci de verdade naquela noite. E percebi: você não chegou por acaso, você veio me salvar.",
   },
   {
     icon: "❤️", chapter: "27 de Junho de 2025",
@@ -478,7 +478,7 @@ function HeroSection({ loveTime }) {
           marginBottom: 44,
           animation: "fadeSlide .9s .45s ease both",
         }}>
-          27 de Junho de 2025 — 27 de Junho de 2026
+          27 de Junho de 2025 a 27 de Junho de 2026
         </div>
 
         {/* Counter */}
@@ -878,7 +878,7 @@ function FinalSection() {
               dizendo sim pra melhor fase da minha vida.
             </p>
             <p style={{ marginBottom: 18 }}>
-              Hoje a gente divide tudo — os planos, as bobeiras, os medos,
+              Hoje a gente divide tudo: os planos, as bobeiras, os medos,
               as conquistas. A gente se cuida, se respeita e empurra um ao
               outro pra voar cada vez mais alto.
             </p>
@@ -920,7 +920,7 @@ function FinalSection() {
             letterSpacing: 5, textTransform: "uppercase",
             marginBottom: 8,
           }}>
-            27 · 06 · 2025 — 27 · 06 · 2026
+            27 · 06 · 2025 a 27 · 06 · 2026
           </div>
           <div style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: 22, color: "#fde68a" }}>
             Feliz 1 ano, meu amor 🎂
@@ -929,7 +929,7 @@ function FinalSection() {
 
         <FadeBlock delay={0.95}>
           <div style={{ marginTop: 32, fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: 22, color: "#fde68a99", letterSpacing: 2 }}>
-            — Lyelson
+            Lyelson ❤️
           </div>
         </FadeBlock>
       </div>
@@ -997,7 +997,7 @@ const LETTER_PARAGRAPHS = [
   { type: "greeting",  text: "Amor," },
   { type: "body",      text: "Há um ano, você me fez o pedido de namoro. Eu disse “vamos tentar” e foi a melhor decisão que eu já tomei na vida." },
   { type: "body",      text: "Hoje a gente divide tudo. Os planos, as bobeiras, os medos, as conquistas. A gente se cuida, se respeita, e se impulsiona um ao outro a voar cada vez mais alto." },
-  { type: "body",      text: "Você é minha namorada, minha melhor amiga e minha parceira em absolutamente tudo. Eu não canso de te dizer o quanto você é incrível — porque é a mais pura verdade." },
+  { type: "body",      text: "Você é minha namorada, minha melhor amiga e minha parceira em absolutamente tudo. Eu não canso de te dizer o quanto você é incrível, porque é a mais pura verdade." },
   { type: "body",      text: "Essa leveza que a gente tem, esse jeito de ser amigos antes de tudo, é o maior presente que eu já recebeu na vida." },
   { type: "emphasis",  text: "Que venham muitos e muitos anos de muito amor, Doidiça." },
   { type: "body",      text: "Eu te amo a cada batida do meu coração, e vou te amar a cada segundo da minha vida." },
@@ -1021,7 +1021,7 @@ const MONTHS = [
     n: 2, label: "Agosto", year: "2025",
     emoji: "☀️",
     title: "O mês que começou a virar rotina",
-    text: "Rotina boa. Do tipo que você sente falta quando falta. A gente foi construindo um jeitinho de ser — de falar, de rir, de existir junto. Dois meses e já parecia que não dava mais pra imaginar sem.",
+    text: "Rotina boa. Do tipo que você sente falta quando falta. A gente foi construindo um jeitinho de ser, de falar, de rir, de existir junto. Dois meses e já parecia que não dava mais pra imaginar sem.",
     photo: GALLERY[7],
     from: "#fffbec", to: "#fff3c4", accent: "#c9a020", numColor: "#c9a020",
   },
@@ -1037,7 +1037,7 @@ const MONTHS = [
     n: 4, label: "Outubro", year: "2025",
     emoji: "🌙",
     title: "O mês dos planos",
-    text: "Quatro meses e a gente começou a falar de futuro sem medo. Não de um futuro distante e abstrato — de um futuro que inclui você do meu lado, simples assim. Esse mês foi o mês que eu soube que era sério.",
+    text: "Quatro meses e a gente começou a falar de futuro sem medo. Não de um futuro distante e abstrato, e sim de um futuro que inclui você do meu lado, simples assim. Esse mês foi o mês que eu soube que era sério.",
     photo: GALLERY[19],
     from: "#f5f0ff", to: "#e8d8ff", accent: "#7a40b8", numColor: "#7a40b8",
   },
@@ -1045,7 +1045,7 @@ const MONTHS = [
     n: 5, label: "Novembro", year: "2025",
     emoji: "💜",
     title: "O mês da leveza",
-    text: "Cinco meses e a gente descobriu que amor também é leveza. É rir sem motivo, é ficar em silêncio sem precisar preencher nada, é estar junto sem cobrar, sem precisar provar. Só estar — e ser suficiente.",
+    text: "Cinco meses e a gente descobriu que amor também é leveza. É rir sem motivo, é ficar em silêncio sem precisar preencher nada, é estar junto sem cobrar, sem precisar provar. Só estar, e ser suficiente.",
     photo: GALLERY[24],
     from: "#f8f0ff", to: "#e8d0f5", accent: "#9b50c0", numColor: "#9b50c0",
   },
@@ -1069,7 +1069,7 @@ const MONTHS = [
     n: 8, label: "Fevereiro", year: "2026",
     emoji: "💌",
     title: "O mês do amor (ainda mais)",
-    text: "Oito meses e fevereiro chegou só confirmando o que a gente já sabia. Não precisa de data pra eu te amar — mas se tem uma, fica ainda mais bonito. Esse mês foi suave, quentinho e muito nosso.",
+    text: "Oito meses e fevereiro chegou só confirmando o que a gente já sabia. Não precisa de data pra eu te amar, mas se tem uma, fica ainda mais bonito. Esse mês foi suave, quentinho e muito nosso.",
     photo: GALLERY[42],
     from: "#fff0f5", to: "#ffd8e8", accent: "#c9748a", numColor: "#c9748a",
   },
@@ -1077,7 +1077,7 @@ const MONTHS = [
     n: 9, label: "Março", year: "2026",
     emoji: "🌿",
     title: "O mês que a gente cresceu",
-    text: "Nove meses. A gente passou por muita coisa e saiu mais forte de cada uma. Aprendi que crescer junto não é fácil, mas é o mais bonito que existe. Você me faz querer ser melhor — todo mês, todo dia.",
+    text: "Nove meses. A gente passou por muita coisa e saiu mais forte de cada uma. Aprendi que crescer junto não é fácil, mas é o mais bonito que existe. Você me faz querer ser melhor, todo mês, todo dia.",
     photo: GALLERY[48],
     from: "#f0fff8", to: "#c8f0dc", accent: "#1a9060", numColor: "#1a9060",
   },
@@ -1093,7 +1093,7 @@ const MONTHS = [
     n: 11, label: "Maio", year: "2026",
     emoji: "🔥",
     title: "Onze meses e contando",
-    text: "Onze meses. A gente tá quase lá. E ao invés de diminuir, só aumentou — o amor, a cumplicidade, a vontade de estar junto. Você é a melhor parte de todos os meses que passaram e de todos que vão vir.",
+    text: "Onze meses. A gente tá quase lá. E ao invés de diminuir, só aumentou: o amor, a cumplicidade, a vontade de estar junto. Você é a melhor parte de todos os meses que passaram e de todos que vão vir.",
     photo: GALLERY[60],
     from: "#fff8ec", to: "#ffe0b0", accent: "#d06000", numColor: "#d06000",
   },
@@ -1531,7 +1531,7 @@ function EnvelopeVisual({ phase, onClick }) {
         }}>
           {/* Letterhead decoration */}
           <div style={{ fontSize: 8, letterSpacing: 4, color: "#c9748a88", fontFamily: "'Lato', sans-serif", textTransform: "uppercase" }}>
-            — com amor —
+            com amor
           </div>
           <div style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: 15, color: "#8b5a50" }}>
             Amor,
@@ -2001,7 +2001,7 @@ function IntroCurtain({ onStart }) {
           color: "#f9d8e477", letterSpacing: 2,
           animation: "blink 2.6s 1.2s infinite",
         }}>
-          🔊 com som — ajuste o volume
+          🔊 com som, ajuste o volume
         </div>
       </div>
     </div>
