@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, memo } from "react";
+import { createPortal } from "react-dom";
 
 // ─────────────────────────────────────────────────────────
 // DATA
@@ -905,7 +906,7 @@ function CameraMoment() {
     <>
       <BtnRomantic gold onClick={open}>ver a pessoa mais importante 📸</BtnRomantic>
 
-      {phase !== "idle" && (
+      {phase !== "idle" && createPortal(
         <div style={{
           position: "fixed", inset: 0, zIndex: 9999,
           background: "rgba(10,2,8,.94)", backdropFilter: "blur(8px)",
@@ -991,7 +992,8 @@ function CameraMoment() {
               </div>
             </>
           )}
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
